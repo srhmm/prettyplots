@@ -1,0 +1,152 @@
+\clearpage
+\subsection{Example 1: Line }
+\begin{figure}[h!]  
+\begin{minipage}{.8\textwidth}  
+		\begin{mintedtxtbox}[/data/expres/expname\_attr1\_metric1.csv]
+\begin{minted}[fontsize=\scriptsize]{TeX}
+%Attribute1 (x)    Method 1 (mean)    Method 1 (+-) ...
+x    ours    ours_c
+0    0.7    0.02 
+	\end{minted}
+\end{mintedtxtbox} 
+\end{minipage} 
+	\begin{minipage}{.8\textwidth}  
+		\begin{mintedtexbox}[/examples/experiments.tex]	
+			\begin{minted}[fontsize=\scriptsize]{TeX}
+%% insert method and attribute names here
+\def\pltpath{data/expres/expname}   
+\def\pltyupper{metric1} 
+\def\pltylower{metric2}  
+\def\pltxleft{attr1} 
+\def\pltxright{attr2} 
+
+%% axis  
+\begin{tikzpicture}
+\begin{groupplot}[ 
+    group style = { group size = 4 by 2 }
+] 
+%% line plots (upper left) 
+% \linesGroupplot{filename}{columnnames}[axis options]
+\linesGroupplot{\pltpath_\pltxleft_\pltyupper.tsv} 
+    [pretty line upleft,
+    ylabel = {upper metric}, 
+    legend entries = {\textsc{Ours},\textsc{NotOurs}}]
+\linesGroupplot{\pltpath_\pltxright_\pltyupper.tsv}[pretty line upper]
+
+%% line plots with confidence (upper right) 
+\linesConfGroupplot{\pltpath_\pltxleft_\pltyupper.tsv}
+    [pretty line upleft,
+    legend entries={\textsc{Ours},,\textsc{NotOurs}}]
+\linesConfGroupplot{\pltpath_\pltxright_\pltyupper.tsv}[pretty line upper]
+\\ 
+%% line plots with marks (lower left) 
+\linesGroupplot{\pltpath_\pltxleft_\pltylower.tsv}
+    [pretty line lowleft, 
+    cycle list name = pr-marks,
+    xlabel = {attribute 1}, ylabel = {upper metric},
+ ]
+\linesGroupplot{\pltpath_\pltxright_\pltylower.tsv}
+    [pretty line lower,
+    cycle list name = pr-marks,
+    xlabel = {attribute 2}]
+%% line plots with confidence, marks (lower right) 
+\linesConfGroupplot{\pltpath_\pltxleft_\pltylower.tsv}
+    [pretty line lowleft,  
+    cycle list name = pr-marks-conf,
+    xlabel = {attribute 1}]
+\linesConfGroupplot{\pltpath_\pltxright_\pltylower.tsv}
+    [pretty line lower, 
+    cycle list name = pr-marks-conf,
+    xlabel = {attribute 2}]
+\end{groupplot}
+\end{tikzpicture}
+			\end{minted}
+		\end{mintedtexbox} 
+\end{minipage} 
+\end{figure}
+
+\iffalse
+\clearpage
+\subsection{Example 1: Line (long version)}
+\begin{figure}[h!]  
+	\begin{minipage}{.8\textwidth}  
+		\begin{mintedtexbox}[/examples/experiments.tex]	
+			\begin{minted}[fontsize=\scriptsize]{TeX}
+%% insert method and attribute names here
+\def\pltpath{data/expres/expname}  
+\def\pltmethods{ours,notours} 
+\def\pltyupper{metric1} 
+\def\pltylower{metric2}  
+\def\pltxleft{attr1} 
+\def\pltxright{attr2} 
+
+%% axis  
+\begin{tikzpicture}
+\begin{groupplot}[ 
+    group style = { group size = 4 by 2 }
+] 
+%% upper left  
+\nextgroupplot[pretty line upleft, ylabel = {upper metric}, legend entries = {\textsc{Ours},\textsc{NotOurs}} ]
+\foreach \i in \pltmethods{
+    \addplot table[x=x, y=\i] {\pltpath_\pltxleft_\pltyupper.tsv};
+} 
+\nextgroupplot[pretty line upper]
+\foreach \i in \pltmethods{
+    \addplot table[x=x, y=\i] {\pltpath_\pltxright_\pltyupper.tsv};
+} 
+%% upper right
+\def\file{\pltpath_\pltxleft_\pltyupper.tsv}
+\nextgroupplot[pretty line upleft, cycle list name = pr-colors-conf, 
+    legend entries = {\textsc{Ours},,\textsc{NotOurs}}, legend style={name=legend2}]
+\foreach \i in \pltmethods{
+    \addplot table[x=x, y=\i] {\file}; 
+    \addplot[pretty conf, name path=low] table [x=x, y expr=\thisrow{\i} - \thisrow{\i_c}]{\file}; 
+    \addplot[pretty conf, name path=up] table [x=x, y expr=\thisrow{\i} + \thisrow{\i_c}]{\file}; 
+    \addplot fill between[of=low and up];
+} 
+\def\file{\pltpath_\pltxright_\pltyupper.tsv}
+\nextgroupplot[pretty line upper, cycle list name = pr-colors-conf]
+\foreach \i in \pltmethods{
+    \addplot table[x=x, y=\i] {\file}; 
+    \addplot[pretty conf, name path=low] table [x=x, y expr=\thisrow{\i} - \thisrow{\i_c}]{\file}; 
+    \addplot[pretty conf, name path=up] table [x=x, y expr=\thisrow{\i} + \thisrow{\i_c}]{\file}; 
+    \addplot fill between[of=low and up];
+} 
+
+%% lower left 
+\nextgroupplot[pretty line lowleft, ylabel = {lower metric}, legend entries = {\textsc{Ours},\textsc{NotOurs}} ]
+\foreach \i in \pltmethods{
+    \addplot table[x=x, y=\i] {\pltpath_\pltxleft_\pltylower.tsv};
+} 
+\nextgroupplot[pretty line lower]
+\foreach \i in \pltmethods{
+    \addplot table[x=x, y=\i] {\pltpath_\pltxright_\pltylower.tsv};
+} 
+%% lower right
+\def\file{\pltpath_\pltxleft_\pltylower.tsv}
+\nextgroupplot[pretty line lowleft, cycle list name = pr-marks-conf, xlabel = {attribute 1}]
+\foreach \i in \pltmethods{
+    \addplot table[x=x, y=\i] {\file}; 
+    \addplot[pretty conf, name path=low] table [x=x, y expr=\thisrow{\i} - \thisrow{\i_c}]{\file}; 
+    \addplot[pretty conf, name path=up] table [x=x, y expr=\thisrow{\i} + \thisrow{\i_c}]{\file}; 
+    \addplot fill between[of=low and up];
+} 
+\def\file{\pltpath_\pltxright_\pltylower.tsv}
+\nextgroupplot[pretty line lower, cycle list name = pr-marks-conf, xlabel = {attribute 2}]
+\foreach \i in \pltmethods{
+    \addplot table[x=x, y=\i] {\file}; 
+    \addplot[pretty conf, name path=low] table [x=x, y expr=\thisrow{\i} - \thisrow{\i_c}]{\file}; 
+    \addplot[pretty conf, name path=up] table [x=x, y expr=\thisrow{\i} + \thisrow{\i_c}]{\file}; 
+    \addplot fill between[of=low and up];
+} 
+\end{groupplot}
+\end{tikzpicture}   
+			\end{minted}
+		\end{mintedtexbox} 
+	\end{minipage}
+	\caption{  Lines in tikz (using the \texttt{pretty line} axis environment).
+	}
+\end{figure}
+\fi
+%\subsection{Example 2: Box}
+%\subsection{Example 2: Bar}

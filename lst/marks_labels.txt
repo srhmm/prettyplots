@@ -1,0 +1,13 @@
+\begin{axis}[
+    pretty line marks, 
+    pretty grid scatter
+]	
+    \addplot table[x=x, y=y]  {data/marks.txt};	
+    \addplot table[x=x, y expr=10-0.5*\thisrow{y}]  
+        {data/marks.txt}; 
+    \node at (axis cs:6, 2.1)  {\\small boring};
+    \node at (axis cs:5.5, 2) (node1) {};
+    \node at (axis cs:4.5, 0.5)  (node2) {};
+    \draw [->, gray, thick] (node1) --(node2);
+    \node[pin=-90:{\\small special}] at (axis cs:9,5.8) {};	
+\end{axis}

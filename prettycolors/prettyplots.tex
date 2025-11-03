@@ -1,0 +1,150 @@
+\documentclass{article}
+%\usepackage[noenumitem]{eda} 
+\usepackage{prettyplots} 
+ 
+\usepackage{pgfplots} 
+\usepackage{tikz} 
+ \usepackage{eda-colors} 
+ 
+\label{key}\pgfplotsset{compat=1.14} % tick positions
+\usetikzlibrary{calc}  % Coordinate calculation
+\usetikzlibrary{intersections} % Fill between
+\usepgfplotslibrary{fillbetween} 
+\usetikzlibrary{pgfplots.statistics} % boxplot calc
+\usetikzlibrary{pgfplots.groupplots} % groups
+\usepackage{numprint,fullpage}  %tkz-kiviat, spider
+\usetikzlibrary{arrows} 
+\usepgfplotslibrary{colorbrewer} %colormap heat
+\usetikzlibrary{pgfplots.colormaps}  
+\usetikzlibrary{fit}
+
+%fonts
+\usepackage[scaled]{beramono}
+\usepackage[scaled]{inconsolata} 
+\usepackage[T1]{fontenc}
+\usepackage{fontspec}
+
+\setmainfont{Brygada1918}[
+Path=./style/BrygadaFontFiles/,
+Extension = .ttf,
+UprightFont=*-Regular,
+BoldFont=*-Bold,
+ItalicFont=*-Italic,
+BoldItalicFont=*-BoldItalic
+] 
+%\setmonofont{JetBrainsMono}[
+%Path=./style/JetbrainsFontFiles/,
+%Scale=0.85,
+%Extension = .ttf,
+%UprightFont=*-Regular,
+%BoldFont=*-Bold,
+%ItalicFont=*-Italic,
+%BoldItalicFont=*-BoldItalic
+%] 
+\setmonofont{GeistMono}[
+Path=./style/Geist_Mono/static/,
+Scale=0.85,
+Extension = .ttf,
+UprightFont=*-Regular,
+BoldFont=*-Bold, 
+]
+
+%code snippets
+\usepackage{listings}
+\lstset{%
+	basicstyle=\small\ttfamily,
+	language=[LaTeX]{TeX},
+	columns=fullflexible
+}
+\usepackage{minted}
+\usemintedstyle{tango}%trac
+\usepackage{tcolorbox}
+\definecolor{mintedtitlebg}{RGB}{250,250,250}
+\definecolor{mintedframecol}{RGB}{234,234,234}
+\definecolor{mintedtitlegray}{RGB}{109,109,109}
+\renewcommand{\theFancyVerbLine}{\sffamily
+	\textcolor[RGB]{110,116,125}{\scriptsize
+		\oldstylenums{\arabic{FancyVerbLine}}}}
+\setminted{
+	framesep=2mm, 
+	baselinestretch=1.1,
+	fontsize=\footnotesize, 
+} 
+\usepackage{xpatch}
+\tcbset{  
+	left=0pt,
+	right=0pt,  
+	colback=white,
+	coltitle=mintedtitlegray,
+	colbacktitle=mintedtitlebg,
+	fonttitle=\scriptsize\ttfamily,
+	boxsep=3mm,colframe=mintedframecol,
+	boxrule=.2pt
+} 
+% code snippet boxes
+\newtcolorbox{mintedicontexbox}[1][]
+{ title={\raisebox{-.4mm}{\includegraphics{style/icon_tex.png}}\quad#1} }  
+\newtcolorbox{mintedicontxtbox}[1][]
+{ title={\raisebox{-.4mm}{\includegraphics{style/icon_data.png}}\quad#1} } 
+\newtcolorbox{mintedtexbox}[1][]{ title={#1} }  
+\newtcolorbox{mintedtxtbox}[1][]{ title={#1} }  
+
+%copiability
+% from http://tex.stackexchange.com/questions/57151/how-do-i-prevent-conflicts-between-accsupp-and-hyperref
+\usepackage{accsupp}
+\newcommand\emptyaccsupp[1]{\BeginAccSupp{ActualText={}}#1\EndAccSupp{}}
+%default definition is: \def\theFancyVerbLine{\rmfamily\tiny\arabic{FancyVerbLine}}
+\let\theHFancyVerbLine\theFancyVerbLine% don't apply our patch to hyperref's version
+\def\theFancyVerbLine{\rmfamily\tiny\emptyaccsupp{\arabic{FancyVerbLine}}}
+ 
+%graphics
+\usepackage{graphicx}
+\newlength{\bheight} 
+\settoheight{\bheight}{T}
+\setkeys{Gin}{height=\bheight} % includegraphics default height
+\usepackage{hologo}
+
+%title
+\usepackage[nonewpage]{imakeidx}
+\makeindex[title=Index,columns=1]
+\title{\bfseries{PrettyPlots} \normalfont in \hologo{LaTeX}}
+\author{EDA group}
+%\date{May 2024}
+\begin{document}
+	\maketitle
+	\tableofcontents
+	\printindex  
+	%basic plots
+	\input{examples/line-experiment}
+	\input{examples/line}
+	\input{examples/box}
+	\input{examples/bar}
+	\input{examples/scatter}
+	\input{examples/marks}
+	\input{examples/colorbar}
+	\input{examples/surf}
+	\input{examples/line-timeseries}
+	\input{examples/violin}
+	\input{examples/kite}
+	\input{examples/contour}
+	\input{examples/ridgeline}
+	\input{examples/venn}
+	%styles
+	\input{examples/line_style}
+	\input{examples/grids}	
+	\input{examples/labels}
+	\input{examples/scatter_classes}
+	\input{examples/line_err}
+	\input{examples/line_shady}
+	\input{examples/axis_scale}
+	\input{examples/axis_log}
+	\input{examples/line_misc}
+	\input{examples/bar_group}
+	\input{examples/bar_misc}
+	\input{examples/stacked}
+%	\input{examples/test}
+%	\input{examples/box}
+%	\input{examples/surf_other}
+%	\input{examples/web}
+	\printindex
+\end{document}

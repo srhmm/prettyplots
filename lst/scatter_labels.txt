@@ -1,0 +1,15 @@
+\begin{axis}[
+    pretty scatter,  
+    scatter/use mapped color = 
+        {draw=gray, fill=gray} ]
+    % \addplot[pr-markweights] table {data/marks_weighted.tsv};
+    \addplot[only marks,
+        nodes near coords*={
+            \prnodefontsize $\pgfmathprintnumber \weight$
+        },	
+        every node near coord/.append style = {yshift = 1 pt},
+        visualization depends on={\thisrow{weight} \as \weight}, 
+        scatter/@pre marker code/.append style=
+        {/tikz/mark size=0.5*\weight}
+    ] table {data/marks_weighted.tsv};
+\end{axis}

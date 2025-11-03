@@ -1,0 +1,12 @@
+% preamble 
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{ternary}
+%
+\begin{ternaryaxis}[ 
+    pretty ternary axis,
+    xlabel= {xlabel},
+    ylabel= {ylabel},
+    zlabel= {zlabel},
+]
+\addplot3+[pr-scatter] table {data/ternary.tsv} ;
+\end{ternaryaxis}

@@ -1,0 +1,268 @@
+ 
+%todo show origin higher is better example
+
+\subsection{Labels} 
+\index{Labels} 
+
+
+
+
+
+
+\begin{figure}[h!]
+	\index{Labels!near lines}
+\begin{minipage}{0.7\textwidth}	 
+\begin{mintedtexbox}[/examples/line\_labels.tex]
+	\inputminted{TeX}{lst/line_labels.txt}
+\end{mintedtexbox}
+\end{minipage}
+\begin{minipage}{0.29\textwidth} 
+	\input{examples/line_lables.tex} 
+\end{minipage}  
+\end{figure}
+
+%% Annotating points  
+\begin{figure}[h!]
+	\index{Labels!showing points}
+\begin{minipage}{0.7\textwidth}	
+	\begin{mintedtexbox}[/examples/marks\_labels.tex]
+		\inputminted{TeX}{lst/marks_labels.txt}
+	\end{mintedtexbox}
+\end{minipage}
+\begin{minipage}{0.29\textwidth}
+	\input{examples/marks_lables.tex} 
+	
+	\end{minipage} 
+\end{figure} 
+
+
+
+%% Annotating points with visualization dependency
+\begin{figure}[h!]
+\begin{minipage}{0.7\textwidth}	
+	\index{Labels!near marks}
+	\begin{mintedtexbox}[/examples/scatter\_labels.tex]
+		\inputminted{TeX}{lst/scatter_labels.txt}
+	\end{mintedtexbox}
+\end{minipage}
+\begin{minipage}{0.29\textwidth}
+	\input{examples/scatter_labels.tex} 
+	\end{minipage}
+\end{figure}
+
+ 
+%% Labelled bars
+\begin{figure}[h!]
+\begin{minipage}{0.65\textwidth}	
+	\index{Labels!near bars}
+	\begin{mintedtexbox}[/examples/bar\_labels.tex]
+		\inputminted{TeX}{lst/bar_labels.txt}
+	\end{mintedtexbox}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+	\input{examples/bar_labels.tex}  
+\end{minipage}
+\end{figure} 
+\clearpage
+
+\begin{comment}
+ 
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+
+% maybe useful from https://tex.stackexchange.com/questions/43610/plotting-bell-shaped-curve-in-tikz-pgf
+\begin{tikzpicture}
+\begin{axis}[
+no markers, domain=0:10, samples=100,
+axis lines*=left, xlabel=$x$, ylabel=$y$,
+every axis y label/.style={at=(current axis.above origin),anchor=south},
+every axis x label/.style={at=(current axis.right of origin),anchor=west},
+height=5cm, width=12cm,
+xtick={4,6.5}, ytick=\empty,
+enlargelimits=false, clip=false, axis on top,
+grid = major
+]
+\addplot [fill=cyan!20, draw=none, domain=0:5.96] {gauss(6.5,1)} \closedcycle;
+\addplot [very thick,cyan!50!black] {gauss(4,1)};
+\addplot [very thick,cyan!50!black] {gauss(6.5,1)};
+
+
+\draw [yshift=-0.6cm, latex-latex](axis cs:4,0) -- node [fill=white] {$1.96\sigma$} (axis cs:5.96,0);
+\end{axis}
+
+\end{tikzpicture} 
+\end{comment}
+
+
+
+\subsection{Highlighting}
+
+
+The following examples are inspired from \cite{knaflic2015storytelling}.
+
+\index{Plot Types!line!simplified}
+\index{Labels!near lines}
+\begin{figure}[h!]
+	\begin{minipage}{0.65\textwidth} 
+		\begin{tcolorbox}
+			\begin{minted}{TeX} 
+\begin{axis}[
+    pretty line,    
+    ytick = {0, 5, 10},
+    x tick label style = {pr-color-gray5}, 
+    y tick label style = {pr-color-gray5},  
+    xtick style = {pr-color-gray4, thick},
+    ytick style = {pr-color-gray4, thick},
+    x axis line style = {pr-color-gray4, very thick}, 
+    y axis line style = {pr-color-gray4, very thick} 
+    ] 
+    \addplot+[line width=1.5pt] 
+    table[x=x, y expr=\thisrow{y1}+1] 
+        {data/line.tsv} 
+        node[pos=1, right] (n) {\small \textbf{Ours}};    
+    \pgfplotsinvokeforeach{2,...,3}{
+    \addplot+[pr-color-gray4] table[x=x, y=y#1] 
+        {data/line.tsv}
+        node[pos=1, right] (n) {\small Method #1};   
+    }
+\end{axis}
+\end{minted}
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth} 
+		\def\methods{ourmethod, goodmethod, badmethod, uglymethod}
+		\def\file{data/box.tsv} 
+		\begin{tikzpicture} 
+			\begin{axis}[
+				pretty line,    
+				xticklabel style = {pr-color-gray5}, 
+				yticklabel style = {pr-color-gray5},  
+				xtick style = {pr-color-gray4, thick},
+				x axis line style = {pr-color-gray4, very thick}, 
+				ytick style = {pr-color-gray4, thick},
+				y axis line style = {pr-color-gray4, very thick}, 
+				ytick = {0, 5, 10},
+				ymin=0, width=\textwidth, 
+				] 
+				\addplot+[line width=1.5pt] table[x=x, y expr=\thisrow{y1}+1] {data/line.tsv} node[pos=1, right] (n) {\small \textbf{ Ours}};  
+				\pgfplotsinvokeforeach{2,...,3}{
+					\addplot+[pr-color-gray4] table[x=x, y=y#1] {data/line.tsv} node[pos=1, right] (n) {\small Method #1};   
+				}
+			\end{axis}
+		\end{tikzpicture}
+	\end{minipage} 
+\end{figure} 
+ 
+\index{Plot Types!box!simplified}
+\index{Colors and Style!defining axis colors}
+\begin{figure}[h!]
+	\begin{minipage}{0.65\textwidth} 
+		\begin{tcolorbox}
+			\begin{minted}{TeX} 
+\begin{axis}[
+    pretty boxplot,  
+    xticklabels = {B1,B2,B3,B4},
+    xtick = {1,2,3,4},
+    y tick label style = {pr-color-gray4, 
+        font=\prtickfontsize}, 
+    x tick label style = {pr-color-gray4, 
+        font=\prtickfontsize}, 
+    ytick style = {pr-color-gray3, thick},
+    x axis line style = {pr-color-gray4, thick}, 
+    ymin=0
+    ]
+    \addplot table[y=y1] {data/boxes.tsv};
+    \foreach \col in {y1,y2,y3,y4,y5}{
+        \addplot+[pr-color-gray3] table[y=\col] 
+        {data/boxes.tsv};
+    }
+\end{axis}
+			\end{minted}
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth} 
+		\def\methods{ourmethod, goodmethod, badmethod, uglymethod}
+		\def\file{data/box.tsv} 
+		\begin{tikzpicture} 
+			\begin{axis}[
+				pretty boxplot,  
+				xticklabels = {B1, B2, B3, B4, B5},
+				xtick = {1, 2, 3, 4, 5},
+				y tick label style  = {pr-color-gray4, font=\prtickfontsize}, 
+				x tick label style  = {pr-color-gray4, font=\prtickfontsize}, 
+				ytick style       	= {pr-color-gray3, thick},
+				x axis line style  	= {pr-color-gray4, very thick}, 
+				width=\textwidth
+				]	
+				\addplot  table[y=y1] {data/boxes.tsv};
+				\foreach \col in {y1,y2,y3,y4}{
+					\addplot+[pr-color-gray3] table[y=\col] {data/boxes.tsv};
+				}
+			\end{axis}
+		\end{tikzpicture}
+	\end{minipage} 
+\end{figure} 
+
+
+
+\index{Labels!label names from columns} 
+\index{Plot Types!bar!simplified}
+\begin{figure}[h!]
+	\begin{minipage}{0.6\textwidth} 
+		\begin{tcolorbox} 
+			\begin{minted}{TeX}  
+\begin{tikzpicture}
+\pgfplotstablegetrowsof{data/countries.tsv}
+\edef\numberofrows{\pgfplotsretval}
+\begin{axis}[ 
+    pretty xbar,
+    bar shift = 0pt, 
+    y dir = reverse,
+    ytick = {0,...,\numberofrows}, 
+    yticklabels from table =
+        {data/countries.tsv}{[index]0},
+    xlabel = {Life Quality},
+    ylabel = {\textbf{Country}}
+    ] 
+    \addplot+[pr-color-bg, fill=pr-color-bg, 
+    show except={country}{Germany}] table [
+    y expr=\coordindex, x index=1]
+        {data/countries.tsv}; 
+    \addplot+[pr-color1b, fill=pr-color1b, 
+    show only={country}{Germany}] table [
+    y expr=\coordindex,
+    x index=1]
+        {data/countries.tsv};
+\end{axis}
+\end{tikzpicture}
+			\end{minted} 
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth}
+		\begin{tikzpicture}
+			\pgfplotstablegetrowsof{data/countries.tsv}
+			\edef\numberofrows{\pgfplotsretval}
+			\begin{axis}[ 
+				pretty xbar,
+				bar shift=0pt,
+				y dir=reverse,
+				ytick={0,...,\numberofrows}, 
+				yticklabels from table={data/countries.tsv}{[index]0},
+				xmin=0, xmax=10, 
+				width=\textwidth,
+				ylabel={\textbf{Country}}, xlabel={Life Quality}, pretty labelshift,
+				y label style={at={(axis description cs:-0.01,1)},
+					rotate=-90, anchor=south east},
+				] 
+				\addplot+[pr-color-bg, fill=pr-color-bg, show except={country}{Germany}] table [
+				y expr=\coordindex,
+				x index=1 
+				]{data/countries.tsv}; 
+				\addplot+[pr-color1b, fill=pr-color1b, show only={country}{Germany}] table [
+				y expr=\coordindex,
+				x index=1 
+				]{data/countries.tsv};
+			\end{axis}
+		\end{tikzpicture}
+	\end{minipage}
+\end{figure} 

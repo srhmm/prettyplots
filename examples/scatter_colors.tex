@@ -1,0 +1,26 @@
+\pgfplotsset{ 
+	my-scatter/.style={	 
+		only marks, mark options={fill opacity=0.50},
+		scatter src	=explicit symbolic,
+		scatter/classes	= {
+			0={mark=*, pr-color1a, fill=pr-color1a!50},   
+			1={mark=triangle*, pr-color1b, fill=pr-color1b!50 },
+			2={mark=diamond*, pr-color1c, fill=pr-color1c!50 },
+			3={mark=square*, pr-color1d, fill=pr-color1d!50 } 
+	}}
+} 
+\begin{tikzpicture}
+	\begin{axis}[
+		pretty scatter,   
+		width= \textwidth,
+		xmin            = 0, 
+		ymin            = 0, 
+		ymax 			= 10, 
+		xmax			= 10,
+		pretty nolabels, 
+		legend style={at={(1.15,1)}}
+		]
+		\addplot [my-scatter]
+		table[x = x1,y = x2,meta = y,col sep=comma] {data/blobs.csv};  
+	\end{axis}
+\end{tikzpicture}  

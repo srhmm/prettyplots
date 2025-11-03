@@ -1,0 +1,16 @@
+\begin{loglogaxis}[
+    pretty scatter, % pretty spacy, xygrid,
+    example marks, 
+    pretty labelshift] % goes last
+    \addplot+[only marks,
+    scatter src      = explicit symbolic,
+    scatter/classes  = {
+            a={mark=*, mark size=1.75, fawn},
+            b={mark=o, draw=black, mark size=1.25, thick},
+            c={mark=triangle*, frenchblue} % no comma 
+    }, only marks]
+    table[x expr=\thisrow{x}*100, 
+        y expr=\thisrow{y}*100, meta=label] 
+    {data/classes.txt};
+    \legend{Class 1,Class 2,Class 3}
+\end{loglogaxis}

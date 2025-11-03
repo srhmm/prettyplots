@@ -1,0 +1,13 @@
+\begin{axis}[
+    pretty line,
+    pretty spacy, 
+    no markers, thick, black, smooth
+] 
+    \addplot table[x=x,y=y2] {data/line_odd.txt} 
+    node[example label] {strange line};
+    \addplot table[x=x, y=y3] {data/line_odd.txt} 
+    node[example label] {odd line};
+    \addplot table[x=x, y=y1] {data/line_odd.txt} 
+    node[example label, inner sep=4pt, 
+         pos=0.3, rotate=25] {weird line};
+\end{axis}

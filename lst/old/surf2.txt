@@ -1,0 +1,14 @@
+\begin{axis}[
+    pretty 3daxis,
+    scaled ticks    = true,	
+    domain          = 5:10,
+    domain y        = -10:-5,	
+    samples y       = 15,
+    xlabel          = {$x_1$},
+    ylabel          = {$x_2$}, 
+    zlabel          = {$y$},  
+    grid            = major,
+    major grid style= {loosely dotted, gray},
+    ]
+    \addplot3 [example contour] {x*y*exp(x)};
+\end{axis}

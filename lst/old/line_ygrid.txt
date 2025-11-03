@@ -1,0 +1,14 @@
+\begin{axis}[
+    pretty line,
+    pretty ygrid,	
+    example line, 
+    scaled x ticks  = base 10:-4, 
+    scaled y ticks  = base 10:-3,	
+    %x tick scale label style  % if scale labels act out
+    %               = {at={(axis description cs:1,0)}..}, 
+    ymax            = 10000, smooth ]
+    \pgfplotsinvokeforeach{1,...,2}{
+        \addplot  table[x expr=\thisrow{x}*10^4, 
+                        y expr=\thisrow{y#1}*10^3] 
+        {data/line.txt}; }
+\end{axis}

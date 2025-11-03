@@ -1,0 +1,55 @@
+\clearpage 
+\subsection{Scatter}
+\hypertarget{prettyscatter}{}
+
+\index{Plot Types!scatter} 
+\index{Plot Types!scatter!with classes}
+
+ Use this plot type if you want color and style of markers to depend on a given class label as follows. 
+ 
+ \begin{figure}[h!]
+ 	\begin{minipage}{.65\textwidth} 
+ 		\begin{mintedtxtbox}[/data/classes.tsv] 
+ 			\begin{minted}{TeX}
+%x    y    scatter class 
+x    y    label
+1    1    0 
+2    3    1
+ 			\end{minted}
+ 		\end{mintedtxtbox}
+ 	\end{minipage}
+ \end{figure}
+  
+
+\begin{figure}[h!] 
+\begin{minipage}{.65\textwidth}  
+	\begin{mintedtexbox}[/examples/scatter.tex]
+		\inputminted{TeX}{lst/scatter.txt} 
+	\end{mintedtexbox}     
+\end{minipage} 
+		\hfill
+		\begin{minipage}{.3\textwidth}  
+			\input{examples/scatter.tex} 
+\end{minipage} 
+\end{figure}
+%\subsection*{Customization}
+Have a look at \sectref{sec:style} to change the scatter class colors.
+
+If you have continuous color labels, use a colormap,
+
+ \index{Plot Types!scatter!with colormap}  
+ \hypertarget{prettyscattermap}{}
+ 
+ \begin{figure}[h!]  
+ 	\begin{minipage}{.65\textwidth}
+ 		
+ 		\begin{mintedtexbox}[/examples/colormap.tex] 
+ 			\inputminted{TeX}{lst/scatter_colormap.txt} 
+ 		\end{mintedtexbox}
+ 	\end{minipage}
+ 	\begin{minipage}{.3\textwidth}
+ 		\input{examples/scatter_colormap.tex} 
+ 	\end{minipage}
+ \end{figure}
+ 
+ \clearpage

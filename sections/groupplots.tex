@@ -1,0 +1,79 @@
+\subsection{Groupplots}
+\index{Plot Types!groupplot} 
+\index{Axes!grouping}
+
+\begin{function}{\tbs addgrouplines}
+	\docarg{data.tsv}{s} \docarg{axis options}{l} \docarg{plot options}{l} 
+	\\ Creates a line plot in a groupplot axis environment.  
+\end{function}
+
+
+\begin{arglist}
+	\argitem{data.tsv}{s}{m}{data file with columns \texttt{x, y1, ..., yn}.}  
+\end{arglist}
+
+
+
+\begin{figure}[h!]% 
+	\begin{minipage}{.8\textwidth}  
+		\begin{mintedtxtbox}[/data/expres/expname\_attr1\_metric1.csv]
+\begin{minted}[fontsize=\scriptsize]{TeX}
+%Attribute1 (x)    Method1 (mean)  ...   MethodM
+x    ours    notours
+0    0.55    0.4
+			\end{minted}
+		\end{mintedtxtbox} 
+	\end{minipage} 
+	\begin{minipage}{.8\textwidth}  
+		\begin{mintedtexbox}[/examples/groupplots.tex]	
+			\begin{minted}[fontsize=\scriptsize]{TeX}
+%% one file per line plot
+\def\fileA{data/expres/expname_attr1_metric1.tsv}
+\def\fileB{data/expres/expname_attr1_metric2.tsv}
+\def\fileC{data/expres/expname_attr2_metric1.tsv}
+\def\fileD{data/expres/expname_attr2_metric2.tsv} 
+
+%% axis  
+\begin{tikzpicture} 
+\begin{groupplot}[ 
+    group style={
+        group size=4 by 1, 
+        horizontal sep=25pt,  
+        vertical sep=30pt,
+    },  
+]  
+    \linesGroupplot{\fileA}[width=0.25\textwidth,
+        ylabel = {metric}, 
+        legend entries = {\textsc{Ours},\textsc{NotOurs}} ]
+    \linesGroupplot{\fileB}[width=0.25\textwidth]
+    \linesGroupplot{\fileC}[width=0.25\textwidth]
+    \linesGroupplot{\fileD}[width=0.25\textwidth] 
+\end{groupplot} 
+\end{tikzpicture}   
+			\end{minted}
+		\end{mintedtexbox} 
+	\end{minipage} 
+	\begin{tikzpicture} 
+\def\fileA{data/expres/expname_attr1_metric1.tsv}
+\def\fileB{data/expres/expname_attr1_metric2.tsv}
+\def\fileC{data/expres/expname_attr2_metric1.tsv}
+\def\fileD{data/expres/expname_attr2_metric2.tsv} 
+\begin{groupplot}[ 
+group style={
+	group size=4 by 1, 
+	horizontal sep=25pt,  
+	vertical sep=30pt,
+}, 
+xtick align=center, 
+ytick align=center
+]  
+\linesGroupplot{\fileA}[ width=0.25\textwidth,  ylabel = {upper metric},   legend entries = {\textsc{Ours},\textsc{NotOurs}} ]
+\linesGroupplot{\fileB}[width=0.25\textwidth,]
+\linesGroupplot{\fileC}[ width=0.25\textwidth  ]
+\linesGroupplot{\fileD}[width=0.25\textwidth,] 
+\end{groupplot} 
+\end{tikzpicture}  
+\end{figure}
+
+ 
+

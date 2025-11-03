@@ -1,0 +1,967 @@
+
+
+%%%%%%%%%%%%
+%% Axis types
+
+%% Line, Scatter
+
+\pgfplotsset{
+	%
+	% #1 = x, y, or z
+	% #2 = the shift value
+	/tikz/normal shift/.code 2 args = {%
+		\pgftransformshift{%
+			\pgfpointscale{#2}{\pgfplotspointouternormalvectorofticklabelaxis{#1}}%
+		}%
+	},%
+	%
+	pretty axis/.style={
+		axis lines*       	= left,
+		tick style    		= {thin, black, major tick length=2pt},
+		x tick label style 	= {font=\scriptsize, yshift = 1pt},
+		y tick label style 	= {font=\scriptsize, xshift = 1pt},
+		x label style 		= {at={($(axis description cs:0.5,0) + (0,-15pt)$)}, anchor=north, font=\scriptsize},
+		y label style 		= {at={($(axis description cs:0,0.5) + (-20pt,0)$)}, anchor=south, font=\scriptsize},	
+		x tick scale label style={at={(axis description cs:1,0)},xshift=1.5em}, 
+		y tick scale label style={at={(axis description cs:0,1)},yshift=0.5em, xshift=-.5em}, 
+		legend cell align 	= left,
+		legend style 		= {inner sep = 1pt, cells = {font=\scriptsize}, },
+		legend image code/.code={%
+			\draw[mark repeat=2,mark phase=2,#1] 
+			plot coordinates { (0cm,0cm) (0.15cm,0cm) (0.3cm,0cm) };% 
+		}
+	}
+}
+
+
+%% Bar 
+
+\pgfplotsset{ 
+	pretty ybar axis/.style={
+		pretty axis,
+		area legend,
+		ymajorgrids,
+		no markers,
+		axis on top,
+		xtick				= data,
+		%cycle list name    	= mamba-bar,
+		tick align        	= outside,
+		enlargelimits     	= false,
+		xmajorgrids 		= false,
+		bar width			= 0.4em,
+		major grid style	= white,
+		axis lines* 		= left,			% only show two lines of the bounding box
+		tick style    		= {thin, black, major tick length=2pt},
+		major y tick style	= {draw=none},
+		x axis line style 	= {thick, normal shift={x}{0pt}},
+		y axis line style	= {opacity=0},	% but make y-axis invisible
+		x tick label style 	= {font=\scriptsize, yshift = -1pt},
+		y tick label style 	= {font=\scriptsize, xshift = -1pt},	
+	}
+}
+
+\pgfplotsset{
+	pretty xbar axis/.style={
+		pretty axis,
+		area legend,
+		axis on top,
+		tick align        	= outside,
+		enlarge y limits 	= 0.3, %or true
+		bar width 			= 10pt, 
+	}
+}
+
+%% 3d
+
+\pgfplotsset{
+	every axis/.append style = {thick},tick style = {thick,black},
+	%
+	% #1 = x, y, or z
+	% #2 = the shift value
+	/tikz/normal shift/.code 2 args = {%
+		\pgftransformshift{%
+			\pgfpointscale{#2}{\pgfplotspointouternormalvectorofticklabelaxis{#1}}%
+		}%
+	},%
+	%
+	pretty 3daxis/.style = {
+		tick align        = outside,
+		scaled ticks      = false,
+		enlargelimits     = false,
+		ticklabel shift   = {10pt},
+		axis lines*       = left,
+		line cap          = round,
+		clip              = false,
+		xtick style       = {normal shift={x}{10pt}},
+		ytick style       = {normal shift={y}{10pt}},
+		ztick style       = {normal shift={z}{10pt}},
+		x axis line style = {normal shift={x}{10pt}},
+		y axis line style = {normal shift={y}{10pt}},
+		z axis line style = {normal shift={z}{10pt}},
+	}
+} 
+
+%%%%%%%%%%%%
+%% Plot types
+
+
+%% Line
+% eda line = pretty line + axis
+% compatible with: x(y,xy)grid, spacy, spacey
+
+\pgfplotsset{
+	%
+	% #1 = x, y, or z
+	% #2 = the shift value
+	/tikz/normal shift/.code 2 args = {%
+		\pgftransformshift{%
+			\pgfpointscale{#2}{\pgfplotspointouternormalvectorofticklabelaxis{#1}}%
+		}%
+	},%
+	%
+	pretty line/.style={
+		pretty axis,
+		cycle list name		= mamba,
+		tick align        	= outside,
+		scaled ticks      	= false,
+		enlargelimits     	= false,
+		ticklabel shift   	= {3pt},
+		axis lines*       	= left,
+		line cap          	= round,
+		clip              	= false,
+		xtick style       	= {normal shift={x}{3pt}},
+		ytick style       	= {normal shift={y}{3pt}},
+		x axis line style 	= {thick,normal shift={x}{3pt}},
+		y axis line style 	= {thick,normal shift={y}{3pt}},
+	}
+}
+
+
+%% Marks
+% scatter plot with the same marker appearance within each plot
+% options: grids, xlabel rotation, enlargexlimits
+
+\pgfplotsset{
+	pretty line marks/.style={
+		pretty line,
+		only marks,
+		cycle list name		= prcl-marks, 
+		%TODO Needed?:
+		legend style 		= {inner xsep=3pt, cells={font=\scriptsize}, },
+		legend image code/.code={%
+			\draw[mark repeat=2,mark phase=2,#1] 
+			plot coordinates { (0cm,0cm) (0.15cm,0cm) (0.5cm,0cm) };%
+		},
+	}
+}
+
+
+
+%% Scatter
+% marker appearance changes for individual points, dep. on value or meta data
+% options: grids, xlabel rotation, enlargexlimits
+
+%TODO xtick=data?
+\pgfplotsset{
+	pretty scatter/.style={
+		pretty line,
+		scatter,
+		legend style 		= {inner sep=3pt, cells={font=\scriptsize}, },
+	}
+}
+
+%% Heat map
+
+\pgfplotsset{
+	pretty heated/.style={
+		pretty scatter,
+		colorbar,
+		%colorbar sampled, 	
+		colorbar style 		= {samples=11,
+			ylabel 			= {zlabel},  
+			yticklabel style= {font=\footnotesize },     
+			ylabel style 	= {font=\scriptsize },               
+			ytick style		= {draw=none},},
+		%colormap/...
+		only marks,
+	}
+}
+\pgfplotsset{
+	pretty heated horizontal/.style={
+		pretty scatter,
+		colorbar horizontal,
+		%colorbar sampled, 	% opt., color transition
+		colorbar style 		= {samples=11,
+			xlabel 			= {zlabel},  
+			xticklabel style= {font=\footnotesize },     
+			xlabel style 	= {font=\scriptsize }, 
+			xtick style		= {draw=none},},
+		only marks,
+	}
+}
+\pgfplotsset{
+	pretty heatmatrix/.style={
+		pretty scatter,
+		colorbar,
+		colorbar sampled, 	% opt., color transition
+		colorbar style 		= {samples=11,
+			ylabel 			= {zlabel},  
+			yticklabel style= {font=\footnotesize },     
+			ylabel style 	= {font=\scriptsize }, 
+			ytick style		= {draw=none},},
+		colormap 		 	= {bluewhite}{color=(white) rgb255=(50,125,184)},		
+		no markers,
+		xtick 		 		= data, %{0,...,2},
+		ytick 		 		= data, 
+		xtick style 		={draw=none},
+		ytick style 		={draw=none},
+		nodes near coords 		={\pgfmathprintnumber\pgfplotspointmeta},
+		every node near coord/.append style={},
+		nodes near coords style={
+			%yshift=-5pt,%instd of align={south} but not f neg numbers
+			font=\footnotesize,
+			/pgf/number format/.cd,
+			fixed,
+			fixed zerofill,
+			precision=2, % decimal places
+			/tikz/.cd},
+		nodes near coords align={south} ,
+		legend entries 		={},
+	}
+}
+
+\pgfplotsset{
+	pretty heatmatrix thesis/.style={
+		pretty scatter,
+		colorbar,
+		colorbar sampled, 	% opt., color transition
+		colorbar style 		= {samples=11,
+		draw=none,
+			%ylabel 			= {zlabel},  
+			yticklabel style= {font=\scriptsize },     
+			ylabel style 	= {font=\scriptsize }, 
+			%ytick style		= {draw=none},
+			},
+		colormap 		 	= {bluewhite}{color=(white) rgb255=(50,125,184)},		
+		no markers,
+		xtick 		 		= data, %{0,...,2},
+		ytick 		 		= data, 
+		xtick style 		={draw=none},
+		%ytick style 		={draw=none},
+		nodes near coords 		={\pgfmathprintnumber\pgfplotspointmeta},
+		every node near coord/.append style={},
+		nodes near coords style={
+			 yshift=-5pt,%instd of align={south} but not f neg numbers
+			font=\footnotesize,
+			/pgf/number format/.cd,
+			fixed,
+			fixed zerofill,
+			precision=1, % decimal places
+			/tikz/.cd},
+		nodes near coords align={south} ,
+		legend entries 		={},
+	}
+}
+
+
+%% ybar
+% eda ybar = pretty ybar + axis
+% options: xlabel rotation, enlargexlimits
+
+\pgfplotsset{	
+	pretty ybar/.style={ 
+		ybar, 
+		pretty ybar axis,
+		legend style        = {
+			nodes={scale=0.8, transform shape}, at={(0.9,1.0)},anchor=north,inner sep=1pt,cells={font=\small}, }, 		
+		legend image post style={scale=0.25},  } }
+
+
+\pgfplotsset{	
+	pretty ybar small/.style={
+		ybar, pretty ybar axis,
+		bar width			= 0.3em,%customize
+		ybar 				= 0,	%space between grouped bars. do not use for stacked plots
+		enlarge x limits	= 0.05, %TODO prettyxlimits?
+		area legend, %why is this overwritten 
+		legend style		= {
+			font			= {\scriptsize},
+			nodes			= {scale=0.8},
+			cells			= {scale=0.2},
+			draw=none, fill=none,
+		}
+	}
+}
+
+\pgfplotsset{	
+	pretty ybar small vario/.style={
+		ybar, pretty ybar axis,
+		bar width			= 0.45em,%customize
+		ybar 				= 0,	%space between grouped bars. do not use for stacked plots
+		enlarge x limits	= 0.05, %TODO prettyxlimits?
+		area legend, %why is this overwritten 
+		legend style		= {
+			font			= {\scriptsize},
+			nodes			= {scale=1},
+			cells			= {scale=0.35},
+			draw=none, fill=none,
+		}
+	}
+}
+
+%% Interval ybar 
+
+\pgfplotsset{	
+	pretty ybar interval/.style={ 
+		ybar interval,
+		pretty ybar axis,	
+		xmajorgrids,
+		pretty enlargexlimits, 
+	} 
+}
+
+
+%% Stacked ybar 
+
+\pgfplotsset{	
+	pretty ybar stacked/.style={ 
+		ybar stacked, 
+		pretty ybar axis,	
+		pretty enlargexlimits, 
+		ymajorgrids 		= false
+	} 
+}
+
+
+%%  Stacked xbar
+
+\pgfplotsset{
+	pretty xbar stacked/.style={
+		xbar stacked,
+		pretty xbar axis,
+		%optional: omit y axis, shift ticks and labels accordingly (as in Disc):
+		y axis line style	= {draw opacity=0},
+		ytick style       	= {normal shift={y}{3pt}}, %x&y swapped
+		y tick label style 	= {font=\scriptsize, yshift=0pt, xshift=-3pt},
+		y label style 		= {at={($(axis description cs:0,0.5) + (-23pt,-5pt)$)}, anchor=south, font=\scriptsize},	
+		% grid background
+		xmajorgrids			= true,
+		major grid style	= {gray, loosely dotted}, 
+	}
+}
+
+%%  Stacked xbar variant
+
+\pgfplotsset{
+	pretty xbar components/.style={
+		xbar stacked,
+		pretty xbar axis,
+		enlargelimits     	= false,
+		bar width 			= 10pt, 
+		%grid for components
+		xmajorgrids 		= false,
+		major grid style	= white,
+	}
+}
+
+%% Interval xbar
+
+
+\pgfplotsset{	
+	pretty xbar interval/.style={ 
+		xbar interval,
+		pretty xbar axis,			
+		enlargelimits     	= false,
+		xmajorgrids 		= false, 
+		ymajorgrids 		= false,
+	} 
+}
+
+%% Box
+%TODO neu
+
+\pgfplotsset{
+	box plot/.style={
+		/pgfplots/.cd,
+		black,
+		only marks,
+		mark=-,
+		tick style    		= {thin, black, major tick length=2pt},
+		major y tick style	= {draw=none},
+		x tick label style 	= {font=\scriptsize, yshift=1pt},
+		y tick label style = {font=\scriptsize, xshift=-2pt},
+		x axis line style 	= {thick, normal shift={x}{0pt}},
+		y axis line style	= {opacity=0},	% but make y-axis invisible
+		x label style 		= {at={(axis description cs:0.5,0)}, normal shift={x}{6pt}, anchor=north, font=\scriptsize},
+		y label style 		= {at={(axis description cs:0,0.5)}, normal shift={y}{20pt}, anchor=south, font=\scriptsize},
+		xtick pos = left,
+		ytick pos = left,
+		mark size=\pgfkeysvalueof{/pgfplots/box plot width},
+		/pgfplots/error bars/y dir=plus,
+		/pgfplots/error bars/y explicit,
+		/pgfplots/table/x index=\pgfkeysvalueof{/pgfplots/box plot x index},
+	},
+	box plot box/.style={
+		/pgfplots/error bars/draw error bar/.code 2 args={%
+			\draw  ##1 -- ++(\pgfkeysvalueof{/pgfplots/box plot width},0pt) |- ##2 -- ++(-\pgfkeysvalueof{/pgfplots/box plot width},0pt) |- ##1 -- cycle;
+		},
+		/pgfplots/table/.cd,
+		y index=\pgfkeysvalueof{/pgfplots/box plot box top index},
+		y error expr={
+			\thisrowno{\pgfkeysvalueof{/pgfplots/box plot box bottom index}}
+			- \thisrowno{\pgfkeysvalueof{/pgfplots/box plot box top index}}
+		},
+		/pgfplots/box plot
+	},
+	box plot top whisker/.style={
+		/pgfplots/error bars/draw error bar/.code 2 args={%
+			\pgfkeysgetvalue{/pgfplots/error bars/error mark}%
+			{\pgfplotserrorbarsmark}%
+			\pgfkeysgetvalue{/pgfplots/error bars/error mark options}%
+			{\pgfplotserrorbarsmarkopts}%
+			\path ##1 -- ##2;
+		},
+		/pgfplots/table/.cd,
+		y index=\pgfkeysvalueof{/pgfplots/box plot whisker top index},
+		y error expr={
+			\thisrowno{\pgfkeysvalueof{/pgfplots/box plot box top index}}
+			- \thisrowno{\pgfkeysvalueof{/pgfplots/box plot whisker top index}}
+		},
+		/pgfplots/box plot
+	},
+	box plot bottom whisker/.style={
+		/pgfplots/error bars/draw error bar/.code 2 args={%
+			\pgfkeysgetvalue{/pgfplots/error bars/error mark}%
+			{\pgfplotserrorbarsmark}%
+			\pgfkeysgetvalue{/pgfplots/error bars/error mark options}%
+			{\pgfplotserrorbarsmarkopts}%
+			\path ##1 -- ##2;
+		},
+		/pgfplots/table/.cd,
+		y index=\pgfkeysvalueof{/pgfplots/box plot whisker bottom index},
+		y error expr={
+			\thisrowno{\pgfkeysvalueof{/pgfplots/box plot box bottom index}}
+			- \thisrowno{\pgfkeysvalueof{/pgfplots/box plot whisker bottom index}}
+		},
+		/pgfplots/box plot
+	},
+	box plot median/.style={
+		/pgfplots/box plot,
+		/pgfplots/table/y index=\pgfkeysvalueof{/pgfplots/box plot median index}
+	},
+	box plot width/.initial=1em,
+	box plot x index/.initial=0,
+	box plot median index/.initial=1,
+	box plot box top index/.initial=2,
+	box plot box bottom index/.initial=3,
+	box plot whisker top index/.initial=4,
+	box plot whisker bottom index/.initial=5,
+}
+
+\newcommand{\boxplot}[2][]{
+	\addplot [box plot median,#1,draw=white] table {#2};
+	\addplot [forget plot, box plot box,#1,draw=white] table {#2};
+	\addplot [forget plot, box plot top whisker,#1,draw=gray] table {#2};
+	\addplot [forget plot, box plot bottom whisker,#1,draw=gray] table {#2};
+}
+
+
+
+%%%%%%%%%%%%
+%% Options: line, line marks, scatter
+
+
+%% Grids 
+% (for bar, no extra spacing needed, use majorgrids directly) 
+
+\pgfplotsset{
+	pretty ygrid/.style={
+		pretty spacey, %customize 
+		ymajorgrids, 
+		major grid style   = {gray,dotted}, %customize
+	}
+}
+\pgfplotsset{
+	pretty ygrid thesis/.style={
+		pretty spacy, %customize 
+		ymajorgrids, 
+		major grid style   = {gray,loosely dotted},  
+	}
+}
+\pgfplotsset{
+	pretty xgrid/.style={
+		pretty spacy,
+		xmajorgrids, 
+		major grid style	= {gray,dotted}
+	}
+}
+
+\pgfplotsset{
+	pretty xygrid/.style={
+		pretty spacy,
+		grid 				= major, 
+		major grid style	= {lightgray, loosely dotted} 
+	}
+}
+
+
+%% Log axis, scale 10 ticks
+
+% Fixing weird label shift when pretty plot is used under \begin{log(log)axis}, semilogaxis...:
+\pgfplotsset{
+	pretty labelshift/.style={
+		xlabel near ticks,
+		ylabel near ticks,
+		% stuff that near ticks overwrites
+		x label style 		= { font=\scriptsize,},
+		y label style 		= { font=\scriptsize },
+		x tick label style 	= { font=\scriptsize, xshift = 1pt},
+		y tick label style 	= { font=\scriptsize, xshift = 1pt},
+	}
+}
+
+% Example: usg with loglogaxis
+\pgfplotsset{
+	pretty loglog line/.style={
+		pretty line, 
+		pretty ygrid,
+		% put it after line, xgrid,.. to have an effect:
+		pretty labelshift,
+	}
+}
+% Example: ytickten, aligns all labels with 10^10
+\pgfplotsset{
+	pretty ytickten line/.style={
+		pretty line, 
+		pretty ygrid, %spacy,
+		major grid style	= {gray, loosely dotted},
+		ytickten		= {0,...,10},
+		yticklabel style= {text width=width("$10^10$"),align=left}, 
+		pretty labelshift,
+	}
+}
+
+
+%%%%%%%%%%%%
+%% Options: Bar/line marks/scatter with discrete x
+
+
+%% Enlarge limits for symbolic xticks
+%TODO repl with near ticks? 
+
+\pgfplotsset{	
+	pretty enlargexlimits/.style={ 
+		enlarge x limits	= 0.1, 		
+		y label style 		= {
+			at				={($(axis description cs:0,0.5) + (-5pt,0)$)}, 
+			anchor			=south, 
+			font			=\scriptsize},
+		x tick label style 	= {font=\scriptsize, yshift=1pt},
+	}
+}
+
+
+
+%% Discrete/symbolic xticks
+% in axis:  symbolic x coords={Class1,...} 
+
+\pgfplotsset{
+	pretty discrete/.style={
+		pretty enlargexlimits, 	%space at start/end label
+		scatter src			= explicit symbolic, % no prbl w bar
+		xtick 				= data,
+	}
+}
+
+
+\pgfplotsset{
+	pretty discrete rotated/.style={
+		pretty xlabelrot, pretty discrete
+	}
+}
+
+\pgfplotsset{
+	pretty discrete tilt/.style={
+		pretty xlabeltilt, pretty discrete
+	}
+}
+
+
+\pgfplotsset{
+	pretty discrete moretilt/.style={
+		pretty xlabelmoretilt, pretty discrete
+	}
+}
+
+
+
+%% xtick label rotation
+
+\pgfplotsset{
+	pretty xlabelrot/.style={
+		xlabel near ticks,
+		x label style 		= { font=\scriptsize },
+		x tick label style 	= { font=\scriptsize,
+			rotate=90, anchor=east, align=right },
+	}
+}
+
+\pgfplotsset{
+	pretty xlabeltilt/.style={
+		xlabel near ticks,
+		x label style 		= { font=\scriptsize },% as near ticks overwrites this
+		x tick label style 	= { font=\scriptsize, 
+			yshift=-3pt, % adjust maybe
+			xshift=10pt, 
+			rotate=25, anchor=east, align=right },
+	}
+}
+
+\pgfplotsset{
+	pretty xlabelmoretilt/.style={
+		xlabel near ticks,
+		x label style 		= { font=\scriptsize },% as near ticks overwrites this
+		x tick label style 	= { font=\scriptsize, 
+			yshift=-3pt, % adjust maybe
+			xshift=10pt, 
+			rotate=35, anchor=east, align=right },
+	}
+}
+
+
+
+
+%%%%%%%%%%%%
+%% Utils: for line, line marks
+
+% Space between axes and plot
+% eg. small plots, ygrid, xgrid
+% compat with line, no use for bar
+\pgfplotsset{
+	pretty spacey/.style={		
+		ticklabel shift   	= {10pt},
+		x tick label style 	= {font=\scriptsize, yshift = -3pt},
+		y tick label style 	= {font=\scriptsize, xshift = -3pt},
+		xtick style       	= {normal shift={x}{10pt}},
+		ytick style       	= {normal shift={y}{10pt}},	
+		x label style		= {yshift=-10pt},
+		y label style		= {yshift=10pt}, 
+		x axis line style 	= {thick,normal shift={x}{10pt}},
+		y axis line style 	= {thick,normal shift={y}{10pt}},
+		x tick scale label style={at={(axis description cs:1,0)}, yshift=-0.6em}, 
+		y tick scale label style={at={(axis description cs:0,1)}, xshift=-0.8em}
+	}
+}
+
+%TODO hacky, variable shift?
+\pgfplotsset{
+	pretty spacy/.style={ 	
+		ticklabel shift   	= {5pt},
+		x tick label style 	= {font=\scriptsize, yshift = -3pt},
+		y tick label style 	= {font=\scriptsize, xshift = -3pt},
+		xtick style       	= {normal shift={x}{5pt}},
+		ytick style       	= {normal shift={y}{5pt}},
+		x label style		= {yshift=-5pt}, 
+		y label style		= {yshift=5pt}, 
+		x axis line style 	= {thick,normal shift={x}{5pt}},
+		y axis line style 	= {thick,normal shift={y}{5pt}},
+		x tick scale label style={at={(axis description cs:1,0)}, yshift=-0.1em}, 
+		y tick scale label style={at={(axis description cs:0,1)}, xshift=-0.3em}
+	} 
+}
+
+\pgfplotsset{
+	pretty spacy asym/.style={ 	
+		ticklabel shift   	= {5pt},
+		x tick label style 	= {font=\scriptsize, yshift = -3pt},
+		y tick label style 	= {font=\scriptsize, xshift = -1pt},
+		xtick style       	= {normal shift={x}{5pt}},
+		ytick style       	= {normal shift={y}{2pt}},
+		x label style		= {yshift=-5pt}, 
+		y label style		= {yshift=2pt}, 
+		x axis line style 	= {thick,normal shift={x}{5pt}},
+		y axis line style 	= {thick,normal shift={y}{2pt}},
+		x tick scale label style={at={(axis description cs:1,0)}, yshift=-0.1em}, 
+		y tick scale label style={at={(axis description cs:0,1)}, xshift=-0.3em}
+	} 
+}
+
+
+%%%%%%%%%%%
+%% Examples
+
+\pgfplotsset{
+	example entries/.style={
+		xlabel				= {xlabel},
+		ylabel				= {ylabel}, 
+		legend entries		= {M1, M2}, 
+		legend style		= {
+			nodes			= {transform shape}, 
+			at				= {(0.85,0.3)}, anchor=north,
+		}, 
+	}
+} 
+\pgfplotsset{
+	example line/.style={
+		example entries,
+		cycle list name		= prcl-line-dot, 
+		mark				= *,
+		mark size 			= 1pt,
+		thick, %line width, legend
+		height 				= 5cm, 
+		width 				= 6cm,
+		xmin				= 0,
+		ymin				= 0},
+} 
+\pgfplotsset{
+	example marks/.style={
+		example entries, 
+		cycle list name		= prcl-marks, 
+		mark				= *,
+		mark size 			= 1pt,
+		thick,
+		height				= 6cm, 
+		width 				= 7cm,
+		ymin				= 0,	 %xmin is sometimes symbolic
+		legend pos       = south east
+	},
+} 
+
+
+%%%%%%%%%%%%
+%% Paths
+
+%usg \addplot3+ [path]
+
+\pgfplotsset{example surf/.style={surf, colormap/RdBu-11, shader = flat,}}
+
+\pgfplotsset{example surf draw/.style={thin,scatter, no marks, draw=charcoal, colormap/hot2, shader=faceted}}
+
+\pgfplotsset{example contour/.style={mesh, patch type=line, thick, colormap/Reds,}}
+
+%usg \addplot+ [path]	
+\pgfplotsset{pretty scattered/.style={mark options={fill opacity=0.50}, mark=*,mark size=1.5}}
+
+\pgfplotsset{pretty diamonds/.style={mark=diamond*, mark options={scale=1}, smooth, line width =2pt, dotted, opacity=0.6}}
+%marks
+\pgfplotsset{thesis gr/.style={cl3, only marks, mark=*,mark options={fill opacity=0.5},mark size=1.5}}
+\pgfplotsset{thesis yell/.style={cc1, only marks, mark=*,mark options={fill opacity=0.5},mark size=1.5}}
+\pgfplotsset{thesis bl/.style={serenity, only marks, mark=*,mark options={fill opacity=0.5},mark size=1.5}}
+\pgfplotsset{thesis gra/.style={g1, only marks, mark=*,mark options={fill opacity=0.8},mark size=1}}
+%lines
+\pgfplotsset{thesis bll/.style={serenity, no marks, line width=1.5pt}}
+\pgfplotsset{thesis greenl/.style={dollarbill, no marks, line width=1.5pt}}
+\pgfplotsset{thesis lgreenl/.style={cc1, no marks, line width=1.5pt}}
+\pgfplotsset{thesis yelll/.style={cl3, no marks, line width=1.5pt}}
+\pgfplotsset{thesis gral/.style={g1, no marks, line width=1.5pt}}
+%methods w lines
+\pgfplotsset{vario line/.style={serenity, no marks, line width=1.5pt}}
+\pgfplotsset{varioI line/.style={dollarbill, no marks, line width=1.5pt}}
+\pgfplotsset{varioC line/.style={cl3, no marks, line width=1.5pt}}
+\pgfplotsset{pione line/.style={gray, dotted, no marks, line width=1.5pt}}
+\pgfplotsset{piE line/.style={gray, dashed, line width=1.5pt}}
+
+\tikzstyle{example label}  %from Slope
+= [sloped, above, font = \small, inner sep = 2pt, text = black, pos = 0.8]
+
+
+\tikzstyle{example thresh}  %from Cute
+= [gray,thin,sharp plot,dashed] 
+%%%%%%%%%%%
+%% Schemes 
+
+\pgfplotscreateplotcyclelist{prcl-line}{
+	{c1, no marks,},
+	{c2, no marks, densely dotted},
+	{dollarbill, no marks, densely dashed}, 
+	{mambacolor2, no marks, loosely dotted},
+	{frenchblue, no marks, loosely dashed}, 
+	{fawn, no marks, dashdotted},
+	{lightcornflowerblue, no marks, densely dashdotted},
+	{lighttaupe, no marks, dashdotdotted},
+}
+\pgfplotscreateplotcyclelist{prcl-line-dot}{ %f examples
+	{c1, mark=*},
+	{c2, mark=*},
+}
+
+\pgfplotscreateplotcyclelist{prcl-marks}{
+	{gray, mark=*,mark options={fill opacity=0.50}, mark size=1.5},
+	{mambacolor6, mark=*,mark options={fill opacity=0.50}, mark size=1.5},
+	{frenchblue, mark=*},
+	{fawn, mark=*},
+	{c1, mark=*},
+	{c2, mark=*},
+}
+\pgfplotscreateplotcyclelist{prcl-marks-thesis}{
+	%{serenity, only marks, mark=*,mark options={fill opacity=0.50}, mark size=1.5},
+	{cl3, only marks, mark=*,mark options={fill opacity=0.5},mark size=1.5},
+	{cc1, only marks, mark=*,mark options={fill opacity=0.5},mark size=1.5},
+	{c1,  only marks, mark=*,mark options={fill opacity=0.50}, mark size=1.5},
+	{c2, only marks, mark=*,mark options={fill opacity=0.50}, mark size=1.5},
+}
+
+\pgfplotscreateplotcyclelist{prcl-manymarks}{
+	{c1, mark=*,mark options={fill opacity=0},mark size=.8},
+	{c2, mark=*},
+	{dollarbill, mark=square*},
+	{mambacolor2, mark=diamond*,mark options={opacity=0.5},},
+	{frenchblue, , mark=triangle*}, 
+	{fawn, mark=star},
+	{lightcornflowerblue, mark=|},
+	{lighttaupe, mark=pentagon*},
+	{black, mark=x},
+	%every mark/.append style={solid} %if dashed/dotted line used
+	%thick in examples
+}
+
+\pgfplotscreateplotcyclelist{prcl-stacked}{%
+	{b1, fill=b1},
+	{b2, fill=b2},	
+	{b3, fill=b3},
+	{dollarbill, fill=dollarbill},
+	{ gray, fill= gray},
+	{b5, fill=b5},
+	{fawn, fill=fawn},
+}
+
+
+\pgfplotscreateplotcyclelist{prcl-stacked-thesis}{%
+		{dollarbill, fill=dollarbill},
+	%	{cl3, fill=cl3},
+		{ black!70, fill= black!70},
+		{ black!50, fill= black!50},
+		{ black!30, fill= black!30},
+		{ black!10, fill= black!10},
+		{ black!5, fill= black!5},
+		%{serenity, fill=serenity},
+	{b3, fill=b3},
+	{b2, fill=b2},		
+	{b1, fill=b1},
+		{ black, fill= black!40},
+	{b1, fill=b1},	
+	{b2, fill=b2},
+	{b3, fill=b3},
+	{b5, fill=b5},
+	{fawn, fill=fawn},
+}
+
+
+\pgfplotscreateplotcyclelist{prcl-ybar}{%
+	{dollarbill, fill=dollarbill},
+	{b2, fill=b2},	
+	{b5, fill=b5},
+	{b3, fill=b3},
+}
+
+
+\pgfplotscreateplotcyclelist{vario-bar2}{%
+	{dollarbill, fill=dollarbill},
+	{b2, fill=b2},	
+	{cl3, fill=cl3},
+	{gray, fill=gray},
+	{b3, fill=b3},
+}
+
+\pgfplotscreateplotcyclelist{vario-bar}{% 
+	{c1, fill=c1},   
+	{b3, fill=b3},	
+	{b5, fill=b5},
+	{b2, fill=b2},
+}
+\pgfplotscreateplotcyclelist{vario-line}{
+%	{c1, no marks,},
+	{niceblue, no marks },
+	{cl3 },
+	{dollarbill, no marks }, 
+	 {red1, no marks, densely dotted},
+	{ca1 },
+	{mambacolor2, no marks, loosely dotted},
+	{frenchblue, no marks, loosely dashed}, 
+	{fawn, no marks, dashdotted},
+	{lightcornflowerblue, no marks, densely dashdotted},
+	{lighttaupe, no marks, dashdotdotted},
+}
+\pgfplotscreateplotcyclelist{vario-line-dash}{
+	%	{c1, no marks,},
+	{cl3 },
+	{cl3  },
+	{niceblue, no marks },
+	{niceblue,   no marks },
+	{dollarbill, no marks }, 
+	{dollarbill, dashed, no marks }, 
+	{red1, no marks, densely dotted},
+	{ca1 },
+	{mambacolor2, no marks, loosely dotted},
+	{frenchblue, no marks, loosely dashed}, 
+	{fawn, no marks, dashdotted},
+	{lightcornflowerblue, no marks, densely dashdotted},
+	{lighttaupe, no marks, dashdotdotted},
+}
+
+
+% from cisc
+\definecolor{c1}{RGB}{63,87,101}
+\definecolor{c2}{RGB}{119,196,211}
+\definecolor{c3}{RGB}{255,83,13}
+
+% other
+\definecolor{b1}{RGB}{19,75,135}
+\definecolor{b2}{RGB}{50,125,184}
+\definecolor{b3}{RGB}{107,172,209}
+\definecolor{b4}{RGB}{228,238,244}
+\definecolor{b5}{RGB}{196,80,60}
+\definecolor{b6}{RGB}{140,12,37}
+
+
+\pgfplotscreateplotcyclelist{cisc-scatter}{%
+	{c1, mark=*},
+	{c2, mark=*},
+	{c3, mark=*},
+}
+
+% If eda package is not loaded (but eda-colors is)
+\pgfplotscreateplotcyclelist{yaf}{%
+	{yafcolor1},
+	{yafcolor2},
+	{yafcolor3},
+	{yafcolor4},
+	{yafcolor5},
+	{yafcolor6},
+	{yafcolor7},
+	{yafcolor8}
+}
+
+\pgfplotscreateplotcyclelist{wrongright}{%
+	{mambacolor3},
+	{mambacolor6}
+}
+
+\colorlet{mambacolor1}{indigo(web)}
+\colorlet{mambacolor2}{internationalorange}
+\colorlet{mambacolor3}{green(ryb)}
+\colorlet{mambacolor4}{richelectricblue}
+\colorlet{mambacolor5}{goldenpoppy}
+\colorlet{mambacolor6}{crimson}
+\colorlet{mambacolor7}{airforceblue}
+\colorlet{green(html/cssgreen)}{green(html/cssgreen)}
+
+% custom color cycle list here
+\pgfplotscreateplotcyclelist{mamba}{%
+	{mambacolor1},
+	{mambacolor2},
+	{mambacolor3},
+	{mambacolor4},
+	{mambacolor5},
+	{mambacolor6},
+	{mambacolor7}
+}
+
+
+%% Credits
+% line: http://pgfplots.net/tikz/examples/tufte-3d-axes/
+% bar: http://latex-community.org/tufte-plots.pdf
+% scatter: https://tug.org/TUGboat/tb34-2/tb107dugge.pdf
+% Eda papers (...)
+% pgf doc, https://ftp.fau.de/ctan/graphics/pgf/contrib/pgfplots/doc/pgfplots.pdf
+% pgf examples, http://pgfplots.sourceforge.net/gallery.html

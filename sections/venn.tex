@@ -1,0 +1,39 @@
+
+\index{Plot Types!venn}
+\begin{figure}[h!]
+	\begin{minipage}{0.7\textwidth}
+		\begin{mintedtexbox}[/examples/venn.tex]
+			\inputminted{TeX}{lst/venn.txt}
+		\end{mintedtexbox} 
+		\begin{tcolorbox}
+			\begin{minted}{TeX} 
+ \node[prellipse white, fill=pr-color2a, rotate=-65] at (c1) {};
+ \node[prellipse white, fill=pr-color2b, rotate=0] at (c2) {}; 
+ \node[prellipse white, fill=pr-color2c, rotate=65] at (c3) {};
+				\end{minted}
+			\end{tcolorbox}
+		\end{minipage}
+	\begin{minipage}{0.29\textwidth}
+	\begin{tikzpicture} 
+		\begin{axis}[pretty line, width=\textwidth] 
+		\end{axis}  
+		\coordinate (c1) at (2,2);
+		\coordinate (c2) at (1.5,1.2); 
+		\coordinate (c3) at (1,2);  
+		\node[prellipse, fill=pr-color3c, rotate=-65] at (c1) {}; %right
+		\node[prellipse, fill=pr-color3e, rotate=0] at (c2) {}; %mid
+		\node[prellipse, fill=pr-color3a, rotate=65] at (c3) {}; %left
+	\end{tikzpicture} 
+      \begin{tikzpicture} 
+	\begin{axis}[pretty line, width=\textwidth] 
+	\end{axis}  
+	\coordinate (c1) at (2,2);
+	\coordinate (c2) at (1.5,1.2); 
+	\coordinate (c3) at (1,2); 
+	
+	\node[prellipse white, fill=pr-color2a, rotate=-65] at (c1) {}; %right
+	\node[prellipse white, fill=pr-color2b, rotate=0] at (c2) {}; %mid
+	\node[prellipse white, fill=pr-color2c, rotate=65] at (c3) {};
+\end{tikzpicture} 
+\end{minipage} 	 
+\end{figure}

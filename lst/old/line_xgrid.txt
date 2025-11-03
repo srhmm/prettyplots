@@ -1,0 +1,9 @@
+\begin{axis}[
+    pretty line,	
+    example line,
+    pretty xgrid, % grid layout and axis spacing
+    % major grid style = {gray,dotted} % customize
+    xtick = data ]
+    \addplot coordinates 
+        {(0,0) (2,1) (6,5) (8,7) (10,10)};
+\end{axis}

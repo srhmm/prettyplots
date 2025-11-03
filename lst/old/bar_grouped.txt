@@ -1,0 +1,20 @@
+\begin{groupplot}[
+    pretty ybar small,
+    pretty discrete tilt, 
+    cycle list name = prcl-ybar,
+    group style     = { group size=2 by 1, horizontal sep=15pt, 
+                        ylabels at=edge left, y descriptions at=edge left },	
+    ylabel          = {Rating}, xlabel = {}, 
+    symbolic x coords= {Germany,France,England,Saarland,Spain,Finland,USA},
+    legend entries  = {Living, Eating},
+    legend style    = { at = {(1.7,1.2)} } ]
+    \nextgroupplot[width=6cm]
+        \addplot table[x=x, y=y1] {data/countries.txt}; 
+        \addplot table[x=x, y=y2] {data/countries.txt}; 
+    \nextgroupplot[width=4cm,
+        symbolic x coords = {Oslo,Berlin,Tokyo,Rio},
+        legend entries = {},
+        ymin = 0, ymax = 10 ] % invisible y axis with the same scale
+        \addplot table[x=x, y=y1] {data/cities.txt}; 
+        \addplot table[x=x, y=y2] {data/cities.txt}; 
+\end{groupplot}

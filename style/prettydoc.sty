@@ -1,0 +1,263 @@
+\ProvidesPackage{prettydoc}[2025/02/20 v0.1 prettyplots package documentation style]
+
+%do some checks
+\RequirePackage{iftex} 
+\RequirePackage{kvoptions}
+\ifPDFTeX
+\PackageError{prettydoc}{This package requires XeLaTeX or LuaLaTeX}{Please compile with xelatex or lualatex.}
+\fi
+
+% f shell escape (minted needs it)
+\IfFileExists{shellesc.sty}{
+	\RequirePackage{shellesc}
+	\edef\shellescTest{\shellescape}
+	\ifnum\shellescTest=0
+	\PackageError{prettydoc}{Shell escape is disabled}{Please compile with --shell-escape}
+	\fi
+}{%
+	\PackageWarning{prettydoc}{Cannot check for shell escape. Ensure --shell-escape is enabled.}
+}
+% -----------------------------------------------------------------------------
+% tikz and pgf libraries
+% ----------------------------------------------------------------------------- 
+
+\usepackage{pgfplots} 
+\usepackage{tikz}   
+\usetikzlibrary{shapes.geometric} % for scatter star
+%\label{key}\pgfplotsset{compat=1.14} % tick positions
+\usetikzlibrary{calc}  % Coordinate calculation
+\usetikzlibrary{intersections} % Fill between
+\usepgfplotslibrary{fillbetween} 
+\usetikzlibrary{pgfplots.statistics} % boxplot calc
+\usetikzlibrary{pgfplots.groupplots} % groups
+\usepackage{numprint,fullpage}  %tkz-kiviat, spider
+\usetikzlibrary{arrows} 
+\usepgfplotslibrary{colorbrewer} %colormap heat
+\usetikzlibrary{pgfplots.colormaps}  %colormap 
+\usepgfplotslibrary{ternary}
+\usetikzlibrary{fit}
+\usepackage{tikzviolinplots} %violin
+\usepackage{pgfplotstable} % for tabletypeset
+
+% other packages
+\usepackage{scontents} %remove
+\usepackage{array}   % For table formatting 
+% -----------------------------------------------------------------------------
+% document style
+% ----------------------------------------------------------------------------- 
+\usepackage[nonewpage]{imakeidx} 
+\usepackage[xetex, colorlinks=true, linkcolor=tcss-gray5]{hyperref} 
+\colorlet{col-links}{tcss-gray5} 
+\hypersetup{ %
+	pdftitle={},
+	pdfauthor={},
+	pdfsubject={},
+	pdfkeywords={},
+	pdfborder=0 0 0,
+	pdfpagemode=UseNone,
+	colorlinks=true,
+	linkcolor=tcss-gray7,
+	citecolor=col-links,
+	filecolor=col-links,
+	urlcolor=col-links,
+	linktoc=all,
+	pdfview=FitH}  
+%\hypersetup{linktocpage} % omit to make toc linked
+\usepackage[scaled]{beramono}
+\usepackage[scaled]{inconsolata} 
+\usepackage[T1]{fontenc}
+\usepackage{fontspec}
+\usepackage{booktabs}
+\usepackage{multirow}
+ 
+\setmainfont{Crimson Text}[Scale=1.1]  %Brygada1918
+\setmonofont{GeistMono}[Path=./style/Geist_Mono/static/,Scale=0.85,
+Extension = .ttf,UprightFont=*-Regular,BoldFont=*-Bold]  
+
+\newcommand{\sectref}[1]{\hyperref[#1]{Section \ref*{#1}}}
+ 
+\definecolor{normalfont}{RGB}{62,62,68}   
+\color{normalfont}
+% -----------------------------------------------------------------------------
+% Setup of axis look
+% ----------------------------------------------------------------------------- 
+
+\renewcommand{\prlabelfontsize}{\normalfont}  
+\renewcommand{\prlegendfontsize}{\normalfont} 
+\renewcommand{\prtickfontsize}{\normalfont} 
+\renewcommand{\prnodefontsize}{\normalfont}
+\renewcommand{\prtitlefontsize}{\normalfont} 
+ 
+
+\renewcommand{\praxiscolor}{normalfont}
+\renewcommand{\prlabelcolor}{normalfont}
+\renewcommand{\prtickcolor}{normalfont}
+\renewcommand{\prticklabelcolor}{normalfont}
+\renewcommand{\prlegendcolor}{normalfont}
+\renewcommand{\prtitlecolor}{normalfont} 
+
+% -----------------------------------------------------------------------------
+% code
+% ----------------------------------------------------------------------------- 
+\usepackage{listings}
+\lstset{%
+	basicstyle=\small\ttfamily,
+	language=[LaTeX]{TeX},
+	columns=fullflexible
+}
+\usepackage{minted}
+\usemintedstyle{tango}%trac
+\usepackage{tcolorbox}
+%color box colors
+\definecolor{mintedtitlebg}{RGB}{250,250,250}
+\definecolor{mintedframecol}{RGB}{234,234,234}
+\definecolor{mintedtitlegray2}{RGB}{109,109,109}
+\definecolor{mintedtitlegray}{RGB}{107,107,112}
+% text colors
+\definecolor{mintedinlinebg2}{RGB}{239,240,242}
+\definecolor{mintedinlinebg}{RGB}{250,250,250}
+\definecolor{normaltitlefont}{RGB}{62,62,68} 
+
+\renewcommand{\theFancyVerbLine}{\sffamily
+	\textcolor[RGB]{110,116,125}{\scriptsize
+		\oldstylenums{\arabic{FancyVerbLine}}}}
+\setminted{
+	framesep=2mm, 
+	baselinestretch=1.1,
+	fontsize=\normalsize,%\scriptsize, 
+} 
+\usepackage{xpatch}
+\tcbset{  
+	left=0pt,
+	right=0pt,  
+	colback=white,
+	coltitle=mintedtitlegray,
+	colbacktitle=mintedtitlebg,
+	fonttitle=\normalsize\ttfamily, 
+	boxsep=3mm,colframe=mintedframecol,
+	boxrule=.2pt
+} 
+
+%% change texttt
+\iffalse
+\usepackage{soul,ragged2e,xcolor,letltxmacro}
+\newtcbox{\mytttbox}[1][mintedinlinebg]{on line,
+	colback=#1, colframe=#1, boxsep=0pt, boxrule=0pt, size=small, arc=1mm}
+
+\LetLtxMacro\oldTexttt\texttt % useless?
+\let\texttt\relax
+
+\DeclareRobustCommand{\texttt}[1]{%
+	\mbox{\sethlcolor{mintedinlinebg}\ttfamily\hl{#1}}%
+	%\mytttbox[mintedtitlebg]{\ttfamily\hl{#1}}%
+}
+\fi
+
+%% tcolorbox 
+\newtcolorbox{mintedicontexbox}[1][]
+{ title={\raisebox{-.4mm}{\includegraphics{style/icon_tex.png}}\quad \ttfamily #1  }}    % or \geist #1
+\newtcolorbox{mintedicontxtbox}[1][]
+{ title={\raisebox{-.4mm}{\includegraphics{style/icon_data.png}}\quad \ttfamily #1} }  
+
+\newtcolorbox{mintedtexbox}[1][]{ title={\ttfamily  #1} }  
+\newtcolorbox{mintedtxtbox}[1][]{ title={\ttfamily  #1} } 
+ 
+% -----------------------------------------------------------------------------
+% environments
+% ----------------------------------------------------------------------------- 
+ 
+\NewDocumentEnvironment{mtdbox}{ O{} }
+{%
+	\IfNoValueTF{#1}
+	{\begin{tcolorbox}}  
+		{\begin{mintedtxtbox}[#1]
+				\begin{minted}{TeX}}  
+				}
+				{%
+				\IfNoValueTF{#1}
+				{\end{tcolorbox}} 
+				{\end{minted}
+		\end{mintedtxtbox}} 
+	}
+% -----------------------------------------------------------------------------
+% misc
+% ----------------------------------------------------------------------------- 
+
+  
+%% graphics
+\usepackage{graphicx}
+\newlength{\bheight} 
+\settoheight{\bheight}{T}
+\setkeys{Gin}{height=\bheight} % includegraphics default height
+\usepackage{hologo}
+
+%% copiability
+% from http://tex.stackexchange.com/questions/57151/how-do-i-prevent-conflicts-between-accsupp-and-hyperref
+\usepackage{accsupp}
+\newcommand\emptyaccsupp[1]{\BeginAccSupp{ActualText={}}#1\EndAccSupp{}}
+%default definition is: \def\theFancyVerbLine{\rmfamily\tiny\arabic{FancyVerbLine}}
+\let\theHFancyVerbLine\theFancyVerbLine% don't apply our patch to hyperref's version
+\def\theFancyVerbLine{\rmfamily\tiny\emptyaccsupp{\arabic{FancyVerbLine}}}
+
+ 
+% -----------------------------------------------------------------------------
+% documentation functionality as in l3doc
+% ----------------------------------------------------------------------------- 
+
+\renewcommand{\figurename}{Example}
+\newcommand{\tbs}{\textbackslash}
+\NewDocumentEnvironment{function}{m} {%
+    %\textbf{Command}
+	%\par\noindent
+	\begin{tabular}{>{\raggedleft}p{0.15\linewidth} p{0.8\linewidth}} %
+		%\baselineskip=1.5\baselineskip
+		\texttt{#1} & 
+		\begin{minipage}[t]{0.85\linewidth}  
+			\index{#1 \textit{(command)}}  %always index each command 
+		}
+		{\end{minipage} \\ \end{tabular} \\		
+	 \par}
+
+ 
+% format of command's arguments
+\NewDocumentCommand{\docarg}{m m}{%
+	% if the argument should be printed in index:
+	%\index{#1 \textit{(argument)}}
+	\IfStrEq{#2}{s}{ $\langle$\texttt{#1}$\rangle$}{}%
+	\IfStrEq{#2}{l}{ [$\langle$\texttt{#1}$\rangle$]}{}%
+}
+
+\NewDocumentCommand{\mandatoryoroptional}{m}{%
+	\IfStrEq{#1}{m}{\textit{(Required)}}{}%
+	\IfStrEq{#1}{o}{\textit{(Optional)}}{}%
+} 
+
+\NewDocumentEnvironment{arglist}{}{% 
+		\textbf{Arguments}
+		\begin{itemize}
+		}{%
+		\end{itemize} 
+}
+
+% individual arguments
+\NewDocumentCommand{\argitem}{ m m m m}{%
+	\item \docarg{#1}{#2} --- \mandatoryoroptional{#3}  #4
+} 
+\NewDocumentCommand{\argeitem}{ m m m m m}{%
+\item \docarg{#1}{#2} --- \mandatoryoroptional{#3} #4 \textit{(Examples:} \texttt{#5})
+}
+\NewDocumentCommand{\argditem}{ m m m m m}{%
+	\item \docarg{#1}{#2} --- \mandatoryoroptional{#3} #4 \textit{(Default:} \texttt{#5})
+}
+
+% Define the key environment
+\NewDocumentEnvironment{keylist}{m}{% 
+		\textbf{#1}
+		\begin{itemize}
+		}{%
+		\end{itemize} 
+}
+ 
+\NewDocumentCommand{\keyitem}{ m m }{%
+	\item \texttt{#1} –-- #2
+}

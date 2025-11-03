@@ -1,0 +1,17 @@
+\begin{axis}[
+    pretty line, 
+    pretty spacy, % space axis to plot
+    example line, % size, labels, legend
+    %
+    % Colors, marks, line styles to cycle through:
+    cycle list name  = prcl-line,
+    %
+    % Bicycling:
+    % cycle multi list= {prcl-marks              % colors
+    %		   \nextlist[2 of]prcl-line},% lines
+    legend entries   = {} ]	
+    \pgfplotsinvokeforeach{1,...,8}{
+        \addplot table[x=x, 
+        y expr=0.3*#1*\thisrow{y1}+0.5*#1] 
+        {data/line_straight.txt}; }
+\end{axis}

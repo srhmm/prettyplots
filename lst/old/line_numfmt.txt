@@ -1,0 +1,16 @@
+\begin{axis}[	
+    pretty line, 
+    example line,
+    pretty ygrid,
+    pretty labelshift, % handles xylabel positions
+    ymode           = log,
+    ytickten        = {1,...,10}, % labels 10,..10^10, alignmt: 
+    yticklabel style= {text width=width("$10^10$"), align=left}, 
+    x tick label style={
+        /pgf/number format/.cd,
+        fixed, fixed zerofill, precision=2,
+        /tikz/.cd }]
+    \addplot[c1,mark=o,mark size=0.75] 
+    table[x=x, y expr=(\thisrow{y1}*10^x)]  
+    {data/line_straight.txt};
+\end{axis}

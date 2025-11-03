@@ -1,0 +1,10 @@
+\begin{axis}[
+    pretty 3daxis,	
+    samples         = 10, %grid resolution
+    domain          = 0:1, 
+    xlabel          = {$x$}, 
+    ylabel          = {$y$}, 
+    zlabel          = {$z$},  
+    ]
+    \addplot3 [addpretty3 surf] {x*y*exp(x)};
+\end{axis}

@@ -1,0 +1,13 @@
+\begin{axis}[	 
+    pretty line marks,
+    pretty discrete rotated, % tick labels rotation
+        {Germany,France,England,Saarland,Spain,Finland,USA},
+    legend entries  = {life quality, food quality}, 
+    legend columns  = 2,
+    legend style    = { % for some space between legend entries:
+        /tikz/every even column/.append style = {column sep=.3cm},
+        at = {(.5,1)}, anchor=north }, 
+    ]
+    \addplot table[x=x, y=y1] {data/countries.txt};
+    \addplot table[x=x, y=y2] {data/countries.txt};
+\end{axis}

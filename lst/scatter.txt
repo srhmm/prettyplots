@@ -1,0 +1,10 @@
+\begin{axis}[
+    pretty scatter, 
+    title = {Scatter},
+    legend entries = {Class 0,Class 1,Class 2,
+        Class 3,Class 4,Class 5,Class 6},
+    legend style={at={(1.1,1.2)}, anchor=north west}, 
+    ]
+    \addplot+[pr-scatter] table[x=x, y=y, meta=label] 
+    {data/classes.tsv}; 
+\end{axis}

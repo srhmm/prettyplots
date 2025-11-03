@@ -1,0 +1,305 @@
+ \clearpage
+\section{Colors and Style} 
+\label{sec:style}
+\subsection{Color Palettes} \hypertarget{cyclelists}{}
+Here are some color schemes as a starting point. 
+\index{Colors and Style!defining line colors (cycle lists)}
+\index{Colors and Style!defining marker colors (scatter classes)}
+
+\begin{figure}[h!]%   
+	\begin{tikzpicture} 
+	\def\file{data/lines.tsv} 
+	\begin{groupplot}[ 
+	group style={ group size=5 by 3,  horizontal sep=25pt,   vertical sep=30pt,
+	},  xtick align=center,  ytick align=center, width=\textwidth
+	]  
+\pgfplotsset{grp-base/.style={
+	 width=0.25\textwidth,
+	 line width=1.5pt,
+	 pretty nolabels, 
+	 pretty spacy
+	},  
+} 
+	\grouplines{\file}[grp-base, cycle list name=pr-colors, title={\footnotesize{\texttt{pr-colors}}}, ylabel={\texttt{prettyplots.sty}}]
+	\grouplines{\file}[grp-base, cycle list name=pr-colors0, title={\footnotesize{\texttt{pr-colors0}}}]
+	\grouplines{\file}[grp-base, cycle list name=pr-colors1, title={\footnotesize{\texttt{pr-colors1}}}]
+	\grouplines{\file}[grp-base, cycle list name=pr-colors2, title={\footnotesize{\texttt{pr-colors2}}}]
+	\grouplines{\file}[grp-base, cycle list name=pr-colors3, title={\footnotesize{\texttt{pr-colors3}}}]
+	\\
+	\groupconflines{data/lines_conf.tsv}[grp-base, title={\footnotesize{\texttt{pr-colors-conf}}} ]
+	\groupconflines{data/lines_conf.tsv}[grp-base, title={\footnotesize{\texttt{pr-colors-conf1}}}, cycle list name=pr-colors-conf1]
+	\grouplines{\file}[grp-base, title={\footnotesize{\texttt{pr-marks}}}, cycle list name=pr-marks][mark size=1pt]
+	\grouplines{\file}[grp-base, title={\footnotesize{\texttt{pr-white-marks}}}, cycle list name=pr-white-marks][mark size=3pt]
+	\groupconflines{data/lines_conf.tsv}[grp-base, title={\footnotesize{\texttt{pr-marks-conf}}}, cycle list name=pr-marks-conf][mark size=1pt]
+	\\
+	\grouplines{\file}[grp-base, cycle list name = vangogh3, title={\footnotesize{\texttt{vangogh3}}},ylabel={\texttt{palettes.sty}}]
+	\grouplines{\file}[grp-base, cycle list name = hiroshige, title={\footnotesize{\texttt{hiroshige}}}]
+	\grouplines{\file}[grp-base, cycle list name = monet, title={\footnotesize{\texttt{monet}}}]
+	\grouplines{\file}[grp-base, cycle list name = pissaro, title={\footnotesize{\texttt{pissaro}}}]
+	\grouplines{\file}[grp-base, cycle list name = mamba, title={\footnotesize{\texttt{mamba}}}] 
+	]
+	\end{groupplot} 
+	\end{tikzpicture}  
+	\caption{Cycle lists for line plots, use with \texttt{\tbs begin\{axis\}[cycle list name=$\langle$name$\rangle$]}.}
+\end{figure}
+\begin{figure}[h!]%   
+	\begin{tikzpicture} 
+	\def\file{data/classes.tsv} 
+	\begin{groupplot}[ 
+		group style={ group size=5 by 2,  horizontal sep=25pt,   vertical sep=30pt,
+		},  xtick align=center,  ytick align=center, width=\textwidth
+		]  
+		\pgfplotsset{grp-base/.style={
+				width=0.25\textwidth,
+				line width=1.5pt,
+				pretty nolabels, 
+				pretty spacy
+			},  
+		} 
+		\scatterGroupplot{\file}[grp-base, title={\footnotesize{\texttt{pr-scatter}}}, ylabel={\texttt{prettyplots.sty}}][pr-scatter]
+		\scatterGroupplot{\file}[grp-base, title={\footnotesize{\texttt{pr-scatter-opacity}}} ][pr-scatter-opacity]
+		\scatterGroupplot{\file}[grp-base, title={\footnotesize{\texttt{pr-scatter-analogous}}} ][pr-scatter-analogous]
+		\scatterGroupplot{\file}[grp-base, title={\footnotesize{\texttt{pr-scatter-complementary}}} ][pr-scatter-complementary] 
+		\scatterGroupplot{\file}[grp-base, title={\footnotesize{\texttt{pr-scatter-marks}}} ][pr-scatter-marks]  
+		]
+	\end{groupplot} 
+\end{tikzpicture}  
+	\caption{Scatter classes, use with \texttt{\tbs addplot+[$\langle$name$\rangle$]} in an \texttt{\tbs begin\{axis\}[pretty scatter]} environment.}
+\end{figure}
+
+\clearpage
+\subsection{Custom Colors} 
+To set your own colors manually, pass your color of choice to \tbs \texttt{addplot[black]}. You can also pre-define a list of colors that each call of \tbs \texttt{addplot} will use through in order. This is known as a  cycle list, which you can pass to the  \texttt{axis} keys as  \texttt{cycle list=$\langle$name$\rangle$}. 
+\begin{figure}[h!]
+\begin{minipage}{.65\textwidth} 
+\begin{mintedtxtbox}[/examples/line\_colors.tex]
+\begin{minted}{TeX} 
+%% Create a cycle list defining the color of each line 
+\pgfplotscreateplotcyclelist{pr-colors}{
+    {pr-color1a}, 
+    {pr-color1b}, 
+    {pr-color1c}, 
+    {pr-color1d}, 
+    {pr-color1e}, 
+    {pr-color1f}, 
+    {pr-color1g}, 
+    {pr-color1h} 
+} 
+%% Usage in an axis environment
+\begin{axis}[pretty line, cycle list name=pr-colors]
+\pgfplotsinvokeforeach{1,...,8}{  
+    \addplot table[x=x, y=y#1] {data/lines.tsv};  } 
+\end{axis}
+		\end{minted}
+	\end{mintedtxtbox}
+\end{minipage}  
+\begin{minipage}{.3\textwidth} 
+	\input{examples/line_colors.tex}
+%\lines{data/lines.tsv}[cycle list name = pr-colors, pretty nolabels, pretty spacy, width=\textwidth]
+\end{minipage} 
+\end{figure}
+ \par 
+You can change the above definition of \texttt{pr-colors} directly in \texttt{prettyplots.sty} to use consistent colors in all of your work. For experiments, you can also define method-specific colors as follows
+
+\begin{figure}[h!]
+	\begin{minipage}{.65\textwidth} 
+	\begin{tcolorbox}
+			\begin{minted}{TeX} 
+%% Pick your colors
+\colorlet{color-ourmethod}{pr-color1a}
+\definecolor{color-baselineA}{HTML}{f3f4f6} 
+\definecolor{color-baselineB}{HTML}{f3f4f6}   
+%% Create a cycle list 
+\pgfplotscreateplotcyclelist{colors-methods}{
+    {color-ourmethod}, 
+    {color-baselineA}, 
+    {color-baselineB}
+} 
+%% Usage in an axis environment
+\begin{axis}[pretty line, cycle list name=colors-methods]
+    \pgfplotsinvokeforeach{1,...,3}{  
+        \addplot table[x=x, y=y#1] {data/lines.tsv};
+    } 
+\end{axis}
+			\end{minted}
+		\end{tcolorbox}
+	\end{minipage}  
+	\begin{minipage}{.3\textwidth}  
+		\colorlet{color-ourmethod}{pr-color1a}
+		\definecolor{color-baselineA}{HTML}{d1d5db} 
+		\definecolor{color-baselineB}{HTML}{d1d5db}    
+		\pgfplotscreateplotcyclelist{colors-methods}{
+			{color-ourmethod}, 
+			{color-baselineA}, 
+			{color-baselineB}
+		} 
+	\begin{tikzpicture}
+		\begin{axis}[pretty line, cycle list name=colors-methods, pretty nolabels, pretty spacy, width=\textwidth]
+		\pgfplotsinvokeforeach{1,...,3}{  
+			\addplot table[x=x, y=y#1] {data/lines.tsv}; 
+		} 
+	\end{axis}
+\end{tikzpicture}
+	\end{minipage} 
+\end{figure}
+
+\clearpage 
+
+\subsection{Line Style}
+\index{Colors and Style!defining line style}
+\index{Colors and Style!defining marker style}  
+
+Similar to color, you can set up the line style for your plots as follows. 
+\begin{figure}[h!]
+	\begin{minipage}{.65\textwidth} 
+		\begin{tcolorbox} 
+			\begin{minted}{TeX} 
+%% Create a cycle list that changes linestyle
+\pgfplotscreateplotcyclelist{pr-linestyle}{
+    {pr-color0a, solid}, 
+    {pr-color0b, densely dashdotted}, 
+    {pr-color0c, densely dotted},
+    {pr-color0d, densely dashed}, 
+    {pr-color0e, dashdotted},
+    {pr-color0f, dashed}, 
+    {pr-color0g, dotted},
+    {pr-color0g!80, loosely dashdotted} 
+}
+\lines{data/lines.tsv}[cycle list name=pr-linestyle]
+			\end{minted}
+		\end{tcolorbox} 
+\end{minipage} 
+\begin{minipage}{.3\textwidth} 	
+	\lines{data/lines.tsv}[cycle list name=pr-linestyle, pretty nolabels, width=\textwidth]	
+\end{minipage} 
+\end{figure}
+\begin{figure}[h!]	
+	\begin{minipage}{.65\textwidth} 	
+		\begin{tcolorbox} 
+		\begin{minted}{TeX} 
+%% Create a cycle list that changes marker style
+\pgfplotscreateplotcyclelist{pr-marks}{
+    {pr-color1a,mark=*,
+    mark options={pr-color1a,fill=pr-color1a}},  
+    {pr-color1b,mark=triangle*,
+    mark options={pr-color1b,fill=pr-color1b}},  
+    {pr-color1c,mark=square*,
+    mark options={pr-color1c,fill=pr-color1b}},  
+    % ...      
+}
+\lines{data/lines.tsv}[cycle list name=pr-marks]
+		\end{minted}
+	\end{tcolorbox}
+	\end{minipage} 
+\begin{minipage}{.3\textwidth} 
+\lines{data/lines.tsv}[cycle list name=pr-marks, pretty nolabels, width=\textwidth]
+\end{minipage} 
+\end{figure}
+	
+\pgfplotsset{pr-marks-base/.style={  
+		mark size=2pt,
+		mark options={fill opacity=1,line width=.8}
+	},  
+}
+\clearpage
+\subsection{Scatter Classes}
+
+\index{Plot Types!scatter!with classes} 
+For scatter plots, \texttt{pr-scatter} defines how each of the classes should appear and is passed to \texttt{addplot},
+\begin{figure}[h!]
+\begin{minipage}{.7\textwidth} 
+	\begin{tcolorbox} 
+		\begin{minted}{TeX}  
+\begin{axis}[pretty scatter,pretty nolabels]
+    \addplot [pr-scatter] table[x=x1,y=x2,meta=y,
+    col sep=comma] {data/classes.csv};  
+\end{axis}
+		\end{minted}
+	\end{tcolorbox}
+\end{minipage} 
+\begin{minipage}{.29\textwidth}  
+	\begin{tikzpicture}
+		\begin{axis}[
+			pretty scatter,  
+			xmin            = 0, 
+			ymin            = 0, 
+			ymax 			= 10, 
+			xmax			= 10,
+			legend style={at={(1.8,1.1)}, legend columns = 2}, 
+			pretty nolabels, width=\textwidth
+			]
+			\addplot[pr-scatter]
+			table[x = x,y = y,meta = label] {data/classes.tsv};
+			\addplot[pr-scatter]
+			table[x expr = \thisrow{x} + 0.5,y expr = \thisrow{y} +  1.25, meta = label2] {data/classes.tsv};
+			%\legend{Class 0,Class 1,Class 2,Class 3,Class 4,Class 5,Class 6,Class 7,Class 8,Class 9,Class 10,Class 11,Class 12,Class 13}
+		\end{axis}
+	\end{tikzpicture}
+\end{minipage} 	 
+  
+ 
+\end{figure}
+ 
+ To replace  this with your own, 
+\begin{figure}[h!]
+	\begin{minipage}{.7\textwidth}  
+\begin{mintedtxtbox}[/examples/scatter\_colors.tex] 
+	\begin{minted}{TeX}
+%% Define custom scatter colors
+\pgfplotsset{ 
+  my-scatter/.style={
+    only marks, mark options={fill opacity=0.50},
+    scatter src=explicit symbolic,
+    scatter/classes={
+        0={mark=*, pr-color1a, fill=pr-color1a!50},   
+        1={mark=triangle*, pr-color1b, fill=pr-color1b!50},
+        2={mark=diamond*, pr-color1c, fill=pr-color1c!50},
+        3={mark=square*, pr-color1d, fill=pr-color1d!50}
+        %no comma in the last line, otherwise latex complains
+    }
+  }
+} 
+\begin{axis}[pretty scatter,pretty nolabels]
+    \addplot [my-scatter]
+    table[x=x1,y=x2,meta=y, col sep=comma] {data/blobs.csv};  
+\end{axis}
+	\end{minted}
+\end{mintedtxtbox}
+	\end{minipage} 
+	\begin{minipage}{.29\textwidth}  
+		\input{examples/scatter_colors.tex} 
+	\end{minipage} 
+\end{figure}
+
+  
+  \clearpage
+\index{Colors and Style!defining continuous colors (colormap)} 
+\index{Plot Types!scatter!with colormap} 
+Here us an example for cases where your label is continuous instead of discrete. 
+\begin{figure}[h!]	
+ 		\begin{minipage}{0.65\textwidth}
+	\begin{mintedtxtbox}[/data/blob.tsv]
+		\begin{minted}{TeX}
+%x    y    color value
+x    y    col
+-82.87    16.81    0.52
+-75.32    44.21    0.41
+\end{minted}
+	\end{mintedtxtbox} 
+\end{minipage}  
+\end{figure}
+\par
+Then, you can pick a few transition colors and set up a color map as follows.
+\begin{figure}[h!]		
+	\begin{minipage}{0.65\textwidth}
+		\begin{mintedtexbox}[/examples/scatter\_colormap\_custom.tex] 
+			\inputminted{TeX}{lst/scatter_colormap_custom.txt} 
+		\end{mintedtexbox} 
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}
+		\input{examples/scatter_colormap_custom.tex} 
+	\end{minipage} 
+	
+\end{figure}
+  
+ 

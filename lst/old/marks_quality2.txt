@@ -1,0 +1,15 @@
+\begin{axis}[	
+    example marks, 
+    pretty line marks,
+    pretty ygrid,
+    pretty discrete tilt, % ticklabels: 25 rotation,
+                          % xylabel shift IF put after line & grid
+
+    %pretty discrete rotated, % labels: 90 rotation
+    scaled y ticks  = base 10:-2,
+    symbolic x coords= 
+        {Germany,France,England,Saarland,Spain,Finland,USA},		
+    legend entries  = {}, height = 5cm ]
+    \addplot table[x=x, y expr=100*\thisrow{y1}] 
+        {data/countries.txt};
+\end{axis}

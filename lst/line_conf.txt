@@ -1,0 +1,15 @@
+\begin{axis}[
+    pretty line,	
+    % cycle list to skip the confidence regions:
+    cycle list name = pr-colors-conf,    ]  
+    \foreach \r in {1,2,3}   {
+        \addplot table[x=x, y=y\r] {data/line_conf.tsv}; 
+	\addplot[forget plot, draw=none, name path=low] 
+        table [x=x, y expr=\thisrow{y\r} - \thisrow{y\r_c}]
+           {data/line_conf.tsv};
+	\addplot[forget plot, draw=none, name path=up] 
+        table [x=x, y expr= \thisrow{y\r} + \thisrow{y\r_c}]
+            {data/line_conf.tsv};
+        \addplot fill between[of=low and up];
+    }  
+ \end{axis}  

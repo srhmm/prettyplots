@@ -1,0 +1,89 @@
+\subsection{Examples}   
+
+
+ 
+
+\index{Plot Types!line!with fill below}
+\begin{figure}[h!]
+	\begin{minipage}{0.65\textwidth} 
+		\hypertarget{addshadedlines}{}
+		\begin{tcolorbox} 
+			\begin{minted}{TeX}
+\begin{axis}[
+    pretty line,
+    cycle list name= pr-shade,
+    ]  
+    \foreach \r in {1,2,3}   {
+        \addplot table[x=x, y=y\r] {data/line.tsv};   
+        \addplot table[x=x, y=y\r] {data/line.tsv} 
+        \closedcycle;
+    }  
+\end{axis}  
+			\end{minted}
+		\end{tcolorbox} 
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth} 
+		\iffalse
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty shadedline,  
+				]
+				\addshadedlines{data/line.tsv}
+			\end{axis} 
+		\end{tikzpicture}
+		\fi
+		%\linesShaded{data/line.tsv}{3}[ymax=10]
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty line,	 
+				cycle list name= pr-shade,  
+				ymin=0, ymax=10,  width=\textwidth
+				]  
+				\foreach \r in {1,2,3}   {
+					\addplot table[x=x, y=y\r] {data/line.tsv}; 
+					\addplot table[x=x, y=y\r] {data/line.tsv} 
+					\closedcycle;
+				}  
+			\end{axis}  
+		\end{tikzpicture}	 
+	\end{minipage} 
+	
+\end{figure}
+
+\index{Plot Types!heatmatrix}
+\begin{figure}[h!]	
+	\begin{minipage}{0.65\textwidth}
+		\begin{mintedtexbox}[/examples/colorbar.tex] 
+			\inputminted{TeX}{lst/scatter_colorbar.txt}
+		\end{mintedtexbox}
+	\end{minipage}	 
+	\begin{minipage}{.3\textwidth}
+		\input{examples/colorbar.tex}
+	\end{minipage} 
+\end{figure}  
+
+
+
+\index{Plot Types!comb} 
+\begin{figure}[h!]
+	\begin{minipage}{0.65\textwidth}
+		\begin{tcolorbox} 
+			\begin{minted}{TeX} 
+\begin{axis}[ pretty comb ]
+\addplot+[ycomb, mark=white*] coordinates 
+{(0,3) (1,2) (2,4) (3,1) (4,2) (5,2.5)};  
+\end{axis}
+			\end{minted}
+		\end{tcolorbox}
+	\end{minipage} 
+	\begin{minipage}{.3\textwidth} 
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty comb, ymin=0, width=\textwidth
+				]
+				\addplot+[ycomb, mark=white*] coordinates {(0,3) (1,2) (2,4) (3,1) (4,2) (5,2.5)};  
+			\end{axis}
+		\end{tikzpicture}   
+	\end{minipage} 
+\end{figure}  

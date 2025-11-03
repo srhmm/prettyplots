@@ -1,0 +1,11 @@
+\begin{axis}[
+    pretty line marks, 
+    example marks, 
+    cycle list name = prcl-manymarks,
+    legend entries = {},
+    skip coords between index={0}{1},
+    skip coords between index={9}{10} ]	
+    \pgfplotsinvokeforeach{1,...,9}{
+	\addplot table[x=x, y expr=0.3*#1*\thisrow{y1}+0.5*#1] 
+        {data/line_straight.txt}; }
+\end{axis}

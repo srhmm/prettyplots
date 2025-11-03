@@ -1,0 +1,46 @@
+% !TEX TS-program = xelatex
+% !TEX options = --shell-escape
+% Compile with: xelatex --shell-escape prettyplots.tex for minted and fontspec
+\documentclass{article}
+\usepackage{prettyplots} 
+\usepackage{style/prettydoc} % style for this document 
+
+\usepgfplotslibrary{colorbrewer} % colorbrewer
+\usepackage{prettycolors/palettecolors}  % MetBrewer colors
+\usepackage{prettycolors/palettes} % MetBrewer palettes
+
+\makeindex[title=Index,columns=1]
+\title{\bfseries{PrettyPlots} \normalfont in \hologo{LaTeX}}
+\author{EDA group} 
+\begin{document}
+	\maketitle 
+	\tableofcontents 
+	\clearpage
+	\input{sections/intro} 
+	\input{sections/cheatsheets}  
+	\input{sections/line} 
+	\input{sections/box} 
+	\input{sections/bar} 
+	\input{sections/scatter}   
+%   \input{sections/time}
+	\input{sections/confline} 
+	\input{sections/group}
+	\input{sections/colorbar}  
+	\input{sections/tri} 
+	\input{sections/contour}
+	\input{sections/venn}
+	\input{sections/ridgeline}
+	\input{sections/kite}
+	\input{sections/matrix}  
+	\input{sections/style}  
+	\input{sections/grids}   
+	\input{sections/decorations}  
+	\input{sections/axis}    
+ 	\input{sections/macro}    
+\clearpage    
+\printindex 
+\clearpage
+\bibliographystyle{bib/icml2019}  
+\bibliography{bib/bib} 
+\end{document}
+

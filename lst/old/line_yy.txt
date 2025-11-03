@@ -1,0 +1,22 @@
+\begin{tikzpicture} % for small plots also use minipage
+    \begin{axis}[
+	pretty line, 
+	example line, 
+	ylabel          = {ydomain 1},
+	axis x line     = none,
+	x axis line style={draw opacity=0},
+	legend entries  = {}, height = 4.5cm ]	
+	\addplot[line width=1pt, c1] table[x=x, 
+           y expr=1-\thisrow{y1}] {data/line_shady.txt};
+    \end{axis}
+\end{tikzpicture} 
+\begin{tikzpicture}
+  \begin{axis}[
+	pretty line, 
+	example line,
+	ylabel          = {ydomain 2}, 
+	legend entries  = {}, height = 4.5cm]	
+	\addplot[line width=1pt, c1] 
+	table[x=x, y=y2] {data/line_shady.txt};
+    \end{axis}
+\end{tikzpicture}

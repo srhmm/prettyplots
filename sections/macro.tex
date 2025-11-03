@@ -1,0 +1,690 @@
+\clearpage
+\section{Advanced Usage}
+\label{sec:macro}
+
+
+\index{Plot Types!groupplot}
+\index{Plot Types!line!basic}
+\index{Plot Types!line!with confidence regions}
+ \subsection*{Commands for Line Plots}
+ \hypertarget{addlines}{}
+ \begin{function}{\tbs addlines}
+ 	\docarg{data.tsv}{s}   
+ 	\docarg{addplot options}{l}  
+ 	\docarg{table options}{l}  
+ 	\\ adds all line plots from a given file, from columns \texttt{(x, y1)}, \ldots, \texttt{(x, yn)}  .  
+ \end{function}
+ 
+ 
+ %\hypertarget{addlinesForEach}{}
+ %\begin{function}{\tbs addlinesForEach}
+% 	\docarg{data.tsv}{s}  
+% 	\docarg{columns}{l} 
+% 	\docarg{addplot options}{l}  
+% 	\docarg{table options}{l}  
+% 	\\ adds line plots from a file, from the given columns.
+% \end{function}
+ 
+ 
+ \hypertarget{addconflines}{}
+ \begin{function}{\tbs addconflines}
+ 	\docarg{data.tsv}{s}  \docarg{addplot options}{l} 	\docarg{table options}{l}  
+ 	\\ adds line plots and confidence regions from a given file, from columns \texttt{(x, y1, y1\_c)}, \ldots, \texttt{(x, yn, yn\_c)}.
+ \end{function}
+ 
+ \hypertarget{grouplines}{}
+ \begin{function}{\tbs grouplines}
+ 	\docarg{data.tsv}{s}  \docarg{addplot options}{l}  	\docarg{table options}{l}  
+ 	\\ adds line plots to a group plot.
+ \end{function}
+  \hypertarget{groupconflines}{}
+ \begin{function}{\tbs groupconflines}
+ 	\docarg{data.tsv}{s}  \docarg{addplot options}{l}  	\docarg{table options}{l}  
+ 	\\ adds line plots to a group plot.
+ \end{function}
+ 
+ 
+ \begin{arglist}
+ 	\argitem{data.tsv}{s}{m}{data file.}   
+% 	\argditem{columns}{l}{o}{column names to plot.}{\texttt{y1, ..., yn}.} 
+ 	\argeitem{addplot options}{l}{o}{style for adding plots, such as color, line-, and markers style.
+ 	}{black, smooth, line width=1.2pt, mark=*, mark options=\{fill opacity=0.5,mark size=1pt\}} 
+ 	\argeitem{table options}{l}{o}{keys to \texttt{table}. }{col sep=comma} 
+ \end{arglist}
+ 
+ 
+\clearpage 
+\subsection*{Examples}
+ \begin{figure}[h!]
+ 	\begin{minipage}{0.65\textwidth} 
+ 		\begin{mintedtxtbox}[/data/line.tsv]
+ 			\begin{minted}{TeX}
+%Metric    Method1 ... MethodN
+x    y1    y2    y3 
+0    9    4    3
+%...
+ 			\end{minted}
+ 		\end{mintedtxtbox}
+ 	\end{minipage}
+ \end{figure}
+ \begin{figure}[h!]
+ 	\begin{minipage}{0.65\textwidth} 
+ 		\begin{tcolorbox}
+ 			\begin{minted}{TeX} 
+\begin{axis}[ pretty line ] 
+\addlines{data/line.tsv} 
+\end{axis}
+ 				\end{minted}
+ 			\end{tcolorbox}  
+ 		\end{minipage}
+ 		\begin{minipage}{0.3\textwidth}  
+ 			\begin{tikzpicture} 
+ 				\begin{axis}[ pretty line, width=\textwidth ] 
+ 				\addlines{data/line.tsv} 
+ 				% or \lines{data/line.tsv} 
+ 			\end{axis}
+ 		\end{tikzpicture} 
+ 		\end{minipage}
+ 	\end{figure} 
+\begin{figure}[h!]
+	\begin{minipage}{0.65\textwidth}
+		\begin{mintedtxtbox}[/data/line\_conf.tsv]
+			\begin{minted}{TeX}
+%Metric    Method1    Method1_conf ...    MethodN_conf 
+x    y1    y1_c    y1    y1_c    y3    y3_c
+0    9    0.5    4    0.5    3    0.6
+%....
+			\end{minted}
+		\end{mintedtxtbox}
+	\end{minipage}
+\end{figure}  	
+\begin{figure}[h!]
+	\begin{minipage}{0.65\textwidth}  
+		\begin{tcolorbox}
+			\begin{minted}{TeX} 
+\begin{axis}[pretty confline]  
+\addconflines{data/line_conf.tsv} 
+\end{axis}  
+			\end{minted} 
+		\end{tcolorbox} 
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth} 
+		\begin{tikzpicture}
+	\begin{axis}[pretty confline, width=\textwidth]  
+		\addconflines{data/line_conf.tsv} 
+	\end{axis} 
+		\end{tikzpicture}  
+	\end{minipage} 	 
+\end{figure}
+
+
+\begin{figure}[h!] 
+	\begin{minipage}{0.8\textwidth}  
+		\begin{tcolorbox}
+			\begin{minted}{TeX} 
+\begin{tikzpicture} 
+\def\file{data/lines_conf.tsv} 
+\begin{groupplot}[ 
+    group style={ 
+        group size=5 by 2, 
+        horizontal sep=25pt,
+        vertical sep=30pt},  
+    xtick align=center, ytick align=center, 
+    width=0.25\textwidth   
+]   
+\grouplines{data/lines.tsv}[ylabel=$y$]
+\grouplines{data/lines.tsv}[cycle list name=pr-colors0]
+\grouplines{data/lines.tsv}[cycle list name=pr-colors1]
+\grouplines{data/lines.tsv}[cycle list name=pr-colors2]
+\grouplines{data/lines.tsv}[cycle list name=pr-colors3]
+\\
+\groupconflines{data/lines_conf.tsv}[ylabel=$y$, xlabel=$x_1$]
+\groupconflines{data/lines_conf.tsv}[cycle list name=pr-colors-conf0]
+\groupconflines{data/lines_conf.tsv}[cycle list name=pr-colors-conf1]
+\groupconflines{data/lines_conf.tsv}[cycle list name=pr-colors-conf2]
+\groupconflines{data/lines_conf.tsv}[cycle list name=pr-colors-conf3] 
+]
+\end{groupplot} 
+\end{tikzpicture}  
+			\end{minted} 
+		\end{tcolorbox} 
+	\end{minipage}
+\end{figure} 
+\begin{figure}[h!] 
+	\begin{minipage}{0.8\textwidth} 
+\begin{tikzpicture} 
+	\def\file{data/lines_conf.tsv} 
+	\begin{groupplot}[ 
+        group style={ group size=5 by 2,  horizontal sep=25pt,   vertical sep=30pt},  
+        xtick align=center,  ytick align=center,  width=0.25\textwidth,
+		pretty nolabels,  pretty spacy
+		]   
+		\grouplines{data/lines.tsv}[ylabel=$y$]
+		\grouplines{data/lines.tsv}[cycle list name=pr-colors0 ]
+		\grouplines{data/lines.tsv}[cycle list name=pr-colors1 ]
+		\grouplines{data/lines.tsv}[cycle list name=pr-colors2]
+		\grouplines{data/lines.tsv}[cycle list name=pr-colors3 ]
+		\\
+		\groupconflines{\file}[ylabel=$y$, xlabel=$x_1$]
+		\groupconflines{\file}[cycle list name = pr-colors-conf0, xlabel=$x_2$]
+		\groupconflines{\file}[cycle list name = pr-colors-conf1, xlabel=$x_3$]
+		\groupconflines{\file}[cycle list name = pr-colors-conf2, xlabel=$x_4$]
+		\groupconflines{\file}[cycle list name = pr-colors-conf3, xlabel=$x_5$] 
+		]
+	\end{groupplot} 
+\end{tikzpicture} 
+	\end{minipage} 	 
+\end{figure}
+
+
+
+\begin{comment} 
+\subsection*{Line Customization} 
+\begin{figure}[h!] 
+	\hypertarget{mark}{}	
+	\begin{minipage}{0.6\textwidth} 
+		\begin{mintedtexbox}[/examples/line-variations.tex]
+			\begin{minted}{TeX}
+				%% with markers (fixed)
+				%\begin{axis}[ pretty line, pretty grid ]
+				%    \addlines{data/line.tsv}[mark=white*, mark size=1pt] 
+				%\end{axis}
+				\begin{axis}[ pretty line, ymax=10,  width=\textwidth ] 
+					\pgfplotsinvokeforeach{1,...,3}{
+						\addplot+[mark=diamond*, mark size=1pt] table[x=x, y=y#1] {data/line.tsv}; 
+					} 
+				\end{axis}  
+			\end{minted}
+		\end{mintedtexbox}
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth} 
+		\begin{tikzpicture}
+			\begin{axis}[ pretty line,
+				ymax=10,  width=\textwidth ] 
+				\pgfplotsinvokeforeach{1,...,3}{
+					\addplot+[mark=diamond*, mark size=1pt] table[x=x, y=y#1] {data/line.tsv};
+					%\addlegendentry{Method #1}
+				} 
+			\end{axis} 
+			%\begin{axis}[
+			%pretty line,
+			%pretty grid
+			%]
+			%\addlines{data/line.tsv}[mark=diamond*, mark size=1pt]
+			%\addlines{data/line.tsv}[mark=white*]
+			%\addlines{data/line.tsv}[white-triangle*] 
+			%\end{axis} 
+		\end{tikzpicture}
+		%\lines{data/line.tsv}[pretty grid][mark=diamond*, mark size=1pt]
+		\iffalse
+		\begin{tikzpicture} 
+			\begin{axis}[
+				pretty line,	 
+				cycle list name=pr-mark-var,  
+				ymin=0, ymax=10,  
+				]  
+				\foreach \r in {1,2,3}   {
+					\addplot table[x=x, y=y\r] {data/line_conf.tsv}; 
+					\addplot[pretty conf, name path=low] 
+					table [ x=x, y expr=\thisrow{y\r} - \thisrow{y\r_c} ]{data/line_conf.tsv};
+					\addplot[pretty conf, name path=up] 
+					table [ x=x, y expr= \thisrow{y\r}  + \thisrow{y\r_c}]{data/line_conf.tsv};
+					\addplot fill between[of=low and up];
+				}
+				\legend{Method 1,, Method 2,, Method 3} 
+			\end{axis}  
+		\end{tikzpicture}
+		\fi
+		\hfill	
+	\end{minipage} 	 
+\end{figure} 
+\begin{figure}[h!] 
+	\begin{minipage}{0.7\textwidth} 
+		\begin{tcolorbox}
+			\begin{minted}{TeX}
+				%% with markers (rotating)
+				\begin{axis}[
+					pretty line, 
+					cycle list name = pr-marks  
+					]
+					\addlines{data/line.tsv}
+				\end{axis}
+			\end{minted}
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}  
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty line, 
+				cycle list name=pr-marks
+				]
+				\addlines{data/line.tsv}
+			\end{axis} 
+		\end{tikzpicture}
+		%\lines{data/line.tsv}[pretty grid, cycle list name=pr-marks]
+		\hfill	
+	\end{minipage} 	 
+\end{figure} 
+\begin{figure}[h!] 
+	\begin{minipage}{0.7\textwidth} 
+		\begin{tcolorbox}
+			\begin{minted}{TeX} 
+				%% with markers (rotating), for confline
+				\begin{axis}[
+					pretty line, 
+					cycle list name = pr-marks-conf
+					]
+					\addconflines{data/line_conf.tsv}
+				\end{axis}
+			\end{minted}
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}  
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty line, 
+				cycle list name = pr-marks-conf
+				]
+				\addconflines{data/line_conf.tsv}
+			\end{axis} 
+		\end{tikzpicture}
+		%\lines{data/line.tsv}[pretty grid, cycle list name=pr-marks]
+		\hfill	
+	\end{minipage} 	 
+\end{figure} 
+\begin{figure}[h!] 
+	\begin{minipage}{0.7\textwidth} 
+		\hypertarget{adderrorlines}{}
+		\begin{tcolorbox}
+			\begin{minted}{TeX}
+				%% with error bars
+				\begin{axis}[ pretty line ]
+					\adderrorlines{data/line_conf.tsv}
+				\end{axis}
+			\end{minted}
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth} 
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty line,  
+				]
+				\adderrorlines{data/line_conf.tsv}
+			\end{axis} 
+		\end{tikzpicture}
+		%\linesError{data/line_conf.tsv}[ymax=10] 
+		\hfill	
+	\end{minipage} 	 
+\end{figure} 
+
+
+\index{Plot Types!Line!with fill below}
+\begin{figure}[h!]
+	\begin{minipage}{0.7\textwidth} 
+		\hypertarget{addshadedlines}{}
+		\begin{tcolorbox} 
+			\begin{minted}{TeX}
+				%% with fill below
+				\begin{axis}[ 
+					pretty line,  
+					cycle list name = pr-shade
+					]
+					\addshadedlines{data/line.tsv}
+				\end{axis}
+			\end{minted}
+		\end{tcolorbox} 
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth} 
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty shadedline,  
+				]
+				\addshadedlines{data/line.tsv}
+			\end{axis} 
+		\end{tikzpicture}
+		%\linesShaded{data/line.tsv}{3}[ymax=10]
+		\iffalse
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty line,	 
+				cycle list name= pr-line-shade,  
+				ymin=0, ymax=10,  
+				]  
+				\foreach \r in {1,2,3}   {
+					\addplot table[x=x, y=y\r, name path=up] {data/line.tsv};  
+					\addplot table[x=x, y=y\r] {data/line.tsv} \closedcycle;
+				} 
+				\legend{Method 1,, Method 2,, Method 3} 
+			\end{axis}  
+		\end{tikzpicture}	
+		\fi 
+	\end{minipage} 
+	
+\end{figure}
+
+
+\hypertarget{addboxes}{}
+\begin{function}{\tbs addboxes}
+	\docarg{data.tsv}{s}  
+	\docarg{plot options}{l}  
+	\docarg{table options}{l}  
+	\\ creates a box plot from a table file.
+\end{function}
+
+
+\begin{arglist}
+	\argitem{data.tsv}{s}{m}{data file.} 
+	\argitem{plot options}{l}{o}{style for adding plots. }  % todo examples f box customization such as width in relationship to $x$ axis units
+	\argditem{table options}{l}{o}{data file options, such as column names for \texttt{x,y}. }{\texttt{x=x, y=y}} 
+\end{arglist}
+
+
+\clearpage 
+\subsection{Scatter}
+\index{Plot Types!scatter} 
+Use this plot type if you want color and style of markers to depend on a given class label. 
+
+\hypertarget{addscatter}{}
+\begin{function}{\tbs addscatter}
+	\docarg{data.tsv}{s}  
+	\docarg{plot options}{l}  
+	\docarg{table options}{l}  
+	\\ creates a scatter plot from a table file.
+\end{function}
+
+
+\begin{arglist}
+	\argitem{data.tsv}{s}{m}{data file.} 
+	\argeitem{plot options}{l}{o}{style for adding plots, such as colors per scatter class. }{\texttt{pr-scatter}}
+	\argditem{table options}{l}{o}{options for data table, such as column names of \texttt{x,y,meta}, where \texttt{meta} is a numeric class label for coloring. }{\texttt{x=x, y=y, meta=label}} 
+\end{arglist}
+
+
+\begin{keylist}{Plot Options} 
+	\keyitem{pr-scatter}{default colors}  
+	\keyitem{pr-scatter-filled}{mark fill variant}
+	\keyitem{pr-scatter-complementary}{mark color variant}
+\end{keylist}
+
+
+\begin{keylist}{Table Options} 
+	\keyitem{meta=label}{change name of the column with class labels here, default is \texttt{label}.  }   
+\end{keylist}
+
+\begin{figure}[h!]
+	\begin{minipage}{.7\textwidth} 
+		\begin{mintedtxtbox}[/data/classes.tsv] 
+			\begin{minted}{TeX}
+				%x    y    numeric class label
+				x    y    label
+				1    1    0 
+				...
+			\end{minted}
+		\end{mintedtxtbox}
+	\end{minipage}
+\end{figure}
+\begin{figure}[h!] 
+	\begin{minipage}{.7\textwidth} 
+		\begin{mintedtexbox}[/examples/scatter.tex] 
+			\begin{minted}{TeX}
+				...
+			\end{minted}
+		\end{mintedtexbox} 
+		\begin{tcolorbox} 
+			\inputminted{TeX}{lst/scatter.txt} 
+		\end{tcolorbox}
+	\end{minipage} 
+	\hfill
+	\begin{minipage}{.3\textwidth} 
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty scatter,   
+				xmin            = 0, 
+				ymin            = 0, 
+				ymax 			= 10, 
+				xmax			= 10,
+				legend style={at={(1.25,1.05)}}, title={Scatter}
+				]
+				%\addscatter{data/classes.tsv}[][x=x, y=y, meta=label]
+				 \addplot+[pr-scatter] 
+				 table[x = x,y = y,meta = label] {data/classes.tsv};
+				\legend{Class 0,Class 1,Class 2,Class 3,Class 4,Class 5,Class 6}
+			\end{axis}
+		\end{tikzpicture} 
+	\end{minipage} 
+\end{figure}
+
+\hfill 
+\iffalse
+\begin{tikzpicture}
+	\begin{axis}[
+		pretty scatter,   
+		width=.3\textwidth,
+		xmin            = 0, 
+		ymin            = 0, 
+		ymax 			= 10, 
+		xmax			= 10,
+		legend style={at={(1.25,1.05)}}
+		]
+		\addplot [pr-scatter-complementary]
+		table[x = x1,y = x2,meta = y,col sep=comma] {data/blobs.csv}; 
+		%\legend{Class 0,Class 1,Class 2,Class 3}
+	\end{axis}
+\end{tikzpicture}   
+\end{figure}   
+\fi 
+\end{comment} 
+%% Line w symbolic x coordinates 
+%\begin{figure}[h!]
+\begin{comment}
+\begin{minipage}{.6\textwidth} 
+	\begin{tcolorbox} 
+		\begin{minted}{TeX}
+			%% line, only marks 
+			\begin{axis}[
+				pretty line marks, 
+				pretty discrete rotated,
+				symbolic x coords = {Germany,France,England,Saarland,Spain,Finland,USA},
+				legend entries  = {life quality, food quality} 
+				]
+				\addplot table[x=x, y=y1] {data/countries.tsv};
+				\addplot table[x=x, y=y2] {data/countries.tsv};
+			\end{axis}
+		\end{minted}
+	\end{tcolorbox}
+\end{minipage} 	
+\hfill
+\begin{tikzpicture}
+	\begin{axis}[	 
+		pretty line marks, 
+		width=.3\textwidth,
+		pretty discrete rotated,	
+		symbolic x coords= {Germany,France,England,Saarland,Spain,Finland,USA},	
+		legend entries  = {life quality, food quality},  
+		ymax = 15, ymin = 0,
+		legend style={at={(1.25,1.05)}}
+		]
+		\addplot table[x=x, y =y1] {data/countries.tsv};
+		\addplot table[x=x, y =y2] {data/countries.tsv};
+	\end{axis}
+\end{tikzpicture}
+\caption{Pretty scatter\index{Plot Types!Scatter!with scatter classes}\index{Colors!scatter classes}  \index{Labels!discrete}\index{Labels!rotation}\index{Legend!positioning}}
+\end{comment} 
+\clearpage
+
+
+
+
+\begin{comment}
+\hypertarget{addbars}{}
+\begin{function}{\tbs addbars}
+	\docarg{data.tsv}{s}  
+	\docarg{plot options}{l}  
+	% \docarg{table options}{l}  
+	\\ Creates a bar plot from a table file.
+\end{function}
+
+
+\begin{arglist}
+	\argitem{data.tsv}{s}{m}{data file with columns \texttt{x, y1, ..., yn}.} 
+	\argeitem{axis options}{l}{o}{customizations for the axis.}{xlabel={xlabel}}
+	\argitem{plot options}{l}{o}{style for adding plots. } 
+\end{arglist}
+
+\begin{keylist}{Axis Options} 
+	\keyitem{pretty discrete rotated}{display xlabels at 90 degree angle}  
+	\keyitem{pretty discrete tilt}{tilt xlabels} 
+	\keyitem{bar width=0.3em}{adjust width} 
+\end{keylist}
+
+
+
+% EXPERIMENT PARAMETERS
+\def\pltpath{data/expres/expname} % expect file names expname_ours_attr1.csv
+% methods
+\def\pltmethods{ours,notours}
+% metrics y
+\def\pltyupper{metric1} 
+\def\pltylower{metric1} 
+% attributes x
+\def\pltxleft{attr1} 
+\def\pltxright{attr1}  
+
+
+\begin{figure}[h!]%
+	\begin{tikzpicture} 
+		\begin{groupplot}[ 
+			group style={
+				group size=4 by 2, 
+				horizontal sep=20pt,  
+				vertical sep=60pt, % 10 without legend stuff
+			}, 
+			xtick align=center, 
+			ytick align=center
+			] 
+			
+			\def\titleA{\footnotesize{\texttt{\hyperlink{addlines}{\tbs addlines}}}}
+			\def\titleB{\footnotesize{\texttt{\hyperlink{adderrorlines}{\tbs adderrorlines}}}}
+			\def\titleC{\footnotesize{\texttt{\hyperlink{addconflines}{\tbs addconflines}}}} 
+			\def\titleD{\footnotesize{\texttt{\hyperlink{addshadedlines}{\tbs addshadedlines}}}} 
+			\def\titleG{\footnotesize{\texttt{\hyperlink{cyclelists}{[cycle list name=pr-marks]}}}}
+			\def\titleH{\footnotesize{\texttt{\hyperlink{cyclelists}{[cycle list name=pr-marks-conf]}}}}
+			\def\titleE{\footnotesize{\texttt{\hyperlink{mark}{[mark=white*]}}}}
+			\def\titleF{\footnotesize{\texttt{\hyperlink{mark}{[mark=diamond*]}}}}
+			
+			\def\shiftBetween{2cm}  %middle space
+			% upper left 
+			\grouplines{\pltpath_\pltxleft_\pltyupper.tsv}[ 
+			pretty line upleft,   
+			legend entries = {\textsc{Ours},\textsc{NotOurs}},  
+			title={\titleA}
+			]
+			\linesErrorGroupplot{\pltpath_\pltxright_\pltyupper.tsv}[	
+			pretty line upper, title={\titleB} ]
+			
+			% upper right  
+			\linesConfGroupplot{\pltpath_\pltxleft_\pltyupper.tsv}[	
+			xshift=\shiftBetween,  
+			pretty line upleft, 
+			cycle list name		= pr-colors-conf,
+			legend entries={\textsc{Ours},,\textsc{NotOurs}},  
+			title=\titleC   
+			]
+			\linesShadedGroupplot{\pltpath_\pltxright_\pltyupper.tsv}[	
+			xshift=\shiftBetween,
+			pretty line upper, 
+			cycle list name		= pr-shade,
+			title=\titleD
+			] 
+			\\ 
+			% lower left 
+			\grouplines{\pltpath_\pltxleft_\pltylower.tsv} [
+			pretty line lowleft,    
+			legend entries = {\textsc{Ours},\textsc{NotOurs}},
+			title=\titleE
+			][mark=white*, mark size=1 ]
+			\grouplines{\pltpath_\pltxright_\pltylower.tsv} [	
+			pretty line lower,     cycle list name = pr-marks, title=\titleG]
+			% lower right 
+			\linesConfGroupplot{\pltpath_\pltxleft_\pltylower.tsv} [
+			xshift=\shiftBetween,  
+			pretty line lowleft,   
+			legend entries = {\textsc{Ours},,\textsc{NotOurs}},
+			cycle list name = pr-colors-conf, 
+			title=\titleF ][mark= diamond* , mark size=1 ] 
+			\linesConfGroupplot{\pltpath_\pltxright_\pltylower.tsv} [
+			%xshift=\shiftBetween,  
+			pretty line lower,  
+			cycle list name = pr-marks-conf ,  title=\titleH ]
+		\end{groupplot}  
+	\end{tikzpicture} 
+	\caption{ Line, Groupplot  \index{Plot Types!Line!in larger experiment} 
+		\index{Axes!grouping} \index{Plot Types!Groupplot}  
+	}
+\end{figure}
+
+%% Boxplot %todo groupplotify
+\def\metric{pretty}
+\def\methods{ourmethod, goodmethod, badmethod, uglymethod}
+\def\file{data/box.txt}	
+\begin{figure}[h!]   
+	\def\metric{pretty}		
+	%% lower left
+	\begin{tikzpicture}
+		\def\titleA{\footnotesize{\texttt{\hyperlink{addboxes}{\tbs addboxes}}}}
+		\begin{axis}[ 
+			pretty box lowleft,  legend columns=5, legend entries={\textsc{a},\textsc{b},\textsc{c},\textsc{d},\textsc{e},},
+			title=\titleA, 
+			]  
+			%\foreach \m in \pltmethods {  	 
+				%	\addplot table[x=\pltxright, y=\m_\pltylower_mn] {\pltpath_\m_\pltxright.tsv};   
+				%}  
+			\foreach \col in {1, ..., 5}{
+				\addplot table[y=y\col] {data/boxes.tsv};
+			}
+		\end{axis}
+	\end{tikzpicture} 
+	\hfill  
+	%% lower left
+	\begin{tikzpicture}
+		\def\titleB{\footnotesize{\texttt{\hyperlink{addsimpleboxes}{\tbs addsimpleboxes}}}}
+		\begin{axis}[
+			pretty box lower, 
+			pretty simplebox,title=\titleB, 
+			width=0.25\textwidth]
+			\foreach \col in {1, ..., 5}{
+				\addplot table[y=y\col] {data/boxes.tsv};
+			}
+		\end{axis} 
+	\end{tikzpicture}
+	\hfill  
+	%% lower right
+	\begin{tikzpicture}
+		\def\titleC{\footnotesize{\texttt{\hyperlink{addbars}{\tbs addbars}}}}
+		\begin{axis}[ 
+			pretty bar lowleft,     title=\titleC, 
+			legend entries = {\textsc{Ours},\textsc{NotOurs}},
+			]  
+			\foreach \m in \pltmethods {  	 
+				\addplot table[x=\pltxleft, y=\m_\pltylower_mn] {\pltpath_\m_\pltxleft.tsv};   
+			}  
+		\end{axis}
+	\end{tikzpicture}
+	\hfill  
+	%% lower fright
+	\begin{tikzpicture}
+		\def\titleD{\footnotesize{\texttt{\hyperlink{addbars}{\tbs addbars}}}}
+		\begin{axis}[ 
+			pretty bar lower,  title=\titleD,  
+			]  
+			\foreach \m in \pltmethods {  	 
+				\addplot table[x=\pltxright, y=\m_\pltylower_mn] {\pltpath_\m_\pltxright.tsv};   
+			}  
+		\end{axis}
+	\end{tikzpicture}
+	\hfill 
+	\caption{ \label{fig:ex:box_bar} Box, Bar \index{Plot Types!Box} \index{Plot Types!Bar}
+	}
+\end{figure} 
+\end{comment}
+

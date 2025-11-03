@@ -1,0 +1,12 @@
+%% expands to
+\begin{axis}[
+    pretty line,	 
+    cycle list name= pr-line-shade,  
+    % double ,, skips the confidence regions in the legend:
+    legend entries = {Method 1,,Method 2,,Method 3}, 
+]  
+\foreach \r in {1,2,3}   {
+	\addplot table[x=x, y=y\r, name path=up] {data/line.txt};  
+	\addplot table[x=x, y=y\r] {data/line.txt} \closedcycle;
+	}  
+\end{axis}  

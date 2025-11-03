@@ -1,0 +1,233 @@
+
+\index{Plot Types!threedimensional!area}
+\index{Plot Types!threedimensional!contour}
+\index{Plot Types!threedimensional!scatter}
+
+\begin{figure}[h!]	
+\begin{minipage}{0.6\textwidth}
+		\begin{mintedtexbox}[/examples/threedim.tex] 
+		\inputminted{TeX}{lst/threedim.txt}
+		\end{mintedtexbox}
+	\end{minipage}	  
+\begin{minipage}{.3\textwidth} 
+	\input{examples/threedim.tex} 
+\end{minipage}  
+	\begin{minipage}{.6\textwidth}  
+	\begin{tcolorbox} 
+		\begin{minted}{TeX}
+\addplot3+ [pr-scatter] table {data/ternary.tsv};
+		\end{minted}
+	\end{tcolorbox} 
+\end{minipage}
+\begin{minipage}{.3\textwidth} 
+	\begin{tikzpicture}
+		\begin{axis}[
+			pretty 3daxis,
+			xlabel          = {$x$}, 
+			ylabel          = {$y$}, 
+			zlabel          = {$z$}, 
+			width=\textwidth
+			]
+			\addplot3+ [pr-scatter] table {data/ternary.tsv} ;
+		\end{axis}
+	\end{tikzpicture}
+\end{minipage} 
+
+ \begin{minipage}{.6\textwidth}  
+\begin{tcolorbox} 
+	\begin{minted}{TeX}
+\begin{axis}[
+    pretty 3daxis,
+    scaled ticks = true,
+    domain = 5:10,
+    domain y = -10:-5,
+    samples y = 15,
+    xlabel = {$x$}, 
+    ylabel = {$y$}, 
+    zlabel = {$z$}, 
+    mesh legend
+]
+    \addplot3 [pr-contour] {x*y*exp(x)};
+    \legend{area};
+\end{axis}
+	\end{minted}
+\end{tcolorbox} 
+ \end{minipage}
+\begin{minipage}{.3\textwidth} 
+\begin{tikzpicture}
+	\begin{axis}[
+	pretty 3daxis,
+	scaled ticks    = true,	
+	domain          = 5:10,
+	domain y        = -10:-5,	
+	samples y       = 15,
+	xlabel          = {$x$}, 
+	ylabel          = {$y$}, 
+	zlabel          = {$z$}, 
+	mesh legend, width=\textwidth
+	]
+	\addplot3 [pr-contour] {x*y*exp(x)};
+	\legend{area};
+	\end{axis}
+\end{tikzpicture}
+\end{minipage} 
+ \end{figure} 
+
+\begin{comment} 
+\begin{figure}[h!] %from https://tex.stackexchange.com/questions/475636/filling-in-region-of-3d-plot
+	\begin{minipage}{.6\textwidth} 
+		\begin{tcolorbox} 
+			\begin{minted}{TeX}
+%%% variant  
+\begin{ternaryaxis}[
+    pretty 3daxis fill, 
+] %... 
+\end{minted}
+			\end{tcolorbox}
+		\end{minipage} 
+		\begin{minipage}{0.3\textwidth}
+			\hfill
+			\begin{tikzpicture}[declare function={f(\x,\y)=exp(-(\x*\x+\y*\y));}]
+			\pgfdeclarelayer{pre main}
+			\pgfsetlayers{pre main,main}
+			\begin{axis}[
+			pretty 3daxis fill,pretty grid 3d,
+			zmax=1.25,
+			view = {45}{45}, 
+			colormap={mycol}{color=(pr-color1b!50!white), color=(pr-color1b!50!white)}, 
+			pretty nolabels,
+			width=\textwidth,
+			]
+			
+			\addplot3[
+			surf,
+			samples=30,
+			domain=0:2,
+			shader=interp,
+			opacity=0.5,
+			]
+			{f(x,y)};
+			%\pgfplotsset{compat=1.16}
+			%\fill[pr-color1b!50!white] (0,0,-1) -- plot[variable=\x,domain=0:2] (\x,0,{f(\x,0)}) -- (2,0,-1) --
+			%cycle;
+			%\fill[pr-color1b!50!white] (2,0,-1) -- plot[variable=\y,domain=0:2] (2,\y,{f(2,\y)}) 
+			%-- (2,2,-1) --cycle;
+			
+			\fill[pr-color1b!50!white] (axis cs:0,0,-1) -- plot[variable=\x,domain=0:2] (axis cs:\x,0,{f(\x,0)}) -- (axis cs:2,0,-1) --cycle;
+			\fill[pr-color1b!50!white] (axis cs:2,0,-1) -- plot[variable=\y,domain=0:2] (axis cs:2,\y,{f(2,\y)}) 
+			-- (axis cs:2,2,-1) --cycle;
+			\end{axis}
+			\end{tikzpicture}
+		\end{minipage} 
+	\end{figure} 
+\end{comment}
+\clearpage
+ 
+\index{Plot Types!ternary}
+\begin{figure}[h!]
+	\begin{minipage}{.6\textwidth} 
+		\begin{mintedtexbox}[/examples/ternary.tex] 
+			\inputminted{TeX}{lst/ternary.txt}
+		\end{mintedtexbox} 
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}
+		\input{examples/ternary.tex}
+		\hfill 
+	\end{minipage} 
+	
+\end{figure} 
+
+
+\begin{comment} 
+
+\begin{figure}[h!]
+	\begin{minipage}{.6\textwidth} 
+		\begin{tcolorbox} 
+			\begin{minted}{TeX} 
+\begin{ternaryaxis}[
+    pretty ternary area axis, 
+    title=pgfplots example,  
+    xlabel=wt Chromium,
+    ylabel=wt Iron,
+    zlabel=wt Nickel  
+] 
+\addplot3 table {
+    A B C
+    1 0 0
+    %...
+    0.1 0.9 0
+};
+\addlegendentry{Cr}
+%...
+\addlegendentry{$\sigma$+$\gamma$FeNi} 
+\node [inner sep=0.5pt,circle,draw,fill=white,
+    pin=-15:\footnotesize Stainless Steel]
+    at (0.18,0.74,0.08) {};
+\end{ternaryaxis}
+			\end{minted}
+		\end{tcolorbox}
+	\end{minipage} 
+	\begin{minipage}{0.3\textwidth}
+		\hfill
+		\begin{tikzpicture}
+		\begin{ternaryaxis}[
+		pretty ternary area axis,
+		title=pgfplots example,  
+		xlabel=wt Chromium,
+		ylabel=wt Iron,
+		zlabel=wt Nickel,
+		width=\textwidth
+		]
+		\addplot3 table {
+			A B C
+			1 0 0
+			0.5 0.4 0.1
+			0.45 0.52 0.03
+			0.36 0.6 0.04
+			0.1 0.9 0
+		};
+		\addlegendentry{Cr}
+		
+		\addplot3 table {
+			A B C
+			1 0 0
+			0.5 0.4 0.1
+			0.28 0.35 0.37
+			0.4 0 0.6
+		};
+		\addlegendentry{Cr+$\gamma$FeNi}
+		
+		\addplot3 table {
+			0.4 0 0.6
+			0.28 0.35 0.37
+			0.25 0.6 0.15
+			0.1 0.9 0
+			0 1 0
+			0 0 1
+		};
+		\addlegendentry{$\gamma$FeNi}
+		
+		\addplot3 table {
+			0.1 0.9 0
+			0.36 0.6 0.04
+			0.25 0.6 0.15
+		};
+		\addlegendentry{Cr+$\gamma$FeNi}
+		
+		\addplot3 table {
+			0.5 0.4 0.1
+			0.45 0.52 0.03
+			0.36 0.6 0.04
+			0.25 0.6 0.15
+			0.28 0.35 0.37
+		};
+		\addlegendentry{$\sigma$+$\gamma$FeNi}
+		
+		\node [inner sep=0.5pt,circle,draw,fill=white,pin=-15:\footnotesize Stainless Steel]
+		at (0.18,0.74,0.08) {};
+		\end{ternaryaxis}
+		\end{tikzpicture}
+	\end{minipage}
+\end{figure} 
+
+\end{comment}

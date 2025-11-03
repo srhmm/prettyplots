@@ -1,0 +1,25 @@
+%% with markers (fixed)
+%\begin{axis}[ pretty line, pretty grid ]
+%	\addlines{data/line.tsv}[mark=diamond*, mark size=1pt]
+%\end{axis} 
+%% with markers (rotating)
+%\begin{axis}[
+%	pretty line,
+%	pretty grid, 
+%	cycle list name=pr-marks
+%	]
+%	\addlines{data/line.tsv}
+%\end{axis}
+%% with error bars
+%\begin{axis}[ pretty line ]
+%	\adderrorlines{data/line_conf.tsv}
+%\end{axis}
+\begin{tikzpicture}
+\begin{axis}[ pretty line,
+	ymax=10,  width=\textwidth ] 
+	\pgfplotsinvokeforeach{1,...,3}{
+		\addplot+[mark=diamond*, mark size=1pt] 
+		table[x=x, y=y#1] {data/line.tsv}; 
+	} 
+\end{axis} 
+\end{tikzpicture}

@@ -1,0 +1,5 @@
+\begin{axis}[ pretty boxplot ]  
+    \foreach \col in {y1, y2, y3, y4}{   
+        \addplot  table[y=\col] {data/box.tsv};   
+    }   
+\end{axis}

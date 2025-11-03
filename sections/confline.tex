@@ -1,0 +1,195 @@
+ 
+\clearpage
+\subsection{Error Line}  
+\index{Plot Types!line!with confidence regions}
+If you want to plot confidence regions around your line, include them in your dataset as follows,
+
+\begin{figure}[h!]
+	\begin{minipage}{0.65\textwidth}
+		\begin{mintedtxtbox}[/data/line\_conf.tsv]
+			\begin{minted}{TeX}
+%Metric    Method1    Method1_conf ...    MethodN_conf 
+x    y1    y1_c    y1    y1_c    y3    y3_c
+0    9    0.5    4    0.5    3    0.6
+....
+			\end{minted}
+		\end{mintedtxtbox}
+	\end{minipage}
+\end{figure}
+
+Then, add both the lines and the confidence bands as follows, 
+
+\begin{figure}[h!]
+	\begin{minipage}{0.65\textwidth} 
+		\begin{mintedtexbox}[/examples/line\_conf.tex]
+			\inputminted{TeX}{lst/line_conf.txt}
+		\end{mintedtexbox}    
+	\end{minipage}
+	\begin{minipage}{0.35\textwidth}  
+		\input{examples/line_conf.tex}
+		\hfill	
+	\end{minipage} 	 
+\end{figure}
+Note that the upper and lower confidence lines are each added using addplot, where \texttt{forget plot} makes sure that these lines are disregarded in the legend and cycle list. The last \texttt{fill-between} line is added without  \texttt{forget plot} as we  define its color in the cycle list. If you use a legend, skip these plots as follows.
+\begin{figure}[h!] 
+	\begin{minipage}{0.65\textwidth} 
+		\begin{tcolorbox}
+			\begin{minted}{TeX}   
+\begin{axis}[
+    pretty line,
+    pretty fill legend, 
+    cycle list name = pr-colors-conf,
+    % double ,, skips the confidence regions in the legend:
+    legend entries = {Method 1,,Method 2,,Method 3},
+]  % ...
+\end{axis}   
+			\end{minted}
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}   
+		\begin{tikzpicture} 
+				\begin{axis}[
+					pretty line, 
+					pretty fill legend,
+					ymin=0, ymax=10,  width=\textwidth, 
+					cycle list name = pr-colors-conf,
+					% double ,, skips the confidence regions in the legend:
+					legend entries = {Method 1,,Method 2,,Method 3},
+					legend style={at={(1,1)}, anchor=north west}, 
+					]  
+	\foreach \r in {1,2,3}   {
+	\addplot table[x=x, y=y\r] {data/line_conf.tsv}; 
+	\addplot[forget plot, draw=none, name path=low] 
+	table [x=x, y expr=\thisrow{y\r} - \thisrow{y\r_c}]
+	{data/line_conf.tsv};
+	\addplot[forget plot, draw=none, name path=up] 
+	table [x=x, y expr= \thisrow{y\r} + \thisrow{y\r_c}]
+	{data/line_conf.tsv};
+	\addplot fill between[of=low and up];
+}  
+				\end{axis}  
+			\end{tikzpicture} 
+		%\lines{data/line.tsv}[pretty grid, cycle list name=pr-marks]
+		\hfill	
+	\end{minipage} 	 
+\end{figure} 
+\clearpage 
+
+For lines with error regions,  the cycle lists contain the colors of the confidence bands. You can look at the  \texttt{-conf} cycle lists in \texttt{prettyplots.sty} for different styles. Here  is an example with \texttt{pr-marks-conf}.
+\begin{figure}[h!] 
+	\begin{minipage}{0.65\textwidth} 
+		\begin{tcolorbox}
+			\begin{minted}{TeX}  
+\begin{axis}[
+    pretty line, 
+    cycle list name = pr-marks-conf
+    ]
+    %% our plot
+    \addplot table[x=x, y=y1] {data/line_conf.tsv} 
+    node[pos=1, right] (n) {ours};   
+    \addplot[forget plot, draw=none, name path=low] 
+    table [x=x, y expr=\thisrow{y1} - \thisrow{y1_c}]
+    {data/line_conf.tsv};
+    \addplot[forget plot, draw=none, name path=up] 
+    table [x=x, y expr= \thisrow{y1} + \thisrow{y1_c}]
+    {data/line_conf.tsv};
+    \addplot fill between[of=low and up]; 
+    %% baseline plot
+    \addplot table[x=x, y=y1] {data/line_conf.tsv} 
+    node[pos=1, right] (n) {baseline};   
+    \addplot[forget plot, draw=none, name path=low] 
+    table [x=x, y expr=\thisrow{y3} - \thisrow{y3_c}]
+    {data/line_conf.tsv};
+    \addplot[forget plot, draw=none, name path=up] 
+    table [x=x, y expr= \thisrow{y3} + \thisrow{y3_c}]
+    {data/line_conf.tsv};
+    \addplot fill between[of=low and up];
+\end{axis}
+				\end{minted}
+			\end{tcolorbox}
+		\end{minipage}
+		\begin{minipage}{0.3\textwidth}   
+			\begin{tikzpicture}
+				\begin{axis}[
+					pretty line, 
+					cycle list name = pr-marks-conf,
+					width=\textwidth
+					]
+				%	\foreach\r/\mtd in {1/A,2/B,3/C} {
+						\addplot table[x=x, y=y1] {data/line_conf.tsv} node[pos=1, right] (n) {ours};   
+						\addplot[forget plot, draw=none, name path=low] 
+						table [x=x, y expr=\thisrow{y1} - \thisrow{y1_c}]
+						{data/line_conf.tsv};
+						\addplot[forget plot, draw=none, name path=up] 
+						table [x=x, y expr= \thisrow{y1} + \thisrow{y1_c}]
+						{data/line_conf.tsv};
+						\addplot fill between[of=low and up];
+						
+						\addplot table[x=x, y=y3] {data/line_conf.tsv} node[pos=1, right] (n) {baseline};   
+						\addplot[forget plot, draw=none, name path=low] 
+						table [x=x, y expr=\thisrow{y3} - \thisrow{y3_c}]
+						{data/line_conf.tsv};
+						\addplot[forget plot, draw=none, name path=up] 
+						table [x=x, y expr= \thisrow{y3} + \thisrow{y3_c}]
+						{data/line_conf.tsv};
+						\addplot fill between[of=low and up];
+				%	}
+\end{axis}
+				%\begin{axis}[
+				%	pretty line, 
+				%	cycle list name = pr-marks-conf, width=\textwidth
+				%	]
+				%	\addconflines{data/line_conf.tsv}
+				%\end{axis} 
+				 %node[pos=1, right] (n) {\small Ours};  
+			\end{tikzpicture}
+			%\lines{data/line.tsv}[pretty grid, cycle list name=pr-marks]
+			\hfill	
+		\end{minipage} 	 
+	\end{figure} 
+	
+	
+To show error bars instead, use
+	\begin{figure}[h!] 
+		\begin{minipage}{0.65\textwidth} 
+			\hypertarget{adderrorlines}{}
+			\begin{tcolorbox}
+				\begin{minted}{TeX} 
+\begin{axis}[pretty line]
+    \foreach \r in {1,...,3}{ 
+        \addplot+[error bars/.cd, y explicit, y dir=both] 
+        table[ x=x, y=y\r, 
+        y error plus expr=\thisrow{y\r_c},
+        y error minus expr=\thisrow{y\r_c}, 
+        ] {data/line_conf.tsv};
+}  
+\end{axis}
+				\end{minted}
+			\end{tcolorbox}
+		\end{minipage}
+		\begin{minipage}{0.3\textwidth} 
+			\begin{tikzpicture}
+				\begin{axis}[
+					pretty line,  width=\textwidth
+					]
+					\foreach \col in {1,...,3}{ 
+						\addplot+[ 
+						error bars/.cd,
+						y explicit,
+						y dir=both] table[
+						x=x, y=y\col, 
+						y error plus expr=\thisrow{y\col_c},
+						y error minus expr=\thisrow{y\col_c}, 
+						] {data/line_conf.tsv};
+					}  
+					%\adderrorlines{data/line_conf.tsv}
+				\end{axis} 
+			\end{tikzpicture}
+			%\linesError{data/line_conf.tsv}[ymax=10] 
+			\hfill	
+		\end{minipage} 	 
+	\end{figure} 
+	
+	\clearpage
+	
+	

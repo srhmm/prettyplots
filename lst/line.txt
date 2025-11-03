@@ -1,0 +1,5 @@
+\begin{axis}[ pretty line ] 
+    \pgfplotsinvokeforeach{1,...,3}{
+        \addplot table[x=x, y=y#1] {data/line.tsv};   
+    } 
+\end{axis}

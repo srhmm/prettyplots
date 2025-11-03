@@ -1,0 +1,123 @@
+ \clearpage 
+ \subsection{Grids } 
+\index{Grids} 
+The plot types come with some grids that you can use, usually called  \texttt{pretty grid $\langle$\emph{plotname}$\rangle$}. 
+\begin{figure}[h!]
+	\begin{minipage}{0.65\textwidth}
+		\begin{mintedtxtbox}[/examples/grids.tex]
+			\begin{minted}{TeX}
+% preamble
+\renewcommand{\prgridcolor}{tcss-slate1}
+%
+\begin{axis}[pretty line, pretty grid line] % ...
+\end{axis}
+			\end{minted}
+		\end{mintedtxtbox} 
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth} 
+		\lines{data/line.tsv}[pretty grid line, pretty nolabels, width=\textwidth] 
+	\end{minipage} 	
+	\begin{minipage}{0.65\textwidth}
+		\begin{tcolorbox} 
+			\begin{minted}{TeX}
+%% defining custom grids
+\pgfplotsset{
+    pretty grid line/.style={ 
+        ymajorgrids, 
+        major grid style = {tcss-slate1, solid, thick}, 
+    },  
+}
+\begin{axis}[ pretty line, pretty grid line]  %...
+\end{axis}
+			\end{minted}
+		\end{tcolorbox} 
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}
+		\hspace{.5cm}
+		\pgfplotsset{
+			my grid/.style={ 
+				ymajorgrids, 
+				major grid style = {tcss-slate1, solid, thick}, 
+			},  
+		}
+		\begin{tikzpicture}
+		\begin{axis}[
+		pretty line,
+		my grid, 
+		pretty nolabels,  width=\textwidth
+		]  
+		\addlines{data/line.tsv}
+		\end{axis}  
+		\hfill
+		\end{tikzpicture}	
+	\end{minipage} 	
+\end{figure}
+\par 
+Similarly for the other plot types. 
+\begin{figure}[h!]
+	\begin{minipage}{.65\textwidth}  
+	\begin{tcolorbox} 
+	\begin{minted}{TeX}
+\pgfplotsset{
+    pretty grid scatter/.style={ 
+    grid = major, 
+    major grid style = {tcss-slate1, thick}, 
+    width=\textwidth
+},
+\begin{axis}[ pretty scatter, pretty grid scatter]  %...
+\end{axis}
+	\end{minted}
+\end{tcolorbox}
+\end{minipage} 
+\hfill
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+\begin{axis}[
+pretty scatter,  
+pretty grid scatter,
+pretty nolabels,
+width= \textwidth,
+xmin            = 0, 
+ymin            = 0, 
+ymax 			= 10, 
+xmax			= 10,
+legend style={at={(1.25,1.05)}}
+]
+\addplot+[pr-scatter-alpha]
+table[x = x,y = y,meta = label] {data/classes.tsv}; 
+\end{axis}
+\end{tikzpicture} 
+\end{minipage}  
+\end{figure}
+\par 
+The default grid color for all grids is defined via \tbs \texttt{prgridcolor}.
+\begin{figure}[h!] 
+	\begin{minipage}{.65\textwidth}  
+	\begin{tcolorbox} 
+		\begin{minted}{TeX}
+\renewcommand{\prgridcolor}{tcss-slate3}
+\begin{axis}[pretty 3daxis, pretty grid 3d]   
+    \addplot3+ [pr-scatter] table {data/ternary.tsv} ;
+\end{axis}
+		\end{minted}
+	\end{tcolorbox} 
+\end{minipage} 
+	\hfill
+\begin{minipage}{.3\textwidth}  
+	\begin{tikzpicture}
+  \renewcommand{\prgridcolor}{tcss-slate3}
+	\begin{axis}[
+	width=\textwidth,
+	pretty 3daxis,
+	pretty nolabels,
+	pretty grid 3d,  
+	]
+	\addplot3+ [pr-scatter] table {data/ternary.tsv} ;
+	\end{axis}
+	\end{tikzpicture} 
+\end{minipage} 
+\end{figure}
+ 
+
+\clearpage
+

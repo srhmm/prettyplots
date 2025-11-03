@@ -1,0 +1,17 @@
+\begin{axis}[
+    pretty heated,
+    example marks,
+    colormap/bone,
+    colorbar sampled, % optional
+    scaled y ticks  = base 10:-2, 
+    scaled x ticks  = base 10:-2, 
+    legend entries  = {} ] 
+    \addplot [mark size = 2pt] 
+    table[x expr=\thisrow{x}*100, 
+        y expr=\thisrow{y}*100]
+        {data/marks.txt};
+    \addplot [mark size = 2pt] 
+    table[x expr=\thisrow{x}*100, 
+        y expr=1000-\thisrow{y}*50]
+        {data/marks.txt};
+\end{axis}

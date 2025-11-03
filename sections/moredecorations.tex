@@ -1,0 +1,668 @@
+ 	
+%% Path labels
+
+%\subsection{Labels}
+\vspace{0.5cm}
+\begin{figure}[h]
+\begin{minipage}{0.45\textwidth}
+\begin{tikzpicture}
+    \begin{axis}[
+    pretty line,
+    pretty spacy, 
+    example line, 
+    no markers, thick, black,
+    legend entries = {}]
+    \addplot[smooth] table[x = x, y = y2] {data/line_odd.txt} 
+    node[example label]  {strange line};
+    \addplot[smooth] table[x = x, y = y3] {data/line_odd.txt} 
+    node[example label] {odd line};
+    \addplot table[x = x, y = y1] {data/line_odd.txt} 
+    node[example label, inner sep = 4pt, pos = 0.3, rotate = 25] {weird line};
+    \end{axis}
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{.55\textwidth}
+	
+    \inputminted{TeX}{lst/line_odd.txt}
+	
+\end{minipage}
+\end{figure}
+
+%% Annotating points
+
+\vspace{2cm}
+\begin{figure}[h]
+	\begin{minipage}{0.45\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[
+		pretty line marks,
+		example marks, 
+		legend style    = {at = {(1,.75)}, anchor = south east},
+		xmax            = 10, 
+		ymax            = 10, 
+		xmin            = 0,
+		]	
+		\addplot table[x=x, y=y]  {data/marks.txt};	
+		\addplot table[x=x, y expr=10-0.5*\thisrow{y}]  {data/marks.txt};
+		%% annotations: 
+		\node at (axis cs:6, 2.1)  {\scriptsize boring};
+		\node at (axis cs:5.5, 2) (node1) {};
+		\node at (axis cs:4.5, 0.5)  (node2) {};
+		\draw [->, gray, thick] (node1) --(node2);
+		\node[pin=-90:{\scriptsize special}] at (axis cs:9,5.8) {};	
+		\end{axis}
+		\end{tikzpicture} 
+	\end{minipage}
+	\begin{minipage}{0.55\textwidth}
+		
+		\inputminted{TeX}{lst/marks_boring.txt}
+		
+	\end{minipage}
+\end{figure} 
+
+%% Discrete, rotation + testing scale 10 labels, grid
+
+%\subsection{Discrete labels, scale labels}
+\vspace{.5cm}
+\begin{figure}[h]
+	\begin{minipage}{0.45\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}[	
+				example marks, 
+				pretty line marks,
+				pretty ygrid,
+				pr-labels-tilted,
+				scaled y ticks  = base 10:-2,
+				symbolic x coords= {Germany,France,England,Saarland,Spain,Finland,USA},
+				height          = 5cm,		
+				legend entries  = {}, 
+				ymax            = 1000
+				]
+				\addplot table[x=x, y expr=100*\thisrow{y1}] {data/countries.tsv};
+			\end{axis}
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}{.55\textwidth}
+		
+		\inputminted{TeX}{lst/marks_quality2.txt}
+		
+	\end{minipage}
+\end{figure}
+
+
+
+
+
+%% Annotating points with visualization dependency
+
+\vspace{0.5cm}
+\begin{figure}[h]
+	\begin{minipage}{.45\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[
+		pretty scatter,
+		example marks,
+		legend entries = {},
+		scatter/use mapped color = {draw=gray,fill=gray,fill opacity=0.5},
+		ymin=0, ymax=10,
+		xmin=0, xmax=10,
+		height = 6cm, 
+		width = 6cm
+		]
+		\addplot[only marks,
+		nodes near coords*={\scriptsize $\pgfmathprintnumber \weight$},	
+		every node near coord/.append style = {yshift = 1 pt},
+		visualization depends on={\thisrow{weight} \as \weight}, 
+		scatter/@pre marker code/.append style=
+		{/tikz/mark size=0.5*\weight}
+		] 
+		table {
+			x	y	weight
+			2	2	4
+			4	6	4
+			6	4	6
+			8	4	2
+		};
+		\end{axis}
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}{.55\textwidth}
+		\vspace{.5cm}
+		\inputminted{TeX}{lst/scatter_weighted.txt}
+		
+	\end{minipage}
+	
+	
+	%% Labelled bars
+	
+	\begin{minipage}{0.45\textwidth}
+		\vspace{3cm}
+		\begin{tikzpicture}
+		\begin{axis}[
+		pretty bar, % small,
+		pr-labels-tilted,
+		bar width       = 0.5cm,
+		cycle list name = prcl-ybar,
+		height          = 6cm,
+		width           = 6cm,
+		ylabel          = {Rating}, 
+		xlabel          = {}, 
+		legend entries  = {},
+		symbolic x coords= {Oslo,Berlin,Tokyo,Rio},
+		%% label each bar with y value
+		visualization depends on=y \as \y,
+		nodes near coords ={\pgfmathprintnumber[precision=2]{\y}}, %TODO \y -> \pgfplotspointmeta? 
+		%% label layout
+		every node near coord/.append style={font=\scriptsize,color=black!80}, 
+		ymin = 0]
+		\addplot table[x=x, y=y3] {data/cities.tsv};
+		\end{axis}
+		\end{tikzpicture}	
+	\end{minipage}
+	\begin{minipage}{0.55\textwidth}	
+		\vspace{3.75cm}
+		\inputminted{TeX}{lst/bar_labelled.txt}
+		
+	\end{minipage}
+\end{figure} 
+
+
+
+%% Alternative: Point meta data
+
+%\begin{figure}
+%	\begin{tikzpicture}
+%	\begin{axis}[
+%		pretty scatter,
+%		nodes near coords,
+%		ymax=10,xmin=0,xmax=10,ymin=0,
+%		width = 5cm, height = 4cm
+%		]
+%	\addplot[only marks, mark=*, point meta=explicit symbolic, c1] 
+%	coordinates {
+%		(2,2) [\scriptsize p1]
+%		(3,7) [\scriptsize p2]
+%		(6,4) [\scriptsize]
+%	};
+%	\end{axis}
+%	\end{tikzpicture}
+%\end{figure}
+%
+
+
+%% More heat
+
+%\begin{figure}
+%	\begin{minipage}{.55\textwidth}
+%	\begin{tikzpicture}
+%	\begin{axis}[
+%	pretty heated,
+%	example marks,
+%	colorbar sampled,
+%	scaled y ticks  = base 10:-2, 
+%	scaled x ticks  = base 10:-2, 
+%	colormap/bone,
+%	legend entries  = {},
+%	xmin=0, ymin=0,,xmax=1000, ymax=1000] 
+%	\addplot [mark size = 2pt] table[x expr=\thisrow{x}*100, y expr=\thisrow{y}*100]  	{data/marks.txt};
+%	\addplot [mark size = 2pt] table[x expr=\thisrow{x}*100, y expr=1000-\thisrow{y}*50]  {data/marks.txt};
+%	\end{axis}
+%	\end{tikzpicture}
+%\end{minipage}
+%\begin{minipage}{.45\textwidth}
+%
+%\inputminted{TeX}{lst/scatter_heated2.txt}
+%
+%\end{minipage}
+%\end{figure}
+\clearpage
+
+
+%% Auxiliary lines
+
+
+%\subsection{Error lines}
+\vspace{1cm}
+\begin{figure}[h]
+	\begin{minipage}{0.45\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[
+		pretty line, 
+		example line, 
+		%% variables:
+		xtick           = {0,2,8,10}, 
+		xticklabels     = {0, $t_0$,$t_1$,$t_2$ }, 
+		xmax = 10, ymax = 10]
+		%% error bars:
+		\addplot[c1, mark=*] 
+		plot[error bars/.cd,
+		y dir           = minus, 
+		y fixed relative= 1,
+		x dir           = minus, 
+		x fixed relative= 1,
+		error mark      = none,
+		error bar style	= {dotted}]
+		coordinates {(0,0) (2,2) (8,8) (10, 10)};
+		%% threshold line: 
+		% \draw[gray, dotted] 
+		% (axis cs:\pgfkeysvalueof{/pgfplots/xmin}, 5) -- (axis cs:\pgfkeysvalueof{/pgfplots/xmax}, 5);
+		\end{axis}
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}{0.55\textwidth}
+		
+		\inputminted{TeX}{lst/line_xylines.txt}
+		
+	\end{minipage}
+\end{figure}
+
+\vspace{2cm}
+\begin{figure}[h]
+	\begin{minipage}{0.45\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[
+		pretty line,  
+		xtick           = {0,...,6}, 
+		ytick           = {0,2,4,6,8,10}, 	 
+		xmax = 6, ymax = 10,smooth,  ]
+		\addplot+[dollarbill,  mark=*,error bars/.cd, y dir=both, y explicit] 
+		coordinates { (0,6)
+			(1,6) +=(0,0.5) -= (0,0.5)
+			(2,5) +=(0,0.6) -= (0,0.6)
+			(3,3) +=(0,0.3) -= (0,0.3)
+			(4,2) +=(0,0.4) -= (0,0.4)
+			(5,2) +=(0,0.3) -= (0,0.3)
+			(6,1.8) 
+		};	
+		\end{axis}
+		\end{tikzpicture}
+	\end{minipage}
+	\caption{Error line. \index{Plot Types!Line!with error bars}\index{Decorations!error marks}}
+	\begin{minipage}{0.55\textwidth}
+		\vspace{2.5cm}
+		%TODO	\inputminted{TeX}{lst/line_confident.txt}
+	\end{minipage}
+\end{figure} 
+
+%	\coordinate (a) at (axis cs:0,4.5);
+%\coordinate (b) at (axis cs:0,5.5);
+%\coordinate (c) at (rel axis cs:0,0);
+%\coordinate (d) at (rel axis cs:1,0);
+%\draw [gray,thin,sharp plot,dashed] (a -| c) -- (a -| d);
+%\draw [gray,thin,sharp plot,dashed] (b -| c) -- (b -| d);
+
+
+
+%% Fill between plots
+
+%\subsection{Fill areas}
+\index{Decorations!fill-between}
+\vspace{1cm}
+\begin{figure}[h]
+	\begin{tikzpicture}
+	\begin{axis}[
+	pretty line,
+	pretty ygrid, 
+	example entries, 
+	%major grid style= {gray,dotted}, 
+	width           = .75*\textwidth, 
+	height          = 5cm,
+	ymax            = 1, 
+	xmax            = 1
+	]
+	%% shading
+	\addplot[forget plot, name path=lower, color=lightgray] % forget: no legend
+	table[x index=0, y index=4, header=true] {data/line_shady.txt};
+	\addplot[forget plot, name path=upper, color=lightgray] 
+	table[x index=0, y index=5, header=true] {data/line_shady.txt};
+	\addplot[forget plot, gainsboro, on layer=axis background] 
+	fill between[of=lower and upper];
+	\pgfplotsinvokeforeach{1,...,2}{
+		\addplot[thick, c#1] 
+		table[x index=0, y index=#1, header=true] {data/line_shady.txt};
+		\addlegendentry{Shady Method #1} %TODO markers
+	}
+	\end{axis}
+	\end{tikzpicture}
+	\vspace{1cm}
+	\inputminted{TeX}{lst/line_shady2.txt}
+	
+\end{figure}
+\clearpage
+
+
+%% Fill area
+
+\begin{figure}[h]
+	\begin{tikzpicture}
+	\begin{axis}[
+	pretty line, 
+	example line,
+	legend style = {at = {(0.85,0.6)}, inner xsep = 3pt}, 
+	area legend,
+	width = .6*\textwidth,
+	ymax=1, xmax=1
+	]
+	\addplot[c2,fill=c2,opacity=0.3,smooth]
+	table[x = x1, y = y1] {data/line_filled.txt}
+	|- (axis cs:0,0) -- cycle;
+	\addplot [c1,fill=c1,opacity=0.3,smooth]
+	table[x = x1, y = y2] {data/line_filled.txt}
+	|- (axis cs:0,0) -- cycle;
+	%alternative to area legend:
+	%\addlegendimage{only marks, mark=*, mark size=2pt,c1,opacity=0.3}
+	%\addlegendimage{only marks, mark=*, mark size=2pt,c2,opacity=0.3}
+	\end{axis}
+	\end{tikzpicture}
+	\vspace{1cm}
+	\inputminted{TeX}{lst/line_shady1.txt}
+	
+\end{figure} 
+
+
+%mixed legend
+%\begin{figure}
+%	\begin{tikzpicture}
+%	\begin{axis}[
+%		pretty line spacey, 
+%		example entries,,
+%		xmax=10, domain=0:10, samples=10,
+%		]
+%		\addplot {x^2};
+%		\addplot[ybar,fill=mambacolor4,draw=mambacolor4,opacity=0.4,
+%	ybar legend,mark=none,samples=5]
+%	{-30*(x +4)};
+%	\legend{first,second}
+%	\end{axis}
+%	\end{tikzpicture}
+%\end{figure}
+
+
+%\begin{figure}
+%\begin{tikzpicture}
+%\begin{axis}[legend pos=outer north east]
+%\addplot3[surf,samples=9,domain=0:1]
+%{(1-abs(2*(x-0.5))) * (1-abs(2*(y-0.5)))};
+%\addlegendentry{$\phi_x \phi_y$}
+%\addplot3+[ultra thick] coordinates {(0,0,0) (0.5,0,1) (1,0,0)};
+%\addlegendentry{$\phi_x $}
+%\addplot3+[ultra thick] coordinates {(1,0,0) (1,0.5,1) (1,1,0)};
+%\addlegendentry{$\phi_y $}
+%\end{axis}
+%\end{tikzpicture}
+%\end{figure}
+
+
+
+%% Stacking two y axes 
+
+%\subsection{Grouping}
+\begin{figure}[h]
+	\begin{minipage}{.45\textwidth}
+		\begin{tikzpicture}
+		% for small plots also use minipage st plots dont appear next to each other
+		\begin{axis}[
+		pretty line, 
+		example line, 
+		height          = 4.5cm,
+		width           = 6.5cm,
+		ylabel          = {ydomain 1},
+		axis x line     = none,
+		x axis line style={draw opacity=0},
+		legend entries  ={},
+		ymax            = 1]	
+		\addplot[line width=1pt, c1,smooth] 
+		table[x index=0, y expr=1-\thisrow{y2}, header=true] {data/line_odd.txt};
+		\end{axis}
+		\end{tikzpicture} 
+		\begin{tikzpicture}
+		\begin{axis}[
+		pretty line, 
+		example line,
+		height          = 4.5cm,
+		width           = 6.5cm,
+		legend entries  ={},
+		ylabel          = {ydomain 2}, 
+		ymax            = 1,]	
+		\addplot[line width=1pt, c1] 
+		table[x index=0, y index=1, header=true] {data/line_odd.txt};
+		\end{axis}
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}{0.55\textwidth}
+		\vspace{1cm}
+		\inputminted{TeX}{lst/line_yy.txt}
+		
+	\end{minipage}
+\end{figure} 
+
+
+
+
+
+%% Small ybar + groupplots
+
+%\subsection{Grouping}
+\begin{figure}[h]		
+	\vspace{.5cm}
+	\begin{minipage}{\textwidth}
+		\vspace{.4cm}
+		\begin{tikzpicture}
+		\begin{groupplot}[
+		pretty ybar small,
+		pr-labels-tilted,
+		cycle list name = prcl-ybar,
+		%% Grouping
+		group style     = {
+			group size = 2 by 1, 
+			horizontal sep = 15pt, 
+			ylabels at = edge left,
+			y descriptions at = edge left
+		},	
+		%% Attributes Group1
+		height          = 4.25cm,
+		symbolic x coords= {Germany,France,England,Saarland,Spain,Finland,USA},
+		ylabel          = {Rating}, 
+		xlabel          = {}, 
+		legend entries  = { Living, Eating },
+		legend style    = { at = {(1.69,1.2)},} ,
+		ymin =0,ymax=10,
+		%bar width illegal in groupplot, set in pretty ybar 
+		]
+		\nextgroupplot[width=6cm]
+		\pgfplotsinvokeforeach{1,...,2}{ \addplot table[x=x, y=y#1] {data/countries.tsv}; }
+		%% Attributes Group 2
+		\nextgroupplot[
+		width   = 4cm,
+		symbolic x coords= {Oslo,Berlin,Tokyo,Rio},
+		legend entries= {},
+		ymin= 0,ymax=10 %mind that y has the same scale
+		]
+		\pgfplotsinvokeforeach{1,...,2}{ \addplot table[x=x, y=y#1] {data/cities.tsv}; }
+		\end{groupplot}
+		\end{tikzpicture}
+		\vspace{1.5cm}
+		\inputminted{TeX}{lst/bar_grouped.txt}
+	\end{minipage} 
+	\caption{\index{Plot Types!Bar}  \index{Axes!grouping}}
+\end{figure} 
+
+
+%% Stacked ybar
+%\subsection{Stacking}
+\begin{figure}[h]
+	\vspace{.5cm}
+	\begin{minipage}{.5\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[
+		pretty ybar stacked,
+		height          = 7cm,
+		width           = 6cm,
+		bar width       = .5cm,
+		symbolic x coords= {y1,y2,y3,y4},
+		cycle list name = prcl-stacked,
+		ylabel          = {ylabel},
+		%xlabel         = {xlabel},
+		legend style    = {
+			at      = {(0.5,-0.20)},
+			anchor  = north,
+			legend columns=-1},
+		]
+		\addplot plot coordinates {(y1,0) (y2,2) (y3,3) (y4,0)};
+		\addplot plot coordinates {(y1,0) (y2,0) (y3,3) (y4,0)};
+		\addplot plot coordinates {(y1,6) (y2,6) (y3,2) (y4,6)};
+		\addplot plot coordinates {(y1,4) (y2,2) (y3,2)  (y4,4)};
+		\legend{z1, z2, z3, z4}
+		\end{axis}
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}{.5\textwidth}
+		
+		\inputminted{TeX}{lst/bar_ystack.txt}
+		
+	\end{minipage}
+	
+	
+	
+	%% Stacked xbar variant
+	
+	\begin{minipage}{.5\textwidth}	
+		\vspace{3cm}
+		\begin{tikzpicture}
+		\begin{axis} [
+		pretty xbar components,
+		width           = 8cm,
+		height          = 3cm,
+		bar width       = 5pt,
+		enlarge y limits= 0.04,
+		xlabel          = {xlabel},
+		ylabel          = {opt. ylabel},
+		xtick           = {0, 0.25, 0.5, 0.75, 1},
+		symbolic y coords={y4,y3,y2,y1},
+		ytick           = {y4,y3,y2,y1},	
+		]
+		\addplot+[color=white,fill=gray] table[y index=0, x index=1, header=true] {data/components.tsv}; 
+		\end{axis}
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}{.5\textwidth}
+		\vspace{3cm}	
+		\inputminted{TeX}{lst/bar_components.txt}
+	\end{minipage}
+\end{figure}
+
+%% Interval ybar
+%
+%\begin{figure}
+%	\begin{tikzpicture}
+%	\begin{axis}[	
+%	pretty ybar interval, 
+%	xticklabel interval boundaries,
+%	pretty discrete,
+%	xlabel          = {xlabel},
+%	ylabel          = {ylabel},
+%	width           = 4cm, 
+%	height          = 4cm, 
+%	ymin            = 0,
+%	]
+%	\addplot[white, fill=gray] coordinates
+%	{(0,2) (1,1) (3,2) (5,4) (6,3) (7,2) };
+%	\end{axis}
+%\end{tikzpicture}
+%\end{figure}
+%
+%%% Interval xbar, no grid
+%
+%\begin{figure}
+%\begin{tikzpicture}
+%	\begin{axis}[	
+%	pretty xbar interval,
+%	ylabel          = {age group},
+%	xlabel          = {something},
+%	ytick           = data,%TODO yticks look weird, put mid bar 
+%	xtick           = data,
+%	yticklabel interval boundaries,
+%	width           = 6cm, 
+%	height          = 5cm, 
+%	xmin            = 0,
+%	xmax            = 10,
+%%	xmajorgrids = true,
+%%		major grid style   = white,
+%	pretty labelshift, % after xbar interval and other pot. axis shifts
+%]
+%	\addplot[white, fill=gray]
+%	coordinates {(2,0) (3,12) (6,18) (9,25) (7,45) (4,65) (3,80)};\end{axis}
+%\end{tikzpicture}
+%	\end{figure}
+
+
+
+%% Stacked  xbar 
+\index{Plot Types!xbar}
+\vspace{1.5cm}
+\begin{figure}[h]
+	\begin{minipage}{0.5\textwidth}
+		\begin{tcolorbox}[title=/stacked.tsv]
+			\begin{minted}{TeX}
+			%ys    x1 ...    xn
+			y    x1 ...    xn
+			y1    1.8
+			...
+			\end{minted} 
+		\end{tcolorbox}
+		\begin{tcolorbox}[title=/examples/stacked.tex]
+			\inputminted{TeX}{lst/bar_xstack1.txt} 
+		\end{tcolorbox}
+	\end{minipage} 
+	\begin{minipage}{0.5\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[	
+		pretty xbar stacked,
+		cycle list name	= prcl-stacked, 
+		bar width       = .35cm,
+		xlabel          = {xlabel},
+		ylabel          = {opt. ylabel},
+		symbolic y coords= {y4,y3,y2,y1},
+		ytick           = {y4,y3,y2,y1},
+		xtick           = {0,2,...,10},	
+		xmin=0, xmax=8,]
+		\pgfplotsinvokeforeach{1,...,5}{ 
+			\addplot+ table[x=x#1, y=y] {data/stacked.txt}; 
+		}
+		\end{axis}
+		\end{tikzpicture} 
+	\end{minipage}  
+\end{figure}
+\clearpage
+
+%\subsection{Legend} 
+\index{Decorations!rotated labels} 
+\begin{figure}[h!]
+	\begin{minipage}{0.6\textwidth}
+		
+		\begin{mintedtexbox}[/examples/marks.tex] 
+			\inputminted{TeX}{lst/marks_quality1.txt}
+		\end{mintedtexbox}
+	\end{minipage}	
+	\hfill
+	\begin{tikzpicture}
+	\begin{axis}[	 
+	pretty line marks, 
+	width=.3\textwidth,
+	pr-labels-rotated,	
+	symbolic x coords= {Germany,France,England,Saarland,Spain,Finland,USA},	
+	legend entries  = {life quality, food quality}, 
+	legend columns  = 2,
+	legend style    = {
+		nodes   = {transform shape}, 
+		at		= {(.5,1)}, anchor=north,	
+		%% leave space between legend entries:
+		/tikz/every even column/.append style={column sep=.3cm},
+	}, 
+	ymax = 15, ymin = 0
+	]
+	\addplot table[x=x, y =y1] {data/countries.tsv};
+	\addplot table[x=x, y =y2] {data/countries.tsv};
+	\end{axis}
+	\end{tikzpicture}  
+\end{figure}

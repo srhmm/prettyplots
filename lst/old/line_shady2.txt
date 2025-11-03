@@ -1,0 +1,18 @@
+\begin{axis}[
+    pretty line,
+    pretty ygrid, 
+    example entries, 
+    width = \textwidth, 
+    height = 4cm 
+    ]
+    % Shading with forgotten (= not legendary) plots
+    \addplot[forget plot, name path=lower, color=lightgray] 
+    table[x index=0, y index=4, header=true] {data/line_shady.txt};
+    \addplot[forget plot, name path=upper, color=lightgray] 
+    table[x index=0, y index=5, header=true] {data/line_shady.txt};
+    \addplot[forget plot, gainsboro, on layer=axis background] 
+    fill between[of=lower and upper];
+    \pgfplotsinvokeforeach{1,...,2}{
+        \addplot[thick, c#1] table[x=x, y=y#1] {data/line_shady.txt};
+        \addlegendentry{Shady Method #1} }
+\end{axis}

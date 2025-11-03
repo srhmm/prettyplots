@@ -1,0 +1,99 @@
+\clearpage
+\section{Plots}     
+This section shows examples for each main plot type. 
+\label{sec:plots}
+
+\subsection{Line} 
+\hypertarget{prettyline}{}
+
+\index{Plot Types!line} 
+\index{Plot Types!line!basic}
+
+For basic line plots, you can pass \texttt{pretty line} to the \texttt{axis} keys.
+
+  
+\begin{figure}[h!]
+	\begin{minipage}{0.65\textwidth} 
+		\begin{mintedtxtbox}[/data/line.tsv]
+			\begin{minted}{TeX}
+%Metric    Method1 ... MethodN
+x    y1    y2    y3 
+0    9    4    3
+...
+			\end{minted}
+		\end{mintedtxtbox}
+	\end{minipage}
+\end{figure}
+\begin{figure}[h!]
+\begin{minipage}{0.65\textwidth} 
+		\begin{mintedtexbox}[/examples/line.tex]
+			\inputminted{TeX}{lst/line.txt}
+		\end{mintedtexbox}  
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}   
+\input{examples/line.tex}
+	\end{minipage}
+\end{figure} 
+   
+
+\index{Plot Types!line!with marks}
+
+The default color scheme \texttt{pr-colors}, you can find others in \sectref{sec:style}. For example, 
+\begin{figure}[h!] 
+	\begin{minipage}{0.65\textwidth} 
+		\begin{tcolorbox}
+			\begin{minted}{TeX} 
+\begin{axis}[pretty line, cycle list name=pr-colors]
+    \pgfplotsinvokeforeach{1,...,3}{
+    \addplot+ table[x=x, y=y#1] {data/line.tsv}; 
+} 
+\end{axis}
+			\end{minted}
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}  
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty line, ymin=0, ymax=10,
+				cycle list name=pr-white-marks, width=\textwidth,  
+				]
+				%\addlines{data/line.tsv} 
+				\pgfplotsinvokeforeach{1,...,3}{
+					\addplot+ table[x=x, y=y#1] 
+					{data/line.tsv}; 
+				}
+			\end{axis} 
+		\end{tikzpicture}
+		%\lines{data/line.tsv}[pretty grid, cycle list name=pr-marks]
+		\hfill	
+	\end{minipage} 	 
+\end{figure}  
+\par
+%which is the same as 
+%\begin{figure}[h!] 
+%	\begin{minipage}{\textwidth} 
+%		\begin{tcolorbox}
+%			\begin{minted}{TeX}  
+%\begin{axis}[pretty line,width=\textwidth, mark size=1pt,
+%	mark options={fill opacity=1,line width=.8}] 
+%    \addplot+[pr-color1a, mark=white-*] table[x=x, y=y1] {data/line.tsv}; 
+%    \addplot+[pr-color1b, mark=white-triangle*] table[x=x, y=y2] {data/line.tsv}; 
+%    \addplot+[pr-color1c, mark=white-diamond*] table[x=x, y=y3] {data/line.tsv}; 
+%\end{axis}
+%			\end{minted}
+%		\end{tcolorbox}
+%	\end{minipage} 	
+%	\begin{minipage}{0.3\textwidth}  
+%	\begin{tikzpicture}
+%\begin{axis}[pretty line,width=\textwidth, mark size=1pt,
+%    mark options={fill opacity=1,line width=.8}] 
+%\addplot+[pr-color1a, mark=white-*] table[x=x, y=y1] {data/line.tsv}; 
+%\addplot+[pr-color1b, mark=white-triangle*] table[x=x, y=y2] {data/line.tsv}; 
+%\addplot+[pr-color1c, mark=white-diamond*] table[x=x, y=y3] {data/line.tsv}; 
+%\end{axis}
+%	\end{tikzpicture}  
+%	\hfill	
+%	\end{minipage} 	 
+%\end{figure} 
+%\clearpage 
+  

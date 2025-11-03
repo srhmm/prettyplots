@@ -1,0 +1,18 @@
+	\begin{tikzpicture}
+	\begin{axis}[
+		pretty scatter, 
+		legend entries = {}, 
+		scatter/use mapped color = 
+		{draw=pr-color-gray4, fill=pr-color-gray4},
+		ymin=0, ymax=10,
+		xmin=0, xmax=10, width=\textwidth
+		]
+		\addplot[only marks,
+		nodes near coords*={\prnodefontsize $\pgfmathprintnumber \weight$},	
+		every node near coord/.append style = {yshift = 1 pt},
+		visualization depends on={\thisrow{weight} \as \weight}, 
+		scatter/@pre marker code/.append style=
+		{/tikz/mark size=0.5*\weight}
+		] table {data/marks_weighted.tsv};
+	\end{axis}
+\end{tikzpicture}

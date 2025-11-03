@@ -1,0 +1,151 @@
+\clearpage
+%\subsection{Overview} 
+
+% EXPERIMENT PARAMETERS
+\def\pltpath{data/expres/expname} % expect file names expname_ours_attr1.csv
+% methods
+\def\pltmethods{ours,notours}
+% metrics y
+\def\pltyupper{metric1} 
+\def\pltylower{metric1} 
+% attributes x
+\def\pltxleft{attr1} 
+\def\pltxright{attr1}  
+
+  
+\begin{figure}[h!]%
+\begin{tikzpicture} 
+\begin{groupplot}[ 
+	group style={
+		group size=4 by 2, 
+		horizontal sep=20pt,  
+		vertical sep=60pt, % 10 without legend stuff
+	}, 
+	xtick align=center, 
+	ytick align=center,
+	width=\textwidth
+	] 
+
+\def\titleA{\footnotesize{\texttt{\hyperlink{addlines}{ pretty line  }}}}
+\def\titleB{} %\footnotesize{\texttt{\hyperlink{adderrorlines}{...}}}}
+\def\titleC{} %\footnotesize{\texttt{\hyperlink{addconflines}{...}}}} 
+\def\titleD{\footnotesize{\texttt{\hyperlink{addshadedlines}{...}}}} 
+\def\titleG{\footnotesize{\texttt{\hyperlink{cyclelists}{\tbs addplot [cycle list name=pr-marks]}}}}
+\def\titleH{\footnotesize{\texttt{\hyperlink{cyclelists}{\tbs addplot [cycle list name=pr-marks-conf]}}}}
+\def\titleE{\footnotesize{\texttt{\hyperlink{mark}{[mark=white*]}}}}
+\def\titleF{\footnotesize{\texttt{\hyperlink{mark}{[mark=diamond*]}}}}
+
+\def\shiftBetween{2cm}  %middle space
+% upper left 
+\linesGroupplot{\pltpath_\pltxleft_\pltyupper.tsv}[ 
+    pretty line upleft,   
+    legend entries = {\textsc{Ours},\textsc{NotOurs}},  
+    title={\titleA}
+]
+\linesErrorGroupplot{\pltpath_\pltxright_\pltyupper.tsv}[	
+		pretty line upper, title={\titleB} ]
+
+% upper right  
+\linesConfGroupplot{\pltpath_\pltxleft_\pltyupper.tsv}[	
+	xshift=\shiftBetween,  
+	pretty line upleft, 
+	cycle list name		= pr-colors-conf,
+	legend entries={\textsc{Ours},,\textsc{NotOurs}},  
+	title=\titleC   
+]
+\linesShadedGroupplot{\pltpath_\pltxright_\pltyupper.tsv}[	
+	    xshift=\shiftBetween,
+		pretty line upper, 
+		cycle list name		= pr-shade,
+		 title=\titleD
+		] 
+\\ 
+% lower left 
+\linesGroupplot{\pltpath_\pltxleft_\pltylower.tsv} [
+    pretty line lowleft,    
+    legend entries = {\textsc{Ours},\textsc{NotOurs}},
+ title=\titleE
+][mark=white*, mark size=1 ]
+\linesGroupplot{\pltpath_\pltxright_\pltylower.tsv} [	
+    pretty line lower,     cycle list name = pr-marks, title=\titleG]
+% lower right 
+\linesConfGroupplot{\pltpath_\pltxleft_\pltylower.tsv} [
+	xshift=\shiftBetween,  
+	pretty line lowleft,   
+ legend entries = {\textsc{Ours},,\textsc{NotOurs}},
+ cycle list name = pr-colors-conf, 
+ title=\titleF ][mark= diamond* , mark size=1 ] 
+\linesConfGroupplot{\pltpath_\pltxright_\pltylower.tsv} [
+	%xshift=\shiftBetween,  
+	pretty line lower,  
+	cycle list name = pr-marks-conf ,  title=\titleH ]
+\end{groupplot}  
+\end{tikzpicture} 
+\index{Plot Types!Line!in larger experiment} 
+\index{Axes!grouping} \index{Plot Types!Groupplot}
+\end{figure}
+ 
+%% Boxplot %todo groupplotify
+\def\metric{pretty}
+\def\methods{ourmethod, goodmethod, badmethod, uglymethod}
+\def\file{data/box.txt}	
+\begin{figure}[h!]   
+\def\metric{pretty}		
+%% lower left
+\begin{tikzpicture}
+\def\titleA{\footnotesize{\texttt{\hyperlink{addboxes}{\tbs addboxes}}}}
+\begin{axis}[ 
+pretty box lowleft,  legend columns=5, legend entries={\textsc{a},\textsc{b},\textsc{c},\textsc{d},\textsc{e},},
+title=\titleA, 
+]  
+%\foreach \m in \pltmethods {  	 
+%	\addplot table[x=\pltxright, y=\m_\pltylower_mn] {\pltpath_\m_\pltxright.tsv};   
+%}  
+\foreach \col in {1, ..., 5}{
+	\addplot table[y=y\col] {data/boxes.tsv};
+}
+\end{axis}
+\end{tikzpicture} 
+	\hfill  
+	%% lower left
+	\begin{tikzpicture}
+	\def\titleB{\footnotesize{\texttt{\hyperlink{addsimpleboxes}{\tbs addsimpleboxes}}}}
+	\begin{axis}[
+	pretty box lower, 
+	pretty simplebox,title=\titleB, 
+	width=0.25\textwidth]
+\foreach \col in {1, ..., 5}{
+		\addplot table[y=y\col] {data/boxes.tsv};
+	}
+	\end{axis} 
+	\end{tikzpicture}
+	\hfill  
+	%% lower right
+	\begin{tikzpicture}
+	\def\titleC{\footnotesize{\texttt{\hyperlink{addbars}{\tbs addbars}}}}
+	\begin{axis}[ 
+	pretty bar lowleft,     title=\titleC, 
+	legend entries = {\textsc{Ours},\textsc{NotOurs}},
+	]  
+	\foreach \m in \pltmethods {  	 
+	  	\addplot table[x=\pltxleft, y=\m_\pltylower_mn] {\pltpath_\m_\pltxleft.tsv};   
+	  }  
+	\end{axis}
+	\end{tikzpicture}
+	\hfill  
+	%% lower fright
+	\begin{tikzpicture}
+	\def\titleD{\footnotesize{\texttt{\hyperlink{addbars}{\tbs addbars}}}}
+	\begin{axis}[ 
+	pretty bar lower,  title=\titleD,  
+	]  
+	\foreach \m in \pltmethods {  	 
+	\addplot table[x=\pltxright, y=\m_\pltylower_mn] {\pltpath_\m_\pltxright.tsv};   
+}  
+	\end{axis}
+	\end{tikzpicture}
+	\hfill 
+	\caption{ \label{fig:ex:box_bar} Overview \index{Plot Types!Box} \index{Plot Types!Bar}
+	}
+\end{figure} 
+

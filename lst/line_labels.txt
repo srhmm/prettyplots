@@ -1,0 +1,11 @@
+\begin{axis}[pretty line,pretty nolabels,very thick,smooth] 
+    \addplot table[x = x, y = y2] {data/line_odd.tsv} 
+    node [sloped,above,font=\small,inner sep=2pt,pos=0.8] 
+        {strange line};
+    \addplot table[x = x, y = y3] {data/line_odd.tsv} 
+    node [sloped,above,font=\small,inner sep=2pt,pos=0.8] 
+        {odd line};
+    \addplot table[x = x, y = y1] {data/line_odd.tsv} 
+    node [sloped,above,font=\small,inner sep=4pt,
+        pos=0.45,rotate=20] {weird line};
+\end{axis}

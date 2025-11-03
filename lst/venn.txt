@@ -1,0 +1,9 @@
+\begin{tikzpicture}[  
+    \begin{axis}[pretty line] \end{axis}  
+    \coordinate (c1) at (2,2);
+    \coordinate (c2) at (1.5,1.2); 
+    \coordinate (c3) at (1,2);  
+   \node[prellipse, fill=prcl-palette3c, rotate=-65] at (c1) {}; 
+   \node[prellipse, fill=prcl-palette3e, rotate=0] at (c2) {};  
+   \node[prellipse, fill=prcl-palette3a, rotate=65] at (c3) {};  
+\end{tikzpicture} 

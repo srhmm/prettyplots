@@ -1,0 +1,18 @@
+%% Create a cycle list defining the color of each line 
+\pgfplotscreateplotcyclelist{pr-colors}{
+	{pr-color1a}, 
+	{pr-color1b}, 
+	{pr-color1c}, 
+	{pr-color1d}, 
+	{pr-color1e}, 
+	{pr-color1f}, 
+	{pr-color1g}, 
+	{pr-color1h} 
+} 
+%% Usage in an axis environment
+\begin{tikzpicture}
+	\begin{axis}[pretty line, cycle list name=pr-colors,width=\textwidth]
+		\pgfplotsinvokeforeach{1,...,8}{  
+			\addplot table[x=x, y=y#1] {data/lines.tsv};  } 
+	\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,11 @@
+\begin{axis}[
+    pretty scatter colormap, 
+    colormap={mymap}{rgb255=(253,247,251) 
+        rgb255=(234,230,241) rgb255=(207,208,228) 
+        rgb255=(171,188,217) rgb255=(133,168,204) 
+        rgb255=(92,143,189) rgb255=(64,111,172) 
+        rgb255=(52,90,138) rgb255=(34,59,88)},   
+] 
+    \addplot+[pr-scatter-meta]  
+        table[meta=col] {data/blob.tsv};   
+\end{axis} 

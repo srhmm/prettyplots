@@ -1,0 +1,41 @@
+ 
+
+\index{Plot Types!ridge line}
+\begin{figure}[h!]
+\begin{minipage}{0.7\textwidth}
+\begin{mintedtexbox}[/examples/ridgeline.tex]
+		\inputminted{TeX}{lst/ridgeline.txt}
+\end{mintedtexbox}
+\begin{tcolorbox}
+	\begin{minted}{TeX}
+\begin{axis}[
+    pretty ridge line, 
+    cycle list name=pr-ridgeline-transparent
+]  
+% ... 
+\end{axis}
+		\end{minted}
+	\end{tcolorbox} 
+	\end{minipage}
+	\begin{minipage}{0.29\textwidth}
+		\centering
+\begin{tikzpicture} 
+\begin{axis}[
+pretty ridge line, 
+cycle list name=pr-ridgeline, width=\textwidth ]
+\addplot coordinates {(0,1) (1,1.5) (2,2) (3,2) (4,1.5) (5,1)} ;
+\addplot coordinates {(0,1) (1,1) (2,2) (3,2) (4,1) (5,1)} ;
+\addplot coordinates {(0,0.5) (0.5,1) (1,1.5) (1.5,1) (2,0)} ;
+\end{axis}
+\end{tikzpicture}  
+	\begin{tikzpicture} 
+	\begin{axis}[
+	pretty ridge line, 
+	cycle list name=pr-ridgeline-transparent, width=\textwidth ]
+	\addplot coordinates {(0,1) (1,1.5) (2,2) (3,2) (4,1.5) (5,1)} ;
+	\addplot coordinates {(0,1) (1,1) (2,2) (3,2) (4,1) (5,1)} ;
+	\addplot coordinates {(0,0.5) (0.5,1) (1,1.5) (1.5,1) (2,0)} ;
+	\end{axis}
+	\end{tikzpicture}
+\end{minipage} 
+\end{figure}

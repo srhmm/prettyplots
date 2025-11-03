@@ -1,0 +1,12 @@
+\begin{axis}[
+    pretty line,
+    example line,
+    pretty xygrid, 
+    scaled x ticks  = base 10:4,
+    scaled y ticks  = base 10:5, 
+    xtickten        = {0,2,4}, smooth ]	
+    \pgfplotsinvokeforeach{1,...,2}{
+        \addplot table[x expr=\thisrow{x}e-04, 
+            y expr=\thisrow{y#1}e-05] 
+    {data/line.txt}; }
+\end{axis}

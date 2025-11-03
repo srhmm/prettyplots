@@ -1,0 +1,264 @@
+
+%% Bar plots
+\clearpage 
+\subsection{Bar} 
+\hypertarget{prettyxbar}{}
+
+\index{Plot Types!bar} 
+\index{Plot Types!bar!xbar} 
+
+You can create bar plots using \texttt{pretty xbar} for horizontal and  \texttt{pretty ybar} for vertical bars.
+\begin{figure}[h!]
+%todo somewhere \index{Labels!rotating axis labels}
+\begin{minipage}{0.6\textwidth}  
+	\begin{mintedtxtbox}[/data/countries.tsv] 
+\begin{minted}{TeX}
+%id    country    lifeq    foodq
+id    country        life    food
+1    Germany    8    2
+...
+5    US    1    7 
+\end{minted}
+	\end{mintedtxtbox}
+	\end{minipage}
+\end{figure}
+%\par  
+\begin{figure}[h!]
+	\begin{minipage}{0.6\textwidth} 
+		\begin{mintedtexbox}[/examples/bar.tex] 
+			\inputminted{TeX}{lst/bar.txt}
+		\end{mintedtexbox}
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth}
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty  xbar,   
+				yticklabels 		=  
+				{Germany,France,England,Saarland,Spain,Finland,US}, 
+				height          = 5cm,
+				xmax			= 10,
+				xmin = 0, 
+				xlabel          =  { Rating},
+		 	ylabel          = {\textbf{Country}},   
+                title	= {Life Quality}, 
+				]
+				\addplot table[x=life,y=id] {data/countries.tsv}; 
+			\end{axis}
+		\end{tikzpicture}   
+	\end{minipage}  
+\end{figure}  
+\par
+
+\hypertarget{prettyybar}{}
+\index{Plot Types!bar!ybar} 
+
+To obtain a vertical bar plot, swap \texttt{xbar} with \texttt{ybar}. You can also add a white grid  \cite{tufte2001visual},
+\begin{figure}[h!]
+	\begin{minipage}{0.6\textwidth} 
+		\begin{tcolorbox} 
+			\begin{minted}{TeX}  
+\begin{axis}[
+    pretty ybar,  
+    pretty grid ybar, 
+    xticklabels = {DE,FR,EN,Saar,ES,FI,US},   
+    xlabel = {Rating}, 
+    ylabel = {Country},    
+    title = {Food Quality}, 
+]
+    \addplot[pr-color1b, fill=pr-color1b] 
+    table[x=life,y=id] {data/countries.tsv}; 
+\end{axis}
+			\end{minted} 
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth}
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				pretty  ybar,  
+				pretty grid ybar, 
+				xticklabels 		=  {DE,FR,EN,Saar,ES,FI,US}, 
+				height          = 5cm,
+				ymax			= 10,
+				ylabel          = {Rating}, 
+				xlabel          = {Country},    
+				title	= {Food Quality}, 
+				]  
+				\addplot[pr-color1b, fill=pr-color1b] table[x=id,y=food] {data/countries.tsv};  
+			\end{axis}
+		\end{tikzpicture}   
+	\end{minipage}  
+\end{figure}
+
+\clearpage
+Here are some variations. 
+\begin{figure}[h!]
+\begin{minipage}{0.6\textwidth} 
+			\begin{tcolorbox} 
+		\begin{minted}{TeX}  
+\begin{axis}[
+    pretty xbar,     
+    yticklabels = {Germany,France,England,
+        Saarland,Spain,Finland,US},     
+    xmax = 10,
+    bar width = 0.5em, 
+    xlabel = {Rating},   
+    ylabel = {\textbf{Country}},   
+    legend entries = {Life Q., Food Q.}, 
+    ]
+    \addplot table[x=life,y=id] {data/countries.tsv}; 
+    \addplot table[x=food,y=id] {data/countries.tsv}; 
+\end{axis}
+		\end{minted} 
+	\end{tcolorbox}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	pretty  xbar,    
+	yticklabels 		=  
+	 {Germany,France,England,Saarland,Spain,Finland,USA}, 
+	height          = 7cm, width=7cm,
+	xmax			= 10,  
+	bar width = 0.5em, 
+	ylabel          = {\textbf{Country}}, 
+	xlabel          = {Rating},    
+	legend entries = {Life Q., Food Q.}, 
+	] 
+	 \addplot table[y=id,x=life] {data/countries.tsv};  
+	 \addplot table[y=id,x=food] {data/countries.tsv};  
+	%todo somewhere else \draw [example thresh] (0,5.5) -- (8,5.5); 
+	\end{axis}
+\end{tikzpicture}   
+\end{minipage} 
+
+\end{figure} 
+
+\begin{comment}
+\begin{figure}[h!]
+	\begin{minipage}{0.6\textwidth} 
+		\begin{tcolorbox} 
+			\begin{minted}{TeX}  
+\begin{axis}[
+    pretty  xbar,   
+    pretty grid xbar, 
+    yticklabels = {Germany,France,England,
+        Saarland,Spain,Finland,US}, 
+    height = 5cm, width = 7cm,
+    xmax = 10, xmin = 0, 
+    xlabel = {Rating}, 
+    ylabel = {Country},    
+    title = {Life Q., Food Q.}, 
+]
+    \addplot table[x=life,y=id] {data/countries.tsv}; 
+    \addplot table[x=food,y=id] {data/countries.tsv}; 
+\end{axis}
+			\end{minted} 
+		\end{tcolorbox}
+	\end{minipage}
+\begin{minipage}{0.4\textwidth}
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[ 
+pretty  xbar,  
+yticklabels 		=  
+{Germany,France,England,Saarland,Spain,Finland,USA}, 
+xtick =  
+{1,2,3,4,5,6,7}, 
+height          = 7cm, width=7cm,
+xmax			= 10,
+ylabel          = {Rating}, 
+xlabel          = {Country},    
+legend entries	= {Life Q., Food Q.}, 
+			]  
+\addplot+[ x=life, y=id, pr-gray4,     
+restrict y to domain=1:1,  ] table {data/countries_id.tsv};
+\addplot+[  x=life, y=id,
+			restrict y to domain=1:1, pr-color1b ] table {data/countries_id.tsv}; 
+ 		\end{axis}
+	\end{tikzpicture}   
+\end{minipage}
+	
+\end{figure}  
+\end{comment}
+  
+
+%\subsection{Stacked Bars} 
+
+\hypertarget{prettyybarstacked}{}
+\index{Plot Types!bar!stacked} 
+
+
+%% Stacked ybar  
+\begin{figure}[h!]
+	\begin{minipage}{0.6\textwidth}
+		\begin{tcolorbox} 
+			\inputminted{TeX}{lst/bar_ystack.txt} 
+		\end{tcolorbox}
+	\end{minipage} 
+	\begin{minipage}{.3\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[
+		pretty ybar stacked, 
+		cycle list name = pr-box2,
+		bar width       = .5cm,
+		symbolic x coords= {y1,y2,y3,y4},
+		ylabel          = {ylabel}, 
+		legend style    = {
+			at      = {(0.5,-0.20)},
+			anchor  = north,
+			legend columns=-1},
+		width=\textwidth
+		]
+		\addplot plot coordinates {(y1,0) (y2,2) (y3,3) (y4,0)};
+		\addplot plot coordinates {(y1,0) (y2,0) (y3,3) (y4,0)};
+		\addplot plot coordinates {(y1,6) (y2,6) (y3,2) (y4,6)};
+		\addplot plot coordinates {(y1,4) (y2,2) (y3,2)  (y4,4)};
+		\legend{z1, z2, z3, z4}
+		\end{axis}
+		\end{tikzpicture}
+	\end{minipage} 
+\end{figure}   
+
+
+
+
+%% Stacked  xbar  
+\begin{comment} 
+	\begin{figure}[h!]
+		\begin{minipage}{0.6\textwidth}
+			\begin{tcolorbox}[title=/data/stacked.tsv]
+				\begin{minted}{TeX}
+					%ys    x1 ... xn
+					y    x1    x2    x3    x4    x5
+					y1    1.8    0.7    1.6    1    1.4
+					y2    0.2    0.7    1    0.7    0.5
+					...
+				\end{minted} 
+			\end{tcolorbox}
+			\begin{tcolorbox} 
+				\inputminted{TeX}{lst/bar_xstack.txt} 
+			\end{tcolorbox}
+		\end{minipage} 
+		\begin{minipage}{0.4\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[	
+					pretty xbar stacked,
+					cycle list name	= pr-box2,  
+					xlabel          = {xlabel},
+					ylabel          = {ylabel},
+					symbolic y coords= {y4,y3,y2,y1},
+					ytick           = {y4,y3,y2,y1}, 
+					xmin=0, xmax=8, 
+					pretty labelshift, % todo why position incorrect
+					width=\textwidth]
+					\pgfplotsinvokeforeach{1,...,5}{ 
+						\addplot+ table[x=x#1, y=y] 
+						{data/stacked.tsv}; 
+					}
+				\end{axis}
+			\end{tikzpicture} 
+		\end{minipage}   
+	\end{comment}

@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+	\begin{axis}[
+		pretty scatter,  
+		%pretty xygrid,
+		xmin            = 0, 
+		ymin            = 0, 
+		ymax 			= 10, 
+		xmax			= 10, width=\textwidth,
+		legend style={at={(1.1,1.2)}, anchor=north west}, title={Scatter}
+		]
+		%\addscatter{data/classes.tsv}[][x=x, y=y, meta=label]
+		\addplot+[pr-scatter] table[x = x,y = y,meta = label] {data/classes.tsv};
+		\legend{Cat 0,Cat 1,Cat 2,Cat 3,Cat 4,Cat 5,Cat 6}
+	\end{axis}
+\end{tikzpicture} 

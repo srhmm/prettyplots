@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+	\begin{groupplot}[ 
+		group style={ group size=3 by 2,  horizontal sep=25pt,   vertical sep=25pt},  
+		xtick align=center,  ytick align=center,  width=3cm,
+		pretty nolabels,  pretty spacy
+		]   
+		\nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+		\nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+		\nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+		\nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+		\nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+		\nextgroupplot[pretty line] \addplot table {data/lines.tsv};    
+	\end{groupplot} 
+\end{tikzpicture}

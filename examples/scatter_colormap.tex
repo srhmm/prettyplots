@@ -1,0 +1,14 @@
+	\begin{tikzpicture}
+	\begin{axis}[
+		pretty scatter colormap horizontal,
+		colormap/RdBu-11,
+		xlabel={mood of Cat 1},
+		ylabel={mood of Cat 2},
+		colorbar style = { xlabel = {harmony between Cat 1 \& 2}, },	  
+		mark size = 2.5pt,
+		width=\textwidth,
+		xmin=0, ymin=0,xmax=10, ymax=10] 
+		\addplot table[x=x, y expr=10-0.5*\thisrow{y}]  {data/marks.tsv};
+		\addplot table[x=x, y=y]  {data/marks.tsv};
+	\end{axis}
+\end{tikzpicture}

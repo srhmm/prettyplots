@@ -1,0 +1,50 @@
+\subsection{Group Plots}
+To place multiple axes side by side with easy alignment, replace \texttt{axis} by \texttt{groupplot} and create subfigures using  \texttt{\tbs nextgroupplot[$\langle$axis keys$\rangle$]}. That is, pass your customizations to \texttt{\tbs   nextgroupplot} and then use \texttt{addplot} as usual. 
+\begin{figure}[h!] 
+	\begin{minipage}{0.8\textwidth}  
+		\begin{mintedtexbox}[/examples/groupplots.tex]
+			\begin{minted}{TeX} 
+%preamble
+\usetikzlibrary{pgfplots.groupplots} 
+%
+\begin{tikzpicture}  
+\begin{groupplot}[ 
+    group style={ 
+      group size=3 by 2, 
+      horizontal sep=25pt,
+      vertical sep=25pt},  
+    xtick align=center, ytick align=center, 
+    width=3cm 
+    ]    
+    \nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+    \nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+    \nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+    \nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+    \nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+    \nextgroupplot[pretty line] \addplot table {data/lines.tsv};     
+\end{groupplot} 
+\end{tikzpicture}  
+			\end{minted} 
+		\end{mintedtexbox} 
+	\end{minipage}  
+\end{figure}
+	\begin{figure}[h!] 
+	\begin{minipage}{0.45\textwidth} 
+		\begin{tikzpicture}  
+			\begin{groupplot}[ 
+				group style={ group size=3 by 2,  horizontal sep=25pt,   vertical sep=25pt},  
+				xtick align=center,  ytick align=center,  width=3cm,
+				pretty nolabels,  pretty spacy
+				]   
+				\nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+				\nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+				\nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+				\nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+				\nextgroupplot[pretty line] \addplot table {data/lines.tsv};   
+				\nextgroupplot[pretty line] \addplot table {data/lines.tsv};    
+			\end{groupplot} 
+		\end{tikzpicture} 
+	\end{minipage} 	 
+\end{figure}
+\clearpage
+

@@ -1,0 +1,28 @@
+\begin{tikzpicture} 
+	\begin{axis}[
+	pretty line,	
+	ymin=0, ymax=10,  width=\textwidth,
+	% cycle list to skip the confidence regions:
+	cycle list name = pr-colors-conf 
+	]  
+	\foreach \r in {1,2,3}   {
+		\addplot table[x=x, y=y\r] {data/line_conf.tsv}; 
+		\addplot[forget plot, draw=none, name path=low] 
+		table [x=x, y expr=\thisrow{y\r} - \thisrow{y\r_c}]
+		{data/line_conf.tsv};
+		\addplot[forget plot, draw=none, name path=up] 
+		table [x=x, y expr= \thisrow{y\r} + \thisrow{y\r_c}]
+		{data/line_conf.tsv};
+		\addplot fill between[of=low and up];
+	}  
+\end{axis}  
+\end{tikzpicture} 
+%\begin{tikzpicture} 
+%\begin{axis}[
+%pretty confline,	    
+%ymin=0, ymax=10,  
+%]  
+%\addconflines{data/line_conf.tsv}
+%\legend{Method 1,,Method 2,,Method 3} 
+%\end{axis}  
+%\end{tikzpicture}  

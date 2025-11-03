@@ -1,0 +1,12 @@
+\begin{axis}[
+    pretty line, 
+    example line, 
+    xtick       = {0,2,8,10}, 
+    xticklabels = {0, $t_0$,$t_1$,$t_2$ }]
+    \addplot
+    plot[error bars/.cd,
+        y dir = minus, y fixed relative= 1,
+        x dir = minus, x fixed relative= 1,
+        error mark = none, error bar style = {dotted}]
+    coordinates {(0,0) (2,2) (8,8) (10, 10)};
+\end{axis}

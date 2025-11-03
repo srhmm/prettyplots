@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+	\begin{axis}[
+		pretty 3daxis,
+		mesh legend,
+		samples         = 10,
+		domain          = 0:1, 
+		xlabel          = {$x$}, 
+		ylabel          = {$y$}, 
+		zlabel          = {$z$},    
+		width=\textwidth 
+		]
+		\addplot3 [pr-surf] {x*y*exp(x)}; 
+		\legend{area};
+	\end{axis}
+\end{tikzpicture}

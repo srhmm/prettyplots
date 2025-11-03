@@ -1,0 +1,15 @@
+\begin{axis}[
+    pretty ybar,   
+    %% label each bar with y value
+    visualization depends on=y \as \y,
+    nodes near coords = {
+        \pgfmathprintnumber[precision=2]{\y}}, 
+    %% opt. label layout
+    %every node near coord/.append style={
+    %    font=\prnodefontsize, color=pr-gray4}, 
+    bar width = 1em,
+    ylabel = {Rating},  
+    symbolic x coords = {Oslo,Berlin,Tokyo,Rio},
+]
+    \addplot table[x=x, y=y3] {data/cities.tsv};
+\end{axis}

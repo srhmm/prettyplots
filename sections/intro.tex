@@ -1,0 +1,201 @@
+\section{Introduction}
+This package provides tools for creating easy-to-read plots in Latex. %, and easy-to-read Latex code for plotting. 
+ To use it, include 
+\begin{minted}{TeX}
+    \usepackage{prettyplots} 
+\end{minted}
+in your preamble.  Then, you can use it together with the \texttt{pgfplots} package, 
+
+\begin{minted}{TeX}
+    \usepackage{tikz} 
+    \usepackage{pgfplots} 
+    \pgfplotsset{compat=1.18}
+\end{minted}
+where it is recommended to specify a version using \texttt{compat} to avoid backward compatibility issues with \texttt{pgfplots} features. It will be useful to have some basic familiarity with \texttt{pgfplots} \footnote{\texttt{https://pgfplots.sourceforge.net/pgfplots.pdf}}.  
+
+\subsection*{Basic Usage}  
+Let's say you want to create a line plot from a dataset of the following shape, 
+\begin{figure}[h!]
+	\begin{minipage}{0.6\textwidth} 
+		\begin{mintedtxtbox}[/data/line.tsv]
+\begin{minted}{TeX}
+%Metric    Method 
+x          y1
+0          9 
+10         9 
+20         8.5
+...
+\end{minted}
+		\end{mintedtxtbox}
+	\end{minipage}
+\end{figure}
+
+Using \texttt{pgfplots}, you can generate a line plot as follows. 
+\begin{figure}[h!]
+	\begin{minipage}{0.6\textwidth}  
+\begin{tcolorbox}
+\begin{minted}{TeX}  
+\begin{tikzpicture}  
+    \begin{axis}[] 
+    \addplot table [x=x, y=y1] {data/line.tsv};
+    \end{axis} 
+\end{tikzpicture}
+\end{minted}
+\end{tcolorbox}  
+		\end{minipage}
+		\begin{minipage}{0.4\textwidth}   
+	\begin{tikzpicture}  
+	\begin{axis}[   width=\textwidth
+		] 
+		\addplot table [x=x, y=y1] {data/line.tsv};
+	\end{axis} 
+\end{tikzpicture} 
+	\end{minipage}
+	\end{figure} 
+\clearpage
+
+\index{Plot Types!line!basic}
+To turn this into a pretty plot, add the \texttt{pretty line} command to the pgf axis keys, 
+\begin{figure}[h!]
+	\begin{minipage}{0.6\textwidth}  
+	\begin{tcolorbox}
+		\begin{minted}{TeX}   
+%preamble
+\usepackage{prettyplots} 
+%
+\begin{tikzpicture}  
+    \begin{axis}[pretty line] 
+    \addplot table [x=x, y=y1] {data/line.tsv};
+    \end{axis} 
+\end{tikzpicture} 
+		\end{minted}
+	\end{tcolorbox}  
+\end{minipage}
+\begin{minipage}{0.4\textwidth}   
+\begin{tikzpicture}  
+    \begin{axis}[ 
+    pretty line,     width=\textwidth
+			] 
+			\addplot table [x=x, y=y1] {data/line.tsv};
+		\end{axis} 
+	\end{tikzpicture} 
+\end{minipage}
+\end{figure} 
+
+
+\subsection*{Basic Customization}  
+You can keep using the common \texttt{pgfplots} keys to change the appearance of plots. The two main ways to do this are  passing keys to \texttt{axis} to change the global appearance of the axis environment, %axis appearance, labels, or predefined colors; 
+or passing  keys to \texttt{addplot} to change the appearance of specific lines or plots. 
+
+\begin{itemize}
+	\item \texttt{axis} keys: There are many axis keys you can find in \texttt{pgfplots}. For example, you can set colors and line style to iterate through using a \texttt{cycle list}, such as  \texttt{cycle list=pr-line} which is set by default. 
+	\item \texttt{addplot} keys:  arguments you pass to  \texttt{addplot}  change the appearance of each plot that you add to the axis. This overwrites any style defined in the global axis environment, so use \texttt{addplot+} if you want to preserve the default style defined in the axis environment.
+\end{itemize}
+
+For example, we can add a line using default style, another with markers, and another that keeps colors  unchanged from the default cycle list \texttt{pr-colors}. 
+
+\index{Plot Types!line!with marks}
+\begin{figure}[h!] 
+	\hypertarget{mark}{}	
+	\begin{minipage}{0.6\textwidth} 
+		%\begin{mintedtexbox}[/examples/line-variations.tex]
+		\begin{tcolorbox} 
+			\begin{minted}{TeX} 
+\begin{tikzpicture} 
+   \begin{axis}[ 
+        pretty line, 
+        cycle list name = pr-colors,
+        legend style = {anchor=north west}
+    ]  
+    \addplot table [x=x, y=y1] {data/line.tsv}; 
+    \addlegendentry{default};
+    \addplot[mark=*, mark size=2pt] 
+    table [x=x, y=y2] {data/line.tsv}; 
+    \addlegendentry{\texttt{\tbs addplot}};
+    \addplot+[mark=diamond*, mark size=2pt] 
+    table [x=x, y=y3] {data/line.tsv}; 
+    \addlegendentry{\texttt{\tbs addplot+}};
+    \end{axis} 
+\end{tikzpicture} 
+			\end{minted}
+	%	\end{mintedtexbox}
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth} 
+\begin{tikzpicture} 
+		\begin{axis}[ pretty line, 
+		legend style = {anchor=north west},
+		cycle list name=pr-colors, 
+		width=\textwidth 
+		]  
+		\addplot table [x=x, y=y1] {data/line.tsv}; 
+		\addlegendentry{default};
+		\addplot[mark=*, mark size=2pt] table [x=x, y=y2] {data/line.tsv}; 
+		\addlegendentry{\texttt{\tbs addplot}};
+		\addplot+[mark=diamond*, mark size=2pt] table [x=x, y=y3] {data/line.tsv}; 
+		\addlegendentry{\texttt{\tbs addplot+}};
+	\end{axis} 
+\end{tikzpicture} 
+	\end{minipage} 	 
+\end{figure}   
+
+\clearpage 
+Here is a larger example using some common \texttt{pgfplots} axis keys to customize sizes, positioning, and labels. 
+
+\begin{figure}[h!]
+	\begin{minipage}{0.6\textwidth}  
+	\begin{tcolorbox}
+		\begin{minted}{TeX}  
+\begin{tikzpicture}  
+    \begin{axis}[ 
+        pretty line,  
+        width = \textwidth,
+        xlabel = {xname}, 
+        ylabel = {yname},
+        ytick = {0,2,4,6,8,10},
+        ymin = 0, ymax = 10,
+        legend style = {anchor=south east},
+        legend entries = 
+             {Method 1, Method 2, Method 3},
+        smooth,
+        line width = 1.5pt,
+    ] 
+    \foreach \i in {1,2,3}   {
+        \addplot table [x=x, y=y\i] {data/line.tsv}; 
+    }
+\end{axis} 
+\end{tikzpicture} 
+		\end{minted}
+	\end{tcolorbox}  
+\end{minipage}
+\begin{minipage}{0.4\textwidth}   
+	\begin{tikzpicture}   
+		\begin{axis}[ 
+			pretty line,  
+			width = \textwidth,
+			legend entries = {Method 1, Method 2, Method 3},    
+			legend style={ anchor=south east},
+			ytick = {0,2,4,6,8,10},
+			ymin = 0, ymax = 10,
+			xlabel = {xname}, 
+			ylabel = {yname},  
+			smooth, 
+			line width = 1.5pt
+			] 
+			\foreach \i in {1,2,3}   {
+				\addplot table [x=x, y=y\i] {data/line.tsv}; 
+			}
+		\end{axis} 
+	\end{tikzpicture} 
+\end{minipage}
+\end{figure}
+ To create a different type of plot, modify the command depending on the type using \texttt{pretty  $\langle$\emph{plotname}$\rangle$}.  %todo Figure \ref{fig:ex:box_bar} gives an overview on the plot types. 
+
+%\subsection*{Usage}   Overall, you can use the library for the following purposes, 
+%\begin{itemize}
+%	\item to create easier-to-read plots using the \texttt{pretty  $\langle$\emph{plotname}$\rangle$} axis environments;
+%	\item to use some of the example plots and color schemes as a starting point; or 
+%	\item to write easier-to-read Latex code using macros in case you have repetitive use of the same plots.
+%\end{itemize}
+
+ The main axis environments are shown in \sectref{sec:plots}, color schemes in \sectref{sec:style}, and macros in  \sectref{sec:macro}. 

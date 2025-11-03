@@ -1,0 +1,91 @@
+\clearpage
+\subsection{Axis Style} 
+
+\index{Colors and Style!defining axis colors}
+The following macros can be redefined to adjust label sizes,
+
+
+
+\begin{figure}[h!]
+	\begin{minipage}{0.7\textwidth}  
+		\begin{tcolorbox}
+			\begin{minted}{TeX}     
+\renewcommand{\prlabelfontsize}{\large}  
+\renewcommand{\prtickfontsize}{\small} 
+\renewcommand{\prlegendfontsize}{\large} 
+			\end{minted}
+		\end{tcolorbox}  
+	\end{minipage}
+	\begin{minipage}{0.29\textwidth}    
+		\renewcommand{\prlabelfontsize}{\large}  
+		\renewcommand{\prtickfontsize}{\small} 
+		\renewcommand{\prlegendfontsize}{\large} 
+		\begin{tikzpicture}  
+			\begin{axis}[ 
+				pretty line,     
+				width=\textwidth,
+				legend style={anchor=south east, at={(1,1.25)}},
+				xlabel={\tbs \texttt{prlabelfontsize}},
+				ylabel={\tbs \texttt{prlabelfontsize}},
+				] 
+				\addplot table [x=x, y=y1] {data/line.tsv};
+				\addlegendentry{\tbs \texttt{prlegendfontsize}};
+			\end{axis} 
+		\end{tikzpicture} 
+	\end{minipage}
+\end{figure} 
+
+Or apply  changes to the axis environment directly,
+ \begin{figure}[h!]
+	\begin{minipage}{0.7\textwidth} 
+		\begin{tcolorbox}
+			\begin{minted}{TeX} 
+\begin{axis}[
+    pretty line,    
+    xlabel style = {pr-color-gray4, font=\prlabelfontsize}, 
+    ylabel style = {pr-color-gray4, font=\prlabelfontsize},  
+    x tick label style = {pr-color-gray5, 
+        font=\prtickfontsize,}, 
+    y tick label style = {pr-color-gray5, 
+        font=\prtickfontsize,},  
+    xtick style = {pr-color-gray4, thick},
+    ytick style = {pr-color-gray4, thick},
+    x axis line style = {pr-color-gray4, very thick}, 
+    y axis line style = {pr-color-gray4, very thick} 
+] 
+    \addplot table[x=x, y expr=\thisrow{y1}+1] 
+        {data/line.tsv} 
+        node[pos=1, right] (n) {\small Ours};  
+    \pgfplotsinvokeforeach{2,...,3}{
+        \addplot+[pr-color-gray4] table[x=x, y=y#1] 
+        {data/line.tsv}
+        node[pos=1, right] (n) {\small Method #1};   
+}
+\end{axis}
+			\end{minted}
+		\end{tcolorbox}
+	\end{minipage}
+	\begin{minipage}{0.29\textwidth} 
+		\def\methods{ourmethod, goodmethod, badmethod, uglymethod}
+		\def\file{data/box.tsv} 
+		\begin{tikzpicture} 
+			\begin{axis}[
+				pretty line,    
+				xlabel style = {pr-color-gray4, font=\prlabelfontsize}, 
+				ylabel style = {pr-color-gray4, font=\prlabelfontsize},  
+				x tick label style = {pr-color-gray5, font=\prtickfontsize,}, 
+				y tick label style = {pr-color-gray5, font=\prtickfontsize,},  
+				xtick style = {pr-color-gray4, thick},
+				ytick style = {pr-color-gray4, thick},
+				x axis line style = {pr-color-gray4, very thick}, 
+				y axis line style = {pr-color-gray4, very thick},
+				ymin=0, width=\textwidth
+				] 
+				\addplot table[x=x, y expr=\thisrow{y1}+1] {data/line.tsv} node[pos=1, right] (n) {\small Ours};  
+				\pgfplotsinvokeforeach{2,...,3}{
+					\addplot+[pr-color-gray4] table[x=x, y=y#1] {data/line.tsv} node[pos=1, right] (n) {\small Method #1};   
+			}
+			\end{axis}
+		\end{tikzpicture}
+	\end{minipage} 
+\end{figure} 

@@ -1,0 +1,11 @@
+\begin{axis}[ 
+    pretty heatmatrix,
+    xticklabels    = {Cat 1, Cat 2, Cat 3},
+    yticklabels    = {Cat D, Cat C, Cat B, Cat A},	
+    colorbar style = { ylabel = {feline relationship}, }	
+    point meta max = 10, % z range
+    pretty labelshift
+]
+    \addplot[pr-matrix, mesh/cols=3, % y 
+    ] table [meta=z] {data/colorbar.txt};
+\end{axis}

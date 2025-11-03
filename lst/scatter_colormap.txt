@@ -1,0 +1,14 @@
+%\usepgfplotslibrary{colorbrewer} % preamble
+\begin{axis}[
+    pretty scatter colormap horizontal, 
+    colormap/RdBu-11, % default colormap
+    colorbar style = { xlabel = 
+        {harmony between Cat 1 \& 2}, },
+    xlabel         = {Cat 1's mood},
+    ylabel         = {Cat 2's mood},	
+    mark size      = 2.5 pt
+ ] 
+    \addplot table[x=x, y expr=10-0.5*\thisrow{y}]  
+        {data/marks.txt};
+    \addplot table[x=x, y=y] {data/marks.txt};
+\end{axis}

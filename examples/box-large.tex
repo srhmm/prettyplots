@@ -1,0 +1,28 @@
+
+\pgfplotstableread[col sep = comma]{data/box-large_stats.csv}\datatable
+\begin{tikzpicture}
+\begin{axis}[pretty boxplot, height=3cm, boxplot/draw direction=y]
+\pgfplotstablegetrowsof{\datatable}
+\pgfmathtruncatemacro\TotalRows{\pgfplotsretval-1}
+\pgfplotsinvokeforeach{0,...,\TotalRows}
+{
+    \addplot+[
+    boxplot prepared from table={
+        table=\datatable,
+        row=#1,
+        lower whisker=lw,
+        upper whisker=uw,
+        lower quartile=lq,
+        upper quartile=uq,
+        median=med
+    },
+    boxplot prepared,
+    ]
+    coordinates {};
+
+    %% comment out if column names should be legend entries: 
+    %\pgfplotstablegetelem{#1}{name}\of\datatable
+    %\addlegendentryexpanded{\pgfplotsretval}
+}
+\end{axis}
+\end{tikzpicture}

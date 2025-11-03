@@ -1,0 +1,10 @@
+\begin{tikzpicture}
+    \begin{loglogaxis}[
+    pretty loglog line, % handles xylabel positions
+    example line, 
+    ymin=10, ymax=1000, 
+    xmin=10, xmax=1000]	
+    \addplot coordinates 
+    { (10,10) (100,100) (1000,1000) };
+    \end{loglogaxis}
+\end{tikzpicture}

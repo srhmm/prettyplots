@@ -1,0 +1,11 @@
+\begin{axis}[
+    pretty xbar,   
+    yticklabels = {Germany,France,England,
+        Saarland,Spain,Finland,US},
+    xmax = 10,
+    xlabel = {Rating}, 
+    ylabel = {\textbf{Country}}, 
+    title = {Life Quality}, 
+]
+    \addplot table[x=life,y=id] {data/countries.tsv}; 
+\end{axis}

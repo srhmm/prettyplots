@@ -1,0 +1,15 @@
+\begin{axis} [
+    pretty xbar components,
+    width      = 10cm,
+    height     = 3cm,
+    bar width  = 5pt,
+    enlarge y limits= 0.04,
+    xlabel     = {xlabel}, 
+    ylabel     = {opt. ylabel},
+    xtick      = {0, 0.25, 0.5, 0.75, 1}, 
+    ytick      = {y4,y3,y2,y1} ,
+    symbolic y coords={y4,y3,y2,y1}]
+    \addplot+[color=white,fill=gray] 
+    table[y index=0, x index=1, header=true] 
+        {data/components.txt}; 
+\end{axis}

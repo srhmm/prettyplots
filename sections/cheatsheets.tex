@@ -1,0 +1,94 @@
+\section{Quick Reference}
+
+\subsection*{Prettyplots}
+\begin{table}[h!]
+	\centering
+	\caption{Plot styles in \texttt{prettyplots}}
+	\begin{tabular}{@{}ll@{}}
+		\toprule
+		\textbf{Style Name} & \textbf{Use Case  } \\ \midrule
+		\hyperlink{prettyline}{\texttt{pretty line}}        & Line plots \\
+		\hyperlink{prettyboxplot}{\texttt{pretty boxplot}}         & Box plots for distributions \\
+		\hyperlink{prettyxbar}{\texttt{pretty xbar}}         & Horizontal bar plots \\
+		\hyperlink{prettyybar}{\texttt{pretty ybar}}         & Vertical bar plots \\
+		\hyperlink{prettyybarstacked}{\texttt{pretty ybar stacked}}          & Stacked bar plots \\ 
+		%todo	\texttt{pretty group bar}   & Grouped bar plots (multiple categories) \\
+		\hyperlink{prettyscatter}{\texttt{pretty scatter}}          & Scatter plots, style for discrete labels\\ 
+		\hyperlink{prettyscattermap}{\texttt{pretty scatter colormap}}         & Scatter plots, style for continuous labels \\  
+		\texttt{pretty axis}        & Base style (sizing, placement, ticks, etc.)  \\
+		\bottomrule
+	\end{tabular}
+	\label{tab:prettyplots-styles}
+\end{table}
+
+\clearpage
+\subsection*{Pgfplots} 
+\begin{table}[h!]
+	\centering
+	\caption{Useful \texttt{pgfplots} axis keys}
+	\begin{tabular}{@{}lll@{}}
+		\toprule
+		\textbf{Category} & \textbf{Key} & \textbf{Description} \\ \midrule
+		
+		\multirow{5}{*}{Size \& Layout}
+		& \texttt{width=\textbackslash textwidth} & Set plot width \\
+		& \texttt{height=6cm} & Optional: set plot height \\
+		& \texttt{scale only axis=true} & Prevent label size from scaling axis \\
+		& \texttt{enlargelimits=0.1} & Add margin around data \\
+		& \texttt{clip=false} & Allow overflow (e.g., annotations) \\
+		
+		\midrule
+		\multirow{4}{*}{Labels}
+		& \texttt{xlabel=\{X label\}} & Label for x-axis \\
+		& \texttt{ylabel=\{Y label\}} & Label for y-axis \\
+		& \texttt{title=\{Plot Title\}} & Optional: add plot title \\
+		& \texttt{label style=\{font=\textbackslash bfseries\}} & Bold axis labels \\
+		
+		\midrule
+		\multirow{6}{*}{Ticks}
+		& \texttt{xtick=\{0, 1, ..., 10\}} & Set specific x-tick positions \\
+		& \texttt{yticklabels=\{Low, Mid, High\}} & Custom y-axis tick labels \\
+		& \texttt{tick align=outside} & Align ticks outside the axis \\
+		& \texttt{tick label style=\{font=\textbackslash small\}} & Style tick label appearance \\
+		& \texttt{xticklabel style=\{rotate=45\}} & Rotate x-axis tick labels \\
+		& \texttt{minor tick num=1} & Add minor ticks between major ticks \\
+		
+		\midrule
+		\multirow{2}{*}{Axis Range}
+		& \texttt{xmin=0, xmax=10} & Set visible x-axis range \\
+		& \texttt{ymin=0, ymax=10} & Set visible y-axis range \\
+		
+		\midrule
+		\multirow{4}{*}{Legend}
+		& \texttt{legend entries=\{A, B, C\}} & Set legend items manually \\
+		& \texttt{legend pos=north east} & Quick legend placement \\
+		& \texttt{legend style=\{anchor=south east\}} & Custom placement/formatting \\
+		& \texttt{legend cell align=left} & Align legend text to the left \\
+		
+		\midrule
+		\multirow{6}{*}{Line \& Style}
+		& \texttt{smooth} & Smooth lines between data points \\
+		& \texttt{line width=1.5pt} & Control line thickness \\
+		& \texttt{mark options=\{fill=white, size=2pt\}} & Customize markers \\
+		& \texttt{cycle list name=pr-colors} & Use a predefined style/color cycle \\
+		& \texttt{cycle list=\{red, blue, green\}} & Manual color/style cycle \\
+		& \texttt{every axis plot/.append style=...} & Apply style to all plots \\
+		
+		\midrule
+		\multirow{4}{*}{Grid \& Axis}
+		& \texttt{grid=major} & Enable major gridlines \\
+		& \texttt{minor grid style=\{dashed, gray!30\}} & Style minor gridlines \\
+		& \texttt{axis lines=left} & Axes only on bottom/left (math-style) \\
+		& \texttt{axis on top=true} & Draw axes over data/background \\
+		
+		\midrule
+		\multirow{3}{*}{Log Axes}
+		& \texttt{xmode=log, ymode=log} & Logarithmic axis scaling \\
+		& \texttt{log basis x=10} & Base of logarithm (x-axis) \\
+		& \texttt{scaled x ticks=base 10:3} & Scientific notation (e.g., $10^3$) \\
+		
+		\bottomrule
+	\end{tabular}
+	\label{tab:pgfplots-cheatsheet-full}
+\end{table} 
+ 

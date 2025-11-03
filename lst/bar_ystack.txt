@@ -1,0 +1,17 @@
+\begin{axis}[
+    pretty ybar stacked,
+    cycle list name = pr-box2,
+    bar width       = .5cm,
+    ylabel          = {ylabel},
+    symbolic x coords= {y1,y2,y3,y4}
+]
+    \addplot plot coordinates
+        {(y1,0) (y2,2) (y3,3) (y4,0)};
+    \addplot plot coordinates
+        {(y1,0) (y2,0) (y3,3) (y4,0)};
+    \addplot plot coordinates
+        {(y1,6) (y2,6) (y3,2) (y4,6)};
+    \addplot plot coordinates
+        {(y1,4) (y2,2) (y3,2)  (y4,4)};
+    \legend{z1, z2, z3, z4}
+\end{axis}

@@ -1,0 +1,119 @@
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{axis}[ pretty line,
+pretty spacy,
+cycle list name = prcl-show-0,
+ylabel = {x}, xlabel = {y},   height = 8 cm, width = 10 cm,
+legend pos=north east, legend columns=2, 
+legend style={nodes={scale=0.65, transform shape}, at={(1.05, 1.05)}, anchor=north west}, 
+xmin=0, xmax=100, % xtick={0, 0.25, 0.5, 0.75, 1}, 
+ymin=0, ymax=100,  ] 
+\pgfplotsinvokeforeach{1, ..., 50}{ 
+	\addplot+[domain=1:100, line width = 1.2, opacity=.8]  {2 *  #1+.1*x};
+};
+\legend{airforceblue, aliceblue, alizarin, almond, amaranth, amber, %amber(sae/ece),
+ americanrose, amethyst, anti-flashwhite, antiquebrass, antiquefuchsia, antiquewhite, ao, ao(english), applegreen, apricot, aqua, aquamarine, armygreen, arsenic, arylideyellow, ashgrey, asparagus, atomictangerine, auburn, aureolin, aurometalsaurus, awesome, azure(colorwheel), azure(web)(azuremist), babyblue, babyblueeyes, babypink, ballblue, bananamania, bananayellow, battleshipgrey, bazaar, beaublue, beaver, beige, bisque, bistre, bittersweet, black, blanchedalmond, bleudefrance, blizzardblue, blond, blue}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{axis}[ pretty line,
+pretty spacy,
+cycle list name = prcl-show-1,
+ylabel = {x}, xlabel = {y},   height = 8 cm, width = 10 cm,
+legend pos=north east, legend columns=2, 
+legend style={nodes={scale=0.65, transform shape}, at={(1.05, 1.05)}, anchor=north west}, 
+xmin=0, xmax=100, % xtick={0, 0.25, 0.5, 0.75, 1}, 
+ymin=0, ymax=100,  ] 
+\pgfplotsinvokeforeach{1, ..., 50}{ 
+\addplot+[domain=1:100, line width = 1.2, opacity=.8]  {2 *  #1+.1*x};
+};
+\legend{blue(munsell), blue(ncs), blue(pigment), blue(ryb), bluebell, bluegray, blue-green, blue-violet, blush, bole, bondiblue, bostonuniversityred, brandeisblue, brass, brickred, brightcerulean, brightgreen, brightlavender, brightmaroon, brightpink, brightturquoise, brightube, brilliantlavender, brilliantrose, brinkpink, britishracinggreen, bronze, brown(traditional), brown(web), bubblegum, bubbles, buff, bulgarianrose, burgundy, burlywood, burntorange, burntsienna, burntumber, byzantine, byzantium, cadet, cadetblue, cadetgrey, cadmiumgreen, cadmiumorange, cadmiumred, cadmiumyellow, calpolypomonagreen, cambridgeblue, camel}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[ pretty line,
+pretty spacy,
+cycle list name = prcl-show-2,
+ylabel = {x}, xlabel = {y},   height = 8 cm, width = 10 cm,
+legend pos=north east, legend columns=2, 
+legend style={nodes={scale=0.65, transform shape}, at={(1.05, 1.05)}, anchor=north west}, 
+xmin=0, xmax=100, % xtick={0, 0.25, 0.5, 0.75, 1}, 
+ymin=0, ymax=100,  ] 
+\pgfplotsinvokeforeach{1, ..., 50}{ 
+\addplot+[domain=1:100, line width = 1.2, opacity=.8]  {2 *  #1+.1*x};
+};
+\legend{camouflagegreen, canaryyellow, candyapplered, candypink, capri, caputmortuum, cardinal, caribbeangreen, carmine, carminepink, carminered, carnationpink, carnelian, carolinablue, carrotorange, ceil, celadon, celestialblue, cerise, cerisepink, cerulean, ceruleanblue, chamoisee, champagne, charcoal, chartreuse(traditional), chartreuse(web), cherryblossompink, chestnut, chocolate(traditional), chocolate(web), chromeyellow, cinereous, cinnabar, cinnamon, citrine, classicrose, cobalt, cocoabrown, columbiablue, coolblack, coolgrey, copper, copperrose, coquelicot, coral, coralpink, coralred, cordovan, corn}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[ pretty line,
+	pretty spacy,
+	cycle list name = prcl-show-3,
+	ylabel = {x}, xlabel = {y},   height = 8 cm, width = 10 cm,
+	legend pos=north east, legend columns=2, 
+	legend style={nodes={scale=0.65, transform shape}, at={(1.05, 1.05)}, anchor=north west}, 
+	xmin=0, xmax=100, % xtick={0, 0.25, 0.5, 0.75, 1}, 
+	ymin=0, ymax=100,  ] 
+	\pgfplotsinvokeforeach{1, ..., 50}{ 
+		\addplot+[domain=1:100, line width = 1.2, opacity=.8]  {2 *  #1+.1*x};
+	};
+	\legend{cornellred, cornflowerblue, cornsilk, cosmiclatte, cottoncandy, cream, crimson, crimsonglory, cyan, cyan(process), daffodil, dandelion, darkblue, darkbrown, darkbyzantium, darkcandyapplered, darkcerulean, darkchampagne, darkchestnut, darkcoral, darkcyan, darkelectricblue, darkgoldenrod, darkgray, darkgreen, darkjunglegreen, darkkhaki, darklava, darklavender, darkmagenta, darkmidnightblue, darkolivegreen, darkorange, darkorchid, darkpastelblue, darkpastelgreen, darkpastelpurple, darkpastelred, darkpink, darkpowderblue, darkraspberry, darkred, darksalmon, darkscarlet, darkseagreen, darksienna, darkslateblue, darkslategray, darkspringgreen, darktan}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{axis}[ pretty line,
+pretty spacy,
+cycle list name = prcl-show-4,
+ylabel = {x}, xlabel = {y},   height = 8 cm, width = 10 cm,
+legend pos=north east, legend columns=2, 
+legend style={nodes={scale=0.65, transform shape}, at={(1.05, 1.05)}, anchor=north west}, 
+xmin=0, xmax=100, % xtick={0, 0.25, 0.5, 0.75, 1}, 
+ymin=0, ymax=100,  ] 
+\pgfplotsinvokeforeach{1, ..., 50}{ 
+\addplot+[domain=1:100, line width = 1.2, opacity=.8]  {2 *  #1+.1*x};
+};
+\legend{darktangerine, darktaupe, darkterracotta, darkturquoise, darkviolet, dartmouthgreen, %davy\'sgrey, 
+	debianred, deepcarmine, deepcarminepink, deepcarrotorange, deepcerise, deepchampagne, deepchestnut, deepfuchsia, deepjunglegreen, deeplilac, deepmagenta, deeppeach, deeppink, deepsaffron, deepskyblue, denim, desert, desertsand, dimgray, dodgerblue, dogwoodrose, dollarbill, drab, dukeblue, earthyellow, ecru, eggplant, eggshell, egyptianblue, electricblue, electriccrimson, electriccyan, electricgreen, electricindigo, electriclavender, electriclime, electricpurple, electricultramarine, electricviolet, electricyellow, emerald, etonblue, fallow}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{axis}[ pretty line,
+pretty spacy,
+cycle list name = prcl-show-5,
+ylabel = {x}, xlabel = {y},   height = 8 cm, width = 10 cm,
+legend pos=north east, legend columns=2, 
+legend style={nodes={scale=0.65, transform shape}, at={(1.05, 1.05)}, anchor=north west}, 
+xmin=0, xmax=100, % xtick={0, 0.25, 0.5, 0.75, 1}, 
+ymin=0, ymax=100,  ] 
+\pgfplotsinvokeforeach{1, ..., 48}{ 
+\addplot+[domain=1:100, line width = 1.2, opacity=.8]  {2 *  #1+.1*x};
+};
+\legend{falured, fandango, fashionfuchsia, fawn, feldgrau, ferngreen, ferrarired, fielddrab, firebrick, fireenginered, flame, flamingopink, flavescent, flax, floralwhite, fluorescentorange, fluorescentpink, fluorescentyellow, folly, forestgreen(traditional), forestgreen(web), frenchbeige, frenchblue, frenchlilac, frenchrose, fuchsia, fuchsiapink, fulvous, fuzzywuzzy, gainsboro, gamboge, ghostwhite, ginger, glaucous, gold(metallic), gold(web)(golden), goldenbrown, goldenpoppy, goldenyellow, goldenrod, grannysmithapple, gray,   %gray(html/cssgray), 
+gray(x11gray), gray-asparagus, green(colorwheel)(x11green),  %green(html/cssgreen),
+green(munsell), green(ncs), green(pigment)}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End:

@@ -1,0 +1,18 @@
+	\begin{tikzpicture}
+	\begin{axis}[
+		pretty ybar,   
+		%x tick label style 	= { font=\prtickfontsize,  yshift=-3pt, xshift=10pt, 
+			%	rotate=25, anchor=east, align=right },  
+		%% label each bar with y value
+		visualization depends on=y \as \y,
+		nodes near coords ={\pgfmathprintnumber[precision=2]{\y}}, 
+		%% label layout
+		%every node near coord/.append style={font=\prnodefontsize ,color=pr-gray4}, 
+		bar width=1em,
+		ylabel          = {Rating},  
+		symbolic x coords= {Oslo,Berlin,Tokyo,Rio},
+		width=\textwidth,
+		ymin = 0]
+		\addplot table[x=x, y=y3] {data/cities.tsv};
+	\end{axis}
+\end{tikzpicture}	

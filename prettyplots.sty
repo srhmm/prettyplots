@@ -1,0 +1,2144 @@
+\ProvidesPackage{prettyplots}[2025/02/20 v0.01 LaTeX package for scientific plots]
+
+\RequirePackage{tikz}
+\RequirePackage{pgfplots} 
+\pgfplotsset{compat=1.18} 
+\usetikzlibrary{calc}
+%\usetikzlibrary{fit,calc,positioning,intersections,arrows,patterns,shapes.geometric,pgfplots.groupplots,pgfplots.statistics,pgfplots.colormaps,pgfplots.fillbetween,pgfplots.ternary}
+
+
+% -----------------------------------------------------------------------------
+% Setup of axis look
+% -----------------------------------------------------------------------------
+\newcommand{\prlabelfontsize}{\normalfont}
+\newcommand{\prlegendfontsize}{\normalfont}
+\newcommand{\prtickfontsize}{\normalfont}
+\newcommand{\prnodefontsize}{\normalfont}
+\newcommand{\prtitlefontsize}{\normalfont} 
+
+\newcommand{\praxiscolor}{black}
+\newcommand{\prlabelcolor}{black}
+\newcommand{\prtickcolor}{black}
+\newcommand{\prticklabelcolor}{black}
+\newcommand{\prlegendcolor}{black}
+\newcommand{\prtitlecolor}{black}
+\newcommand{\prgridcolor}{tcss-slate2}
+ 
+% -----------------------------------------------------------------------------
+% Axis
+% -----------------------------------------------------------------------------
+\pgfplotsset{
+	%
+	% #1 = x, y, or z
+	% #2 = the shift value
+	/tikz/normal shift/.code 2 args = {%
+		\pgftransformshift{%
+			\pgfpointscale{#2}{\pgfplotspointouternormalvectorofticklabelaxis{#1}}%
+		}%
+	},%
+	%
+	pretty axis/.style={
+		axis lines*       	= left,
+		x axis line style   = {\praxiscolor}, 
+		y axis line style   = {\praxiscolor}, 
+		tick style    		= {thin, \prtickcolor, major tick length=2pt},
+		x tick label style 	= {xshift=1pt,font=\prtickfontsize,color=\prticklabelcolor},
+		y tick label style 	= {yshift=1pt,font=\prtickfontsize,color=\prticklabelcolor},
+		x label style 		= {at={($(axis description cs:0.5,0) + (0,-15pt)$)}, anchor=north, font=\prlabelfontsize, color=\prlabelcolor},
+		y label style 		= {at={($(axis description cs:0,0.5) + (-20pt,0)$)}, anchor=south, font=\prlabelfontsize, color=\prlabelcolor},	
+		x tick scale label style={at={(axis description cs:1,0)},xshift=1.5em,font=\prtickfontsize,color=\prticklabelcolor}, 
+		y tick scale label style={at={(axis description cs:0,1)},yshift=0.5em, xshift=-.5em,font=\prtickfontsize,color=\prticklabelcolor}, 
+		legend cell align 	= left, 
+		legend style 		= {inner sep=1pt, cells = {font=\prlegendfontsize,color=\prlegendcolor},draw=\prlegendcolor},  
+		legend image code/.code={%
+			\draw[mark repeat=2,mark phase=2,#1] 
+			plot coordinates { (0cm,0cm) (0.15cm,0cm) (0.3cm,0cm) };% 
+		},
+		title style={font=\prtitlefontsize,color=\prtitlecolor}
+	}
+}
+
+%% 3d
+\pgfplotsset{
+	every axis/.append style = {thick},tick style = {thick,black},
+	%
+	% #1 = x, y, or z
+	% #2 = the shift value
+	/tikz/normal shift/.code 2 args = {%
+		\pgftransformshift{%
+			\pgfpointscale{#2}{\pgfplotspointouternormalvectorofticklabelaxis{#1}}%
+		}%
+	},%
+	%
+	pretty 3daxis/.style = {
+		tick align        = outside,
+		scaled ticks      = false,
+		enlargelimits     = false,
+		ticklabel shift   = {10pt},
+		axis lines*       = left,
+		line cap          = round,
+		clip              = false,
+		xtick style       = {normal shift={x}{10pt}},
+		ytick style       = {normal shift={y}{10pt}},
+		ztick style       = {normal shift={z}{10pt}},
+		tick style    		= {thin, \prtickcolor, major tick length=2pt},
+		x axis line style = {normal shift={x}{10pt},\praxiscolor},
+		y axis line style = {normal shift={y}{10pt},\praxiscolor},
+		z axis line style = {normal shift={z}{10pt},\praxiscolor},  
+		x tick label style = {font=\prtickfontsize,color=\prticklabelcolor},
+		y tick label style = {font=\prtickfontsize,color=\prticklabelcolor},
+		z tick label style = {font=\prtickfontsize,color=\prticklabelcolor}, 
+		x label style 	   = {font=\prlabelfontsize,color=\prlabelcolor}, 
+		y label style      = {font=\prlabelfontsize,color=\prlabelcolor},	 
+		z label style      = {font=\prlabelfontsize,color=\prlabelcolor},	 
+		legend cell align  = left, 
+		legend style 	   = {inner sep=1pt, cells = {font=\prlegendfontsize,color=\prlegendcolor},draw=\prlegendcolor},  
+		legend image code/.code={%
+			\draw[mark repeat=2,mark phase=2,#1] 
+			plot coordinates { (0cm,0cm) (0.15cm,0cm) (0.3cm,0cm) };% 
+		},
+		title style        ={font=\prtitlefontsize,color=\prtitlecolor},
+		cycle list name	   = pr-colors, 
+	},
+} 
+ 
+
+% -----------------------------------------------------------------------------
+% Plots
+% -----------------------------------------------------------------------------
+%% Line   
+\pgfplotsset{ 
+	pretty line/.style={
+		pretty axis,
+		cycle list name		= pr-colors, 
+		tick align        	= outside,
+		scaled ticks      	= false,
+		enlargelimits     	= false,
+		ticklabel shift   	= {3pt},
+		axis lines*       	= left,
+		line cap          	= round,
+		clip              	= false,
+		xtick style       	= {normal shift={x}{3pt}},
+		ytick style       	= {normal shift={y}{3pt}},
+		x axis line style 	= {thick,normal shift={x}{3pt}},
+		y axis line style 	= {thick,normal shift={y}{3pt}},
+		line width			= 1.1pt,  
+	},
+}
+
+%% Variations of line
+\pgfplotsset{ 
+	pretty timeline/.style={
+		pretty line, 
+		cycle list name		= pr-colors,
+		y axis line style	= {opacity=0}, 
+	},
+	pretty confline/.style={
+		pretty line,
+		pretty fill legend,
+		cycle list name		= pr-colors-conf, 
+	},
+	pretty shadedline/.style={
+		pretty line,  
+		pretty area legend,
+		cycle list name = pr-shade,
+	}, 
+	pretty marks/.style={
+		pretty line,
+		only marks, 
+		pretty marks legend,
+		cycle list name=pr-marks,
+	}, 
+	pretty ridge line/.style={
+		pretty line, 
+		cycle list name		= pr-ridgeline, 
+		stack plots         = y,
+		enlarge x limits    = false,
+		smooth,
+		area style,
+	}
+}
+
+
+%% Scatter  
+% \addplot[pr-scatter] 
+% usage with different colors: \addplot[pr-scatter-complementary]
+% usage with alphabetic classes: \addplot[pr-scatter-alpha]
+\pgfplotsset{
+	pretty scatter/.style={
+		pretty line,
+		scatter,   
+		legend style 		= {inner sep=3pt, cells = {font=\prlegendfontsize,color=\prlegendcolor},draw=\prlegendcolor},  
+	}
+}
+
+
+%% Bar 
+\pgfplotsset{ 
+	pretty ybar axis/.style={
+		pretty axis,
+		area legend, 
+		no markers,
+		axis on top, 
+		xtick				= data,
+		cycle list name    	= pr-bar-fill,%pr-bar for opacity fill
+		tick align        	= outside, 
+		xmajorgrids 		= false,
+	%	bar width			= 0.5em,
+		axis lines* 		= left,			% only show two lines of the bounding box
+		tick style    		= {thin,major tick length=2pt,font=\prtitlefontsize,color=\prtitlecolor},
+		major y tick style	= {draw=none},
+		x axis line style 	= {thick, normal shift={x}{0pt}, \praxiscolor},
+		y axis line style	= {opacity=0}, 
+		x tick label style 	= {font=\prlabelfontsize,color=\prticklabelcolor,yshift = -1pt},
+		y tick label style 	= {font=\prlabelfontsize,,color=\prticklabelcolor,xshift = -1pt},	
+	}
+}
+
+\pgfplotsset{
+	pretty xbar axis/.style={
+		pretty axis,
+		area legend,
+		axis on top,
+		ytick				= data,
+		cycle list name    	= pr-bar-fill,%pr-bar for opacity fill
+		tick align        	= outside, 
+	    enlarge x limits    = {value=0.1, upper},
+	%	bar width			= 0.5em,
+		axis lines* 		= left,		 
+		tick style    		= {thin,major tick length=2pt,font=\prtitlefontsize,color=\prtitlecolor},
+		major y tick style	= {draw=none},
+		y label style={at={(axis description cs:-0.01,1)},
+		  rotate=-90, anchor=south east},
+		x axis line style 	= {thick, normal shift={x}{0pt}, \praxiscolor},
+		y axis line style	= {opacity=0}, 
+		x tick label style 	= {font=\prlabelfontsize,color=\prticklabelcolor,yshift = -1pt},
+		y tick label style 	= {font=\prlabelfontsize,color=\prticklabelcolor,xshift = -1pt},	
+	},
+}
+
+
+%% Colorbar, contour, heat matrix
+\pgfplotsset{
+	pretty contour/.style={
+		pretty line,  
+		colormap={prmap1}{rgb255=(251,191,36) rgb255=(22,161,74) rgb255=(3,105,161) rgb255=(131,24,76)},  
+		colorbar style 		= {samples=10,
+			ylabel 			= { },  
+			yticklabel style= {font=\prtickfontsize,color=\prticklabelcolor},     
+			ylabel style 	= {font=\prlabelfontsize,color=\prlabelcolor},               
+			ytick style		= {draw=none},},  
+	},
+	pretty scatter colormap/.style={
+		pretty scatter, 
+		colorbar,
+		colorbar sampled, 	
+		colormap/RdBu-11, 
+		colorbar style 		= {samples=11,
+			ylabel 			= {zlabel},  
+			yticklabel style= {font=\prtickfontsize,color=\prticklabelcolor},     
+			ylabel style 	= {font=\prlabelfontsize,color=\prlabelcolor},               
+			ytick style		= {draw=none},}, 
+		only marks,
+	%	colorbar style={ width=1em, ticklabel style={font=\prtickfontsize,color=\prticklabelcolor,  ylabel= { },  }  	},  
+	},
+	pretty scatter colormap horizontal/.style={
+		pretty scatter,
+		colorbar horizontal,
+		colormap/RdBu-11, 
+	    colorbar sampled, 	% opt., color transition
+		colorbar style 		= {samples=11, 
+			xticklabel style= {font=\prtickfontsize,color=\prticklabelcolor},   
+			xlabel style 	= {font=\prlabelfontsize,color=\prlabelcolor}, 
+			xtick style		= {draw=none},},
+		only marks,
+	},
+	pretty heatmatrix/.style={
+		pretty scatter,
+		colorbar,
+		colorbar sampled, 
+		colorbar style 		= {samples=11,
+			ylabel 			= {zlabel},  
+			yticklabel style= {font=\prtickfontsize,color=\prticklabelcolor},   
+			ylabel style 	=  {font=\prlabelfontsize,color=\prlabelcolor}, 
+			ytick style		= {draw=none},},
+		colormap 		 	= {bluewhite}{color=(white) rgb255=(50,125,184)},		
+		no markers,
+		xtick 		 		= data,  
+		ytick 		 		= data, 
+		xtick style 		={draw=none},
+		ytick style 		={draw=none},
+		nodes near coords 		={\pgfmathprintnumber\pgfplotspointmeta},
+		every node near coord/.append style={},
+		nodes near coords style={ 
+			font=\prlabelfontsize,
+			color=\prlabelcolor,
+			/pgf/number format/.cd,
+			fixed,
+			fixed zerofill,
+			precision=2,
+			/tikz/.cd},
+		nodes near coords align={south} , 
+		grid=none,
+	}
+}
+ 
+
+
+%% bar  
+\pgfplotsset{	
+	pretty ybar/.style={ 
+		ybar, 
+		pretty ybar axis, 
+		%bar width       = 0.5em,   
+		legend cell align=left,    
+		legend image post style={scale=0.2},  
+	},
+}
+\pgfplotsset{	
+	pretty xbar/.style={ 
+		xbar, 
+		pretty xbar axis, 
+		%bar width       = 0.5em,   
+		legend cell align=left,    
+		legend image post style={scale=0.2},  
+	},
+}
+% comb
+\pgfplotsset{	
+	pretty comb/.style={  
+		pretty axis,
+		pretty yspacy,
+		only marks, 
+		cycle list name = pr-marks,
+		pretty marks legend,
+		tick align        	= outside, 
+		y axis line style	= {opacity=0},   
+		y tick label style 	= {xshift = -1pt,font=\prtickfontsize,color=\prticklabelcolor},	 
+		tick pos 			= left,
+		tick align			= outside,
+		ticklabel shift   	= {3pt},
+		tick style    		= {thin, \prtickcolor, major tick length=2pt},  
+	}, 
+}
+ 
+
+%% Interval ybar 
+\pgfplotsset{	
+	pretty ybar interval/.style={ 
+		ybar interval,
+		pretty ybar axis,	
+		xmajorgrids,
+		pretty enlargexlimits, 
+	} 
+}
+
+
+%% Stacked ybar 
+\pgfplotsset{	
+	pretty ybar stacked/.style={ 
+		ybar stacked, 
+		pretty ybar axis,	
+		pretty enlargexlimits, 
+		ymajorgrids = false
+	} 
+}
+
+
+%%  Stacked xbar
+\pgfplotsset{
+	pretty xbar stacked/.style={
+		xbar stacked,
+		pretty xbar axis, 
+		y axis line style	= {draw opacity=0},
+		ytick style       	= {normal shift={y}{3pt}}, %x&y swapped		
+		tick style    		= {thin, \prtickcolor, major tick length=2pt},
+		y tick label style 	= {yshift=0pt, xshift=-3pt,font=\prtickfontsize,color=\prticklabelcolor},
+		y label style 		= {at={($(axis description cs:0,0.5) + (-23pt,-5pt)$)}, anchor=south,font=\prlabelfontsize, color=\prlabelcolor},	
+		},	   
+}
+
+%%  Stacked xbar variant
+\pgfplotsset{
+	pretty xbar components/.style={
+		xbar stacked,
+		pretty xbar axis,
+		enlargelimits     	= false,
+		bar width 			= 10pt,  
+		xmajorgrids 		= false,
+		major grid style	= white,
+	}
+}
+
+%% Interval xbar
+\pgfplotsset{	
+	pretty xbar interval/.style={ 
+		xbar interval,
+		pretty xbar axis,			
+		enlargelimits     	= false,
+		xmajorgrids 		= false, 
+		ymajorgrids 		= false,
+	} 
+}
+
+
+
+%% Box
+
+% Box appearances
+\pgfplotsset{pr-box-base/.style={
+		pretty box legend,
+		boxplot = {
+			box extend=0.3,  % box width
+			every box/.style = {draw=none}, %solid, thick, 
+			every whisker/.style = {solid},
+			every median/.style = {thick}, 
+			average = auto,% 
+			every average/.style={/tikz/mark=*,/tikz/mark size=1pt},%
+		},
+}}
+\pgfplotsset{pr-variablewidthbox-base/.style={
+		pretty box legend,
+		boxplot/variable width,
+		% todo change these
+		boxplot = {
+			box extend=0.3,  % box width, in x units
+			every box/.style = {draw=none},  
+			every whisker/.style = {solid},
+			every median/.style = {thick}, 
+			average = auto,% 
+			every average/.style={/tikz/mark=*,/tikz/mark size=1pt},%
+		},
+}}
+\pgfplotsset{pr-simplebox-base/.style={
+		pretty box legend,
+		boxplot = {
+			box extend=0.3,  % box width, in x units
+			whisker extend=0,
+			every box/.style = {draw=none},
+			every whisker/.style = {solid, very thick},
+			every median/.style = {draw=none},  
+			every average/.style={/tikz/mark=*,/tikz/mark size=1.2pt},%
+		},
+}}
+\pgfplotsset{pr-box-base-diamond/.style={
+		pr-box-base, 
+		boxplot = {%
+			average = auto,%
+			every average/.style={/tikz/mark=diamond*,/tikz/mark size =2pt},%
+		}, 
+}} 
+
+\pgfplotsset {
+	pretty boxplot/.style={
+		box plot width/.initial=1em,
+		boxplot/draw direction = y,
+		pr-box-base, % custom box appearance
+		cycle list name=pr-box,  % box colors
+		y axis line style	= {opacity=0},  
+		axis lines*			= left,
+		mark size			= 0.2pt,
+		tick pos 			= left,
+		tick align			= outside,
+		ticklabel shift   	= {3pt},		
+		tick style    		= {thin, \prtickcolor, major tick length=2pt},		
+		title style={font=\prtitlefontsize,color=\prtitlecolor},
+		x tick style        = {draw=none},
+		xticklabels         = none, 
+		ytick style       	= {normal shift={y}{3pt}},
+		x tick label style  = {xshift=1pt,align=center,font=\prtickfontsize,color=\prticklabelcolor}, 
+		y tick label style 	= {yshift=1pt,font=\prtickfontsize,color=\prticklabelcolor},
+		x axis line style 	= {thick,normal shift={x}{3pt},\praxiscolor},
+		y axis line style 	= {thick,normal shift={y}{3pt},\praxiscolor},
+		x label style 		= {at={($(axis description cs:0.5,0) + (0,-12pt)$)}, anchor=north,font=\prlabelfontsize, color=\prlabelcolor}, 
+		y label style = {at={($(axis description cs:0,0.5) + (-20pt,0)$)},font=\prlabelfontsize, color=\prlabelcolor},  
+		legend style 		= {inner sep=1pt, cells = {font=\prlegendfontsize,color=\prlegendcolor},draw=\prlegendcolor},   
+		legend cell align=left,    
+	}
+}
+
+\pgfplotsset {
+		pretty boxplot simple/.style={
+			pretty boxplot,
+			pr-simplebox-base, % custom box appearance
+			cycle list name=pr-colors,  % box colors
+	}
+}
+
+\pgfplotsset{
+	boxplot prepared from table/.code={
+		\def\tikz@plot@handler{\pgfplotsplothandlerboxplotprepared}%
+		\pgfplotsset{
+			/pgfplots/boxplot prepared from table/.cd,
+			#1,
+		}
+	},
+	/pgfplots/boxplot prepared from table/.cd,
+	table/.code={\pgfplotstablecopy{#1}\to\boxplot@datatable},
+	row/.initial=0,
+	make style readable from table/.style={
+		#1/.code={
+			\pgfplotstablegetelem{\pgfkeysvalueof{/pgfplots/boxplot prepared from table/row}}{##1}\of\boxplot@datatable
+			\pgfplotsset{boxplot/#1/.expand once={\pgfplotsretval}}
+		}
+	},
+	make style readable from table=lower whisker,
+	make style readable from table=upper whisker,
+	make style readable from table=lower quartile,
+	make style readable from table=upper quartile,
+	make style readable from table=median,
+	make style readable from table=lower notch,
+	make style readable from table=upper notch
+} 
+ 
+%% Violin
+\pgfplotsset{
+	pretty violin/.style={ 
+		pretty axis,  
+		y axis line style	= {opacity=0}, 
+		x tick label style 	= {font=\prtickfontsize, color=\prticklabelcolor, yshift = -1pt},
+		y tick label style 	= {font=\prtickfontsize, color=\prticklabelcolor, xshift = -1pt},	
+		axis lines*			= left,
+		mark size			= 0.2pt,
+		tick pos 			= left,
+		tick align			= outside,
+		ticklabel shift   	= {3pt},
+		tick style    		= {thin, black, major tick length=2pt}, 
+		x tick style = {draw=none},
+		ytick style       	= {normal shift={y}{3pt}},
+		x tick label style = {align=center, font=\prtickfontsize,color=\prticklabelcolor,}, 
+		y tick label style 	= {font=\prtickfontsize, color=\prticklabelcolor, xshift = 1pt},
+		x axis line style 	= {thick, normal shift={x}{3pt}},
+		y axis line style 	= {thick,normal shift={y}{3pt}},
+		x label style 		= {at={($(axis description cs:0.5,0) + (0,-12pt)$)}, anchor=north, font=\prlabelfontsize, color=\prlabelcolor}, 
+		y label style = {anchor=south, font=\prlabelfontsize, color=\prlabelcolor},
+		legend style    = {at = {(1.1, 1)}, anchor	= north west, font=\prlegendfontsize},  
+		legend cell align=left,  
+		cycle list name=pr-box, 
+		xticklabels=none, 
+	},
+} 
+
+%% Ternary
+\pgfplotsset{
+pretty ternary axis/.style = {
+	pretty 3daxis,  
+	major grid style	= {\prgridcolor, dotted}, 
+	minor grid style	= {\prgridcolor, dotted}, 
+	label style={sloped},
+	ternary limits relative=false,
+	clip=false,
+	disabledatascaling,
+	cycle list name=pr-ternary
+},
+pretty ternary area axis/.style = {	
+	pretty 3daxis,  
+	ticklabel shift   = {0pt},
+	xtick style       = {normal shift={x}{-10pt}},
+	ytick style       = {normal shift={y}{-10pt}},
+	ztick style       = {normal shift={z}{-10pt}},
+	x axis line style = {normal shift={x}{-10pt}},
+	y axis line style = {normal shift={y}{-10pt}},
+	z axis line style = {normal shift={z}{-10pt}},
+	label style={sloped},
+	ternary limits relative=false,
+	clip=false,
+	disabledatascaling, 
+	grid=none,
+	area style,
+	cycle list name=pr-ternary
+} 
+} 
+
+%% Radar 
+\pgfplotsset{
+	pretty radar axis/.style={
+		axis lines = center,  
+		axis line style = {thin, black},  
+		grid = major, 
+		grid style = {dotted, \prgridcolor},  
+		tick style = {thin, black, major tick length=2pt},  
+		xtick = {0,73,...,360},  
+		xticklabels={}, 
+		xticklabel style={font=\prlabelfontsize, yshift=-3pt},  
+		ytick = {0, 0.2, 0.4, 0.6, 0.8, 1}, 
+		ymin=0, ymax=1.2 , 
+		ytick style = {draw=black},  
+		yticklabel style = {font=\prlabelfontsize}, 
+		axis equal image, % Ensure equal scaling
+	}
+}
+
+
+% -----------------------------------------------------------------------------
+% Decorations
+% -----------------------------------------------------------------------------
+
+
+%% Grids 
+
+% put grids below plots - check
+\pgfplotsset{
+	/pgfplots/layers/Bowpark/.define layer set={
+		axis background,axis grid,main,axis ticks,axis lines,axis tick labels,
+		axis descriptions,axis foreground
+	}{/pgfplots/layers/standard},
+}
+
+
+\pgfplotsset{ 
+	pretty grid/.style={ 
+		ymajorgrids, 
+		major grid style   = {\prgridcolor, thick, densely dotted},  
+	}, 
+	pretty xgrid/.style={ 
+		xmajorgrids, 
+		major grid style	= {\prgridcolor, thick, densely dotted}
+	}, 
+	pretty xygrid/.style={ 
+		grid 				= major, 
+		major grid style	= {\prgridcolor, thick} 
+	}
+}
+
+% grids that could look well with different plot types 
+
+\pgfplotsset{
+	pretty grid line/.style={ 
+		ymajorgrids, 
+		major grid style   = {\prgridcolor, thick, densely dotted}, 
+	},   
+	pretty grid box/.style={ 
+	ymajorgrids, 
+	major grid style   = {\prgridcolor, thick, densely dashed}, 
+	},   
+	pretty grid ybar/.style={ 
+		ymajorgrids,
+		major grid style	= {white, thick} 
+	}, 
+	pretty grid xbar/.style={ 
+	xmajorgrids,
+	major grid style	= {white, thick} 
+	},  
+	pretty grid scatter/.style={ 
+		grid 				= major, 
+		major grid style	= {\prgridcolor, thick} 
+	},
+	pretty grid 3d/.style={ 
+	grid 				= major, 
+	major grid style	= {\prgridcolor, dotted, thick} 
+	}, 
+}
+
+\pgfplotsset{
+	pr-markweights/.style={
+	only marks,
+	nodes near coords*={\prnodefontsize $\pgfmathprintnumber \weight$},	
+	every node near coord/.append style = {yshift = 1 pt},
+	visualization depends on={\thisrow{weight} \as \weight}, 
+	scatter/@pre marker code/.append style=
+	{/tikz/mark size=0.5*\weight}
+},
+	pr-barweights/.style={
+	%% label each bar with y value
+	visualization depends on=y \as \y,
+	nodes near coords ={\pgfmathprintnumber[precision=2]{\y}}, 
+	%% label layout
+	every node near coord/.append style={font=\prnodefontsize,color=black!80}, 
+}
+}
+%% Log axis, scale 10 ticks
+
+% Fixing weird label shift when pretty plot is used under \begin{log(log)axis}, semilogaxis...:
+\pgfplotsset{
+	pretty labelshift/.style={
+		xlabel near ticks,
+		ylabel near ticks,
+		% stuff that near ticks overwrites
+		x label style 		= { font=\prlabelfontsize, color=\prlabelcolor },
+		y label style 		= { font=\prlabelfontsize, color=\prlabelcolor },
+		x tick label style 	= { font=\prtickfontsize, color=\prticklabelcolor, xshift = 1pt},
+		y tick label style 	= { font=\prtickfontsize, color=\prticklabelcolor, xshift = 1pt},
+	}
+}
+\pgfplotsset{
+	pretty labelcolor/.style={ 
+		x label style 		= { font=\prlabelfontsize, color=\prlabelcolor },
+		y label style 		= { font=\prlabelfontsize, color=\prlabelcolor },
+		x tick label style 	= { font=\prtickfontsize, color=\prticklabelcolor, xshift = 1pt},
+		y tick label style 	= { font=\prtickfontsize, color=\prticklabelcolor, xshift = 1pt},
+	}
+}
+
+% Example: usg with loglogaxis
+\pgfplotsset{
+	pretty loglog line/.style={
+		pretty line, 
+		pretty grid,
+		% put it after line, xgrid,.. to have an effect:
+		pretty labelshift,
+	}
+}
+% Example: ytickten, aligns all labels with 10^10
+\pgfplotsset{
+	pretty ytickten line/.style={
+		pretty line, 
+		pretty grid,  
+		major grid style	= {\prgridcolor, loosely dotted},
+		ytickten		= {0,...,10},
+		yticklabel style= {text width=width("$10^10$"),align=left}, 
+		pretty labelshift,
+	}
+}
+
+ 
+%% Bar/line marks/scatter with discrete x
+
+\pgfplotsset{	
+	pretty enlargexlimits/.style={ 
+		enlarge x limits	= 0.1, 		
+		y label style 		= {
+			at				={($(axis description cs:0,0.5) + (-5pt,0)$)}, 
+			anchor			=south, 
+			font			=\prlabelfontsize},
+		x tick label style 	= {font=\prtickfontsize,color=\prticklabelcolor, yshift=1pt},
+	}
+}
+
+
+
+%% Discrete/symbolic xticks
+% in axis:  symbolic x coords={Class1,...} 
+
+\pgfplotsset{
+	pr-labels/.style={
+		pretty enlargexlimits, 	%space at start/end label
+		scatter src			= explicit symbolic, % no prbl w bar
+		xtick 				= data,
+	}
+}
+
+
+\pgfplotsset{
+	pr-labels-rotated/.style={
+			pr-labels, pretty xlabelrot 
+	}
+}
+
+\pgfplotsset{
+	pr-labels-tilted/.style={
+			pr-labels, pretty xlabeltilt 
+	}
+}
+
+ 
+
+%% xtick label rotation
+
+\pgfplotsset{
+	pretty xlabelrot/.style={
+		xlabel near ticks,
+		x label style 		= { font=\prlabelfontsize , color=\prticklabelcolor},
+		x tick label style 	= { font=\prtickfontsize, color=\prticklabelcolor,
+			rotate=90, anchor=east, align=right },
+	}
+}
+
+\pgfplotsset{
+	pretty xlabeltilt/.style={
+		xlabel near ticks,
+		x label style 		= { font=\prlabelfontsize, color=\prticklabelcolor},% as near ticks overwrites this
+		x tick label style 	= { font=\prtickfontsize, color=\prticklabelcolor,
+			yshift=-3pt, % adjust maybe
+			xshift=10pt, 
+			rotate=25, anchor=east, align=right },
+	}
+}
+
+ 
+
+
+% -----------------------------------------------------------------------------
+% Spacing
+% -----------------------------------------------------------------------------
+
+
+
+% Space between axes and plot
+% eg. small plots, ygrid, xgrid
+% compat with line, no use for bar
+\pgfplotsset{
+	pretty spacey/.style={		
+		ticklabel shift   	= {10pt},
+		x tick label style 	= {font=\prtickfontsize, color=\prticklabelcolor, yshift = -3pt},
+		y tick label style 	= {font=\prtickfontsize, color=\prticklabelcolor, xshift = -3pt},
+		xtick style       	= {normal shift={x}{10pt}},
+		ytick style       	= {normal shift={y}{10pt}},	
+		x label style		= {yshift=-10pt, font=\prlabelfontsize, color=\prlabelcolor},
+		y label style		= {yshift=10pt, font=\prlabelfontsize, color=\prlabelcolor}, 
+		x axis line style 	= {thick,normal shift={x}{10pt}},
+		y axis line style 	= {thick,normal shift={y}{10pt}},
+		x tick scale label style={at={(axis description cs:1,0)}, yshift=-0.6em}, 
+		y tick scale label style={at={(axis description cs:0,1)}, xshift=-0.8em}
+	}
+}
+ 
+\pgfplotsset{
+	pretty spacy/.style={ 	
+		ticklabel shift   	= {5pt},
+		x tick label style 	= {font=\prtickfontsize, color=\prticklabelcolor, yshift = -3pt},
+		y tick label style 	= {font=\prtickfontsize, color=\prticklabelcolor, xshift = -3pt},
+		xtick style       	= {normal shift={x}{5pt}},
+		ytick style       	= {normal shift={y}{5pt}},
+		x label style		= {yshift=-5pt, font=\prlabelfontsize, color=\prlabelcolor},
+		y label style		= {yshift=5pt, font=\prlabelfontsize, color=\prlabelcolor},
+		x axis line style 	= {thick,normal shift={x}{5pt}},
+		y axis line style 	= {thick,normal shift={y}{5pt}},
+		x tick scale label style={at={(axis description cs:1,0)}, yshift=-0.1em}, 
+		y tick scale label style={at={(axis description cs:0,1)}, xshift=-0.3em}
+	} 
+}
+\pgfplotsset{
+	pretty yspacy/.style={ 	
+		ticklabel shift   	= {5pt}, 
+		y tick label style 	= {font=\prtickfontsize, xshift = -3pt}, 
+		ytick style       	= {normal shift={y}{5pt}}, 
+		y label style		= {yshift=5pt},  
+		y axis line style 	= {thick,normal shift={y}{5pt}}, 
+		y tick scale label style={at={(axis description cs:0,1)}, xshift=-0.3em}
+	} 
+}
+
+ 
+% -----------------------------------------------------------------------------
+% Util
+% -----------------------------------------------------------------------------
+%idea from:  https://tex.stackexchange.com/questions/58548/is-it-possible-to-change-the-color-of-a-single-bar-when-the-bar-plot-is-based-on
+\pgfplotsset{
+	show except/.style 2 args={
+		x filter/.code={
+			\edef\tempa{\thisrow{#1}}
+			\edef\tempb{#2}
+			\ifx\tempa\tempb
+			\def\pgfmathresult{inf}
+			\fi
+		}
+	},
+	show only/.style 2 args={
+		x filter/.code={
+			\edef\tempa{\thisrow{#1}}
+			\edef\tempb{#2}
+			\ifx\tempa\tempb
+			\else
+			\def\pgfmathresult{inf}
+			\fi
+		}
+	}
+}
+
+
+ 
+% -----------------------------------------------------------------------------
+% commands - addplot
+% -----------------------------------------------------------------------------
+
+\NewDocumentCommand{\addlines}{m O{} O{}}{% 
+	\pgfplotstablegetcolsof{#1}  
+	\pgfmathtruncatemacro\ncols{\pgfplotsretval-1}  
+	\foreach \i in {1,...,\ncols}{
+		\addplot+[#2] table[x=x, y=y\i, #3] {#1};  
+	}
+}
+\NewDocumentCommand{\addboxes}{m O{} O{}}{% 
+	\pgfplotstablegetcolsof{#1}  
+	\pgfmathtruncatemacro\ncols{\pgfplotsretval-1}  
+	\foreach \i in {1,...,\ncols}{
+		\addplot+[#2] table[x index=0, y=y\i, #3] {#1};  
+	}
+}
+\NewDocumentCommand{\addscatter}{m O{} O{}}{%   
+		\addplot+[pr-scatter, #2] table[x=x, y=y, meta=label, #3] {#1};  
+}
+\NewDocumentCommand{\addlinesforeach}{m m O{} O{}}{%  
+	\foreach \i in #2{
+		\addplot+[#3] table[x=x, y=y\i, #4] {#1};  
+	}
+}
+\NewDocumentCommand{\addshadedlines}{m O{} O{}}{% 
+\pgfplotstablegetcolsof{#1}  
+\pgfmathtruncatemacro\ncols{\pgfplotsretval-1}  
+\foreach \i in {1,...,\ncols}{
+	\addplot+[#2] table[x=x, y=y\i, #3] {#1};   
+	\addplot table[x=x, y=y\i] {#1} \closedcycle;
+	}
+}
+\NewDocumentCommand{\adderrorlines}{m O{} O{} O{}}{% 
+	\pgfplotstablegetcolsof{#1}  
+	\pgfmathtruncatemacro\ncols{(\pgfplotsretval-1)/2}  
+	\foreach \col in {1,...,\ncols}{ 
+		\addplot+[#3,
+			error bars/.cd,
+			y explicit,
+			y dir=both] table[
+			x=x, y=y\col, 
+			y error plus expr=\thisrow{y\col_c},
+			y error minus expr=\thisrow{y\col_c},
+			#4
+		] {#1};
+	} 
+}
+\NewDocumentCommand{\addconflines}{m O{} O{} O{}}{% 
+	\pgfplotstablegetcolsof{#1}  
+	\pgfmathtruncatemacro\ncols{(\pgfplotsretval-1)/2}  
+	\foreach \i in {1,...,\ncols}{
+		\addplot+[#3] table[x=x, y=y\i, #4] {#1}; 
+		\addplot+[pr-confline, name path=low] table [x=x, y expr=\thisrow{y\i} - \thisrow{y\i_c}]{#1}; 
+		\addplot+[pr-confline, name path=up] table [x=x, y expr=\thisrow{y\i} + \thisrow{y\i_c}]{#1};  
+		\addplot fill between[of=low and up];
+	}
+}
+\NewDocumentCommand{\addgroupconflines}{m O{} O{} O{}}{% 
+	\pgfplotstablegetcolsof{#1}  
+	\pgfmathtruncatemacro\ncols{(\pgfplotsretval-1)/2} 
+	\nextgroupplot[pretty line,
+	pretty fill legend,
+	cycle list name = pr-colors-conf, #2]
+	\foreach \i in {1,...,\ncols}{
+		\addplot+[#3] table[x=x, y=y\i, #4] {#1}; 
+		\addplot+[pr-confline, name path=low] table [x=x, y expr=\thisrow{y\i} - \thisrow{y\i_c}]{#1}; 
+		\addplot+[pr-confline, name path=up] table [x=x, y expr=\thisrow{y\i} + \thisrow{y\i_c}]{#1};  
+		\addplot fill between[of=low and up];
+	}
+}
+
+
+% -----------------------------------------------------------------------------
+% commands - groupplot
+% -----------------------------------------------------------------------------
+ \NewDocumentCommand{\grouplines}{m O{} O{} O{}}{% 
+ 	% expect columns x, y1, y1_c, y2, y2_c in #1
+ 	\pgfplotstablegetcolsof{#1} 	 
+ 	%\pgfmathtruncatemacro\ncols{(\pgfplotsretval-1)/2}  
+ 	\pgfmathtruncatemacro\ncols{\pgfplotsretval-1}  
+ 	\nextgroupplot[pretty line, #2] 
+ 	\foreach \i in {1,...,\ncols}{
+ 		\addplot+[#3] table[x=x, y=y\i, #4] {#1};
+ 	} 
+ }
+ \NewDocumentCommand{\groupshadedlines}{m O{} O{} O{}}{%  
+ 	\pgfplotstablegetcolsof{#1} 	 
+ 	\pgfmathtruncatemacro\ncols{(\pgfplotsretval-1)/2}  
+ 	\nextgroupplot[pretty line, #2] 
+ 	\foreach \i in {1,...,\ncols}{ 
+ 		\addplot+[#3] table[x=x, y=y\i, #4] {#1};   
+ 		\addplot table[x=x, y=y\i] {#1} \closedcycle; 
+ 	} 
+ }
+ \NewDocumentCommand{\grouperrorlines}{m O{} O{} O{}}{% 
+ 	% expect columns x, y1, y1_c, y2, y2_c in #1
+ 	\pgfplotstablegetcolsof{#1} 	 
+ 	\pgfmathtruncatemacro\ncols{(\pgfplotsretval-1)/2}  
+ 	\nextgroupplot[pretty line, #2] 
+ 	\foreach \i in {1,...,\ncols}{
+ 		\addplot+[
+ 		error bars/.cd,
+ 		y explicit,
+ 		y dir=both, #3] table[
+ 		x=x, y=y\i, 
+ 		y error plus expr=\thisrow{y\i_c},
+ 		y error minus expr=\thisrow{y\i_c},
+ 		#4] {#1};
+ 	} 
+ }
+ \NewDocumentCommand{\groupconflines}{m O{} O{} O{}}{%
+ 	% expect columns x, y1, y1_c, y2, y2_c in #1
+ 	\pgfplotstablegetcolsof{#1}  
+ 	\pgfmathtruncatemacro\ncols{(\pgfplotsretval-1)/2} 
+ 	\nextgroupplot[pretty line,
+ 	pretty fill legend,
+ 	cycle list name = pr-colors-conf, #2]
+ 	\foreach \i in {1,...,\ncols}{
+ 		\addplot+[#3] table[x=x, y=y\i, #4] {#1}; 
+ 		\addplot+[pr-confline, name path=low] table [x=x, y expr=\thisrow{y\i} - \thisrow{y\i_c}]{#1}; 
+ 		\addplot+[pr-confline, name path=up] table [x=x, y expr=\thisrow{y\i} + \thisrow{y\i_c}]{#1};  
+ 		\addplot fill between[of=low and up];
+ 	}
+ }
+ 
+ \NewDocumentCommand{\scatterGroupplot}{m O{} O{} O{}}{% 
+ 	% expect columns x, y, label in #1  
+ 	\nextgroupplot[pretty scatter, #2] 
+ 	\addplot+[#3] table[x=x, y=y, meta=label #4] {#1};
+ }
+ 
+  
+% -----------------------------------------------------------------------------
+% commands - full tikzpicture
+% -----------------------------------------------------------------------------
+\usepackage{xparse}
+%\pgfkeys{
+ %	/prettyplots/.is family,  
+ %	/prettyplots/line/.is family,  
+% 	%/prettyplots/line/cacheplot/.initial=true, % testing
+% }
+\NewDocumentCommand{\prettyaxis}{O{} m}{%
+	\begin{tikzpicture}
+	\begin{axis}[
+		pretty axis,
+		#1  
+		]
+		#2  
+	\end{axis}
+	\end{tikzpicture}
+}
+
+
+% Command to create a line plot
+% \lines{file.csv}[axis opt][addplot opt][table opt]
+\NewDocumentCommand{\lines}{m O{} O{} O{} O{}}{%
+	\prettyaxis[pretty line, #2]{   
+	\pgfplotstablegetcolsof{#1} 
+	\pgfmathtruncatemacro\ncols{\pgfplotsretval-1} 
+	 \foreach \col in {1,...,\ncols}{ 
+	 			\addplot+[#3] table[x index=0, y index=\col, #4] {#1};
+	 } 
+	}
+}
+
+
+%% with user-specified column names
+% \linesForEach{file.csv}{column names}[axis opt][addplot opt][table opt]
+\NewDocumentCommand{\linesForEach}{m m O{} O{} O{}}{%
+	\prettyaxis[pretty line, #3]{
+		\foreach \i in #2{
+			\addplot+[#4] table[x=x, y=\i, #5] {#1};
+		}
+	} 
+} 
+
+%% with error bar indicators
+\NewDocumentCommand{\linesError}{m O{} O{} O{} O{}}{%
+	% expect columns x, y1, y1_c, y2, y2_c in #1
+	\pgfplotstablegetcolsof{#1} 
+	\pgfmathtruncatemacro\ncols{(\pgfplotsretval-1)/2} 
+	\prettyaxis[pretty line, #2]{   
+		\foreach \col in {1,...,\ncols}{ 
+			\addplot+[#3,
+			error bars/.cd,
+			y explicit,
+			y dir=both] table[
+			x=x, y=y\col, 
+			y error plus expr=\thisrow{y\col_c},
+			y error minus expr=\thisrow{y\col_c},
+			#4] {#1};
+		} 
+	}
+}
+
+
+%% with error regions
+\NewDocumentCommand{\linesConf}{m O{} O{} O{}}{%
+	\pgfplotstablegetcolsof{#1} 
+	% divide the columns in the file by two (expect columns like x, y1, y1_c, y2, y2_c)
+	\pgfmathtruncatemacro\ncols{(\pgfplotsretval-1)/2} 
+	\prettyaxis[
+	pretty line,	 
+	pretty fill legend, 
+	cycle list name = pr-colors-conf, #2]{ 
+		\foreach \i in {1,...,\ncols} {
+			\addplot+[#3] table[x=x, y=y\i, #4] {#1};
+			\addplot[pr-confline, name path=low] table [x=x, y expr=\thisrow{y\i} - \thisrow{y\i_c}] {#1};
+			\addplot[pr-confline, name path=up] 
+			table [ x=x, y expr= \thisrow{y\i}  + \thisrow{y\i_c}]{#1};
+			\addplot fill between[of=low and up];
+		} 
+	}  
+}
+\NewDocumentCommand{\linesConfForEach}{m m O{} O{} O{}}{%
+	\prettyaxis[
+	pretty line,	
+	pretty fill legend, 
+	cycle list name = pr-colors-conf, #3]{ 
+		\foreach \i in #2 {
+			\addplot+[#4] table[x=x, y=\i, #5] {#1};
+			\addplot[pr-confline, name path=low] table [x=x, y expr=\thisrow{\i} - \thisrow{\i_c}] {#1};
+			\addplot[pr-confline, name path=up] 
+			table [ x=x, y expr= \thisrow{\i}  + \thisrow{\i_c}]{#1};
+			\addplot fill between[of=low and up];
+		} 
+	}  
+}
+
+
+
+%% with fill regions under
+\NewDocumentCommand{\linesShaded}{m m O{} O{} O{}}{%
+	\prettyaxis[
+		pretty line,	 
+		cycle list name = pr-shade,
+		#3
+		]{  
+		\foreach \i in {1,...,#2} { 
+			\addplot+[#4] table[x=x, y=y\i, #5] {#1};   
+			\addplot table[x=x, y=y\i] {#1} \closedcycle;
+		}
+	}  
+}
+
+% todo \pgfplotstableread [#4]{#1}{\table} everywhere
+\NewDocumentCommand{\boxes}{m O{} O{} O{}}{%
+	\pgfplotstableread[#4]{#1}{\table}
+	\pgfplotstablegetcolsof{\table} 
+	\pgfmathtruncatemacro\ncols{\pgfplotsretval-1} 
+	\prettyaxis[ 
+	pretty boxplot,
+	#2
+	]{  
+	 \foreach \i in {0,...,\ncols}{  
+			\addplot+[#3]  table[y index=\i, #4] {\table};   
+		}  
+	}  
+} 
+\NewDocumentCommand{\boxesFromStats}{m O{} O{} O{}}{%
+	\pgfplotstableread[#4]{#1}{\table}
+	\pgfplotstablegetcolsof{\table} 
+	\pgfmathtruncatemacro\ncols{\pgfplotsretval-1} 
+	\prettyaxis[ 
+	pretty boxplot,
+	#2
+	]{	
+ \foreach \i in {0,...,\ncols}
+	{
+		\addplot+[
+		boxplot prepared from table={
+			table=\table,
+			row=\i,
+			lower whisker=lw,
+			upper whisker=uw,
+			lower quartile=lq,
+			upper quartile=uq,
+			median=med, 
+		}, 
+		boxplot prepared,
+		#3,
+		]
+		coordinates {}; 
+	} 
+} 
+}
+ 
+\NewDocumentCommand{\boxesForEach}{m m O{} O{} O{}}{% 
+	\prettyaxis[ 
+	pretty boxplot,
+	#3
+	]{  
+		\foreach \i in {#1} {   
+			\addplot+[#4]  table[y=\i, #5] {#2};   
+		}  
+	}  
+}
+ 
+ 
+% -----------------------------------------------------------------------------
+% Example customisations
+% -----------------------------------------------------------------------------
+% for section 1 Examples
+\pgfplotsset{
+	pretty nox/.style={  
+		axis x line     = none, 
+	},   
+	pretty nolabels/.style={  
+		major y tick style	= {draw=none}, 
+		yticklabels={,,,,,,},  
+		major x tick style	= {draw=none}, 
+		xticklabels={,,,,,,},  
+		major z tick style	= {draw=none}, 
+		zticklabels={,,,,,,},  
+	},   
+	pretty lowerbetter/.style={  
+		%yticklabels={,\textbf{0},,,,,1},  % option A
+		major y tick style	= {draw=none}, % option B
+		yticklabels={,,,,,,},  
+	},
+	pretty higherbetter/.style={   
+		major y tick style	= {draw=none},  
+		yticklabels={,,,,,,},  
+		},  
+	pretty lowerbetter labelled/.style={  
+		yticklabels={,\textbf{0},0.2,0.4,0.6,0.8,1}, 
+	},
+	pretty higherbetter labelled/.style={  
+		yticklabels={,0,0.2,0.4,0.6,0.8,\textbf{1}}, 
+	}, 
+} 
+ 		 
+\pgfplotsset{
+	pretty axis experiment/.style={ 
+		legend pos			= outer north east, 
+		legend style        = {
+		%	nodes={scale=0.8, transform shape}, 
+			at={(-0.05,1.65)}%when using titles 
+		}, 
+		legend columns={2},  
+		ymin=0 , ymax=1,    
+		width=0.25\textwidth,   
+}
+}
+\pgfplotsset{
+	pretty line experiment/.style={ 
+		pretty axis experiment,
+		%pretty line, %already in \linesGroupplot
+		pretty grid line,
+		pretty nolabels,
+		cycle list name		= pr-colors,     
+		width=0.25\textwidth,  
+	},
+} 
+\pgfplotsset{
+	pretty box experiment/.style={ 
+		pretty axis experiment,
+		pretty boxplot, 	% might remove when using groupplot 
+		cycle list name		= pr-box,  
+		width=0.25\textwidth,   
+	},
+} 
+
+\pgfplotsset{
+	pretty bar experiment/.style={ 
+		pretty axis experiment,
+		pretty ybar,  % might remove when using groupplot
+		pretty grid ybar, 
+		width=0.25\textwidth,   
+		major x tick style	= {draw=none}, 
+		xticklabels={,,,,,,},   
+	},
+} 
+\pgfplotsset{
+	pretty line upleft/.style={  
+		pretty line experiment, 
+		pretty nox, 
+		pretty higherbetter, % labelled,
+	},
+	pretty line upper/.style={  
+		pretty line experiment, 
+		pretty nox,
+		pretty higherbetter,
+	},
+	pretty line lowleft/.style={  
+		pretty line experiment,  
+		pretty higherbetter, % labelled,
+	},
+	pretty line lower/.style={  
+		pretty line experiment,  
+		pretty higherbetter, 
+	}, 
+	pretty box upleft/.style={  
+		pretty box experiment, 
+		pretty nox, 
+		pretty higherbetter labelled,
+	},
+	pretty box upper/.style={  
+		pretty box experiment, 
+		pretty nox,
+		pretty higherbetter,
+	},
+	pretty box lowleft/.style={  
+		pretty box experiment,  
+		pretty higherbetter  labelled,
+	},
+	pretty box lower/.style={  
+		pretty box experiment,  
+		pretty higherbetter, 
+	}, 
+	pretty bar upleft/.style={  
+	pretty bar experiment, 
+	pretty nox, 
+	pretty higherbetter labelled,
+},
+	pretty bar upper/.style={  
+		pretty bar experiment, 
+		pretty nox,
+		pretty higherbetter,
+	},
+	pretty bar lowleft/.style={  
+		pretty bar experiment,  
+		pretty higherbetter labelled,
+	},
+	pretty bar lower/.style={  
+		pretty bar experiment,  
+		pretty higherbetter, 
+	},
+} 
+
+ 
+
+% TODO scatter classes
+% -----------------------------------------------------------------------------
+% Cycle lists: for scatter classes
+% -----------------------------------------------------------------------------
+
+% Default
+\pgfplotsset{  
+	pr-scatter/.style={	 
+		only marks,
+		scatter src	=explicit symbolic,
+		scatter/classes	= {
+			0={mark=*,pr-color2a},   
+			1={mark=triangle*, pr-color2b},
+			2={mark=diamond*, pr-color2c},
+			3={mark=square*, pr-color2d},
+			4={mark=pentagon*, pr-color2e},
+			5={mark=halfcircle*, pr-color2f},
+			6={mark=halfdiamond*, pr-color2g},
+			7={mark=halfsquare*, pr-color2f},
+			8={mark=halfsquare right*, pr-color2e},   
+			9={mark=halfsquare left*, pr-color2d},   
+			10={mark=-, pr-color2c},   
+			11={mark=|, pr-color2b},   
+			12={mark=Mercedes star, pr-color2a},   
+			13={mark=Mercedes star flipped, pr-color2b},  
+			14={mark=+, pr-color2c},  
+			15={mark=star, pr-color2d},  
+			16={mark=asterisk, pr-color2e},  
+			17={mark=10-pointed star, pr-color2f},  
+			18={mark=Mercedes star flipped, pr-color2g},   
+			19={mark=x, pr-color2f} 
+	}},
+	pr-scatter-alpha/.style={	 
+		only marks,
+		scatter src	=explicit symbolic,
+		scatter/classes	= {
+			a={mark=*,pr-color2a},   
+			b={mark=triangle*, pr-color2b},
+			c={mark=diamond*, pr-color2c},
+			d={mark=square*, pr-color2d},
+			e={mark=pentagon*, pr-color2e},
+			f={mark=halfcircle*, pr-color2f},
+			g={mark=halfdiamond*, pr-color2g},
+			h={mark=halfsquare*, pr-color2f},
+			i={mark=halfsquare right*, pr-color2e},   
+			j={mark=halfsquare left*, pr-color2d},   
+			k={mark=-, pr-color2c},   
+			l={mark=|, pr-color2b},   
+			m={mark=Mercedes star, pr-color2a},   
+			n={mark=Mercedes star flipped, pr-color2b},  
+			o={mark=+, pr-color2c},  
+			p={mark=star, pr-color2d},  
+			q={mark=asterisk, pr-color2e},  
+			r={mark=10-pointed star, pr-color2f},  
+			s={mark=Mercedes star flipped, pr-color2g},   
+			t={mark=asterisk, pr-color2f}
+	}},
+	pr-scatter-opacity/.style={	 
+	only marks,
+	scatter src	=explicit symbolic,
+	scatter/classes	= {
+		0={mark=*,   pr-color2a, fill=pr-color2a!50, mark options={fill opacity=0.50}},   
+		1={mark=triangle*, pr-color2b, fill=pr-color2b!50, mark options={fill opacity=0.50}},
+		2={mark=diamond*, pr-color2c, fill=pr-color2c!50, mark options={fill opacity=0.50}},
+		3={mark=square*, pr-color2d, fill=pr-color2d!50, mark options={fill opacity=0.50}},
+		4={mark=pentagon*, pr-color2e, fill=pr-color2e!50, mark options={fill opacity=0.50}},
+		5={mark=halfcircle*, pr-color2f, fill=pr-color2f!50, mark options={fill opacity=0.50}},
+		6={mark=halfdiamond*, pr-color2g, fill=pr-color2g!50, mark options={fill opacity=0.50}},
+		7={mark=halfsquare*, pr-color2f, fill=pr-color2f!50, mark options={fill opacity=0.50}},
+		8={mark=halfsquare right*, pr-color2e, fill=pr-color2e!50, mark options={fill opacity=0.50}},   
+		9={mark=halfsquare left*, pr-color2d, fill=pr-color2d!50, mark options={fill opacity=0.50}},    
+		10={mark=asterisk, pr-color2c, fill=pr-color2c!50, mark options={fill opacity=0.50}},  
+		11={mark=diamond*, pr-color2b, fill=pr-color2b!50, mark options={fill opacity=0.50}},   
+		12={mark=triangle*, pr-color2a, fill=pr-color2a!50, mark options={fill opacity=0.50}},   
+		13={mark=*, pr-color2b, fill=pr-color2b!50, mark options={fill opacity=0.50}}
+	}},   
+	pr-scatter-opacity-alpha/.style={	 
+		only marks,
+		scatter src	=explicit symbolic,
+		scatter/classes	= {
+			a={mark=*,   pr-color2a, fill=pr-color2a!50, mark options={fill opacity=0.50}},   
+			b={mark=triangle*, pr-color2b, fill=pr-color2b!50, mark options={fill opacity=0.50}},
+			c={mark=diamond*, pr-color2c, fill=pr-color2c!50, mark options={fill opacity=0.50}},
+			d={mark=square*, pr-color2d, fill=pr-color2d!50, mark options={fill opacity=0.50}},
+			e={mark=pentagon*, pr-color2e, fill=pr-color2e!50, mark options={fill opacity=0.50}},
+			f={mark=halfcircle*, pr-color2f, fill=pr-color2f!50, mark options={fill opacity=0.50}},
+			g={mark=halfdiamond*, pr-color2g, fill=pr-color2g!50, mark options={fill opacity=0.50}},
+			h={mark=halfsquare*, pr-color2f, fill=pr-color2f!50, mark options={fill opacity=0.50}},
+			i={mark=halfsquare right*, pr-color2e, fill=pr-color2e!50, mark options={fill opacity=0.50}},   
+			j={mark=halfsquare left*, pr-color2d, fill=pr-color2d!50, mark options={fill opacity=0.50}},     
+			%k={mark=prstar, pr-color2c, fill=pr-color2c!50, mark options={fill opacity=0.50}}, 
+			k={mark=asterisk, pr-color2c, fill=pr-color2c!50, mark options={fill opacity=0.50}},  
+			l={mark=diamond*, pr-color2b, fill=pr-color2b!50, mark options={fill opacity=0.50}},   
+			m={mark=triangle*, pr-color2a, fill=pr-color2a!50, mark options={fill opacity=0.50}},   
+			n={mark=*, pr-color2b, fill=pr-color2b!50, mark options={fill opacity=0.50}}
+	}},
+	pr-scatter-analogous-alpha/.style={	 
+		only marks,
+		scatter src	=explicit symbolic,
+		scatter/classes	= {
+			a={mark=*,   pr-color3a, fill=pr-color3a!50, mark options={fill opacity=0.50}},   
+			b={mark=triangle*, pr-color3b, fill=pr-color3b!50, mark options={fill opacity=0.50}},
+			c={mark=diamond*, pr-color3c, fill=pr-color3c!50, mark options={fill opacity=0.50}},
+			d={mark=square*, pr-color3d, fill=pr-color3d!50, mark options={fill opacity=0.50}},
+			e={mark=pentagon*, pr-color3e, fill=pr-color3e!50, mark options={fill opacity=0.50}},
+			f={mark=halfcircle*, pr-color3f, fill=pr-color3f!50, mark options={fill opacity=0.50}},
+			g={mark=halfdiamond*, pr-color3g, fill=pr-color3g!50, mark options={fill opacity=0.50}},
+			h={mark=halfsquare*, pr-color3f, fill=pr-color3f!50, mark options={fill opacity=0.50}},
+			i={mark=halfsquare right*, pr-color3e, fill=pr-color3e!50, mark options={fill opacity=0.50}},   
+			j={mark=halfsquare left*, pr-color3d, fill=pr-color3d!50, mark options={fill opacity=0.50}},     
+			k={mark=asterisk, pr-color3c, fill=pr-color3c!50, mark options={fill opacity=0.50}},  
+			l={mark=diamond*, pr-color3b, fill=pr-color3b!50, mark options={fill opacity=0.50}},   
+			m={mark=triangle*, pr-color3a, fill=pr-color3a!50, mark options={fill opacity=0.50}},   
+			n={mark=*, pr-color3b, fill=pr-color3b!50, mark options={fill opacity=0.50}}
+	}},
+	pr-scatter-analogous/.style={	 
+	only marks,
+	scatter src	=explicit symbolic,
+	scatter/classes	= {
+		0={mark=*,   pr-color3a, fill=pr-color3a!50, mark options={fill opacity=0.50}},   
+		1={mark=triangle*, pr-color3b, fill=pr-color3b!50, mark options={fill opacity=0.50}},
+		2={mark=diamond*, pr-color3c, fill=pr-color3c!50, mark options={fill opacity=0.50}},
+		3={mark=square*, pr-color3d, fill=pr-color3d!50, mark options={fill opacity=0.50}},
+		4={mark=pentagon*, pr-color3e, fill=pr-color3e!50, mark options={fill opacity=0.50}},
+		5={mark=halfcircle*, pr-color3f, fill=pr-color3f!50, mark options={fill opacity=0.50}},
+		6={mark=halfdiamond*, pr-color3g, fill=pr-color3g!50, mark options={fill opacity=0.50}},
+		7={mark=halfsquare*, pr-color3f, fill=pr-color3f!50, mark options={fill opacity=0.50}},
+		8={mark=halfsquare right*, pr-color3e, fill=pr-color3e!50, mark options={fill opacity=0.50}},   
+		9={mark=halfsquare left*, pr-color3d, fill=pr-color3d!50, mark options={fill opacity=0.50}},     
+		10={mark=asterisk, pr-color3c, fill=pr-color3c!50, mark options={fill opacity=0.50}},  
+		11={mark=diamond*, pr-color3b, fill=pr-color3b!50, mark options={fill opacity=0.50}},   
+		12={mark=triangle*, pr-color3a, fill=pr-color3a!50, mark options={fill opacity=0.50}},   
+		13={mark=*, pr-color3b, fill=pr-color3b!50, mark options={fill opacity=0.50}}
+	}}, 
+	pr-scatter-complementary-alpha/.style={	 
+		only marks,
+		scatter src	=explicit symbolic,
+		scatter/classes	= {
+			a={mark=*,   pr-color1a, fill=pr-color1a!50, mark options={fill opacity=0.50}},   
+			b={mark=triangle*, pr-color1b, fill=pr-color1b!50, mark options={fill opacity=0.50}},
+			c={mark=diamond*, pr-color1c, fill=pr-color1c!50, mark options={fill opacity=0.50}},
+			d={mark=square*, pr-color1d, fill=pr-color1d!50, mark options={fill opacity=0.50}},
+			e={mark=pentagon*, pr-color1e, fill=pr-color1e!50, mark options={fill opacity=0.50}},
+			f={mark=halfcircle*, pr-color1f, fill=pr-color1f!50, mark options={fill opacity=0.50}},
+			g={mark=halfdiamond*, pr-color1g, fill=pr-color1g!50, mark options={fill opacity=0.50}},
+			h={mark=halfsquare*, pr-color1h, fill=pr-color1h!50, mark options={fill opacity=0.50}},
+			i={mark=halfsquare right*, pr-color1i, fill=pr-color1i!50, mark options={fill opacity=0.50}},   
+			j={mark=halfsquare left*, pr-color1j, fill=pr-color1j!50, mark options={fill opacity=0.50}},     
+			k={mark=asterisk, pr-color1k, fill=pr-color1k!50, mark options={fill opacity=0.50}},  
+			l={mark=diamond*, pr-color1a, fill=pr-color1a!50, mark options={fill opacity=0.50}},   
+			m={mark=triangle*, pr-color1b, fill=pr-color1b!50, mark options={fill opacity=0.50}},   
+			n={mark=*, pr-color1c, fill=pr-color1c!50, ,mark options={fill opacity=0.50}}
+	}},
+	pr-scatter-complementary/.style={	 
+		only marks,
+		scatter src	=explicit symbolic,
+		scatter/classes	= {
+			0={mark=*,   pr-color1a, fill=pr-color1a!50, mark options={fill opacity=0.50}},   
+			1={mark=triangle*, pr-color1b, fill=pr-color1b!50, mark options={fill opacity=0.50}},
+			2={mark=diamond*, pr-color1c, fill=pr-color1c!50, mark options={fill opacity=0.50}},
+			3={mark=square*, pr-color1d, fill=pr-color1d!50, mark options={fill opacity=0.50}},
+			4={mark=pentagon*, pr-color1e, fill=pr-color1e!50, mark options={fill opacity=0.50}},
+			5={mark=halfcircle*, pr-color1f, fill=pr-color1f!50, mark options={fill opacity=0.50}},
+			6={mark=halfdiamond*, pr-color1g, fill=pr-color1g!50, mark options={fill opacity=0.50}},
+			7={mark=halfsquare*, pr-color1h, fill=pr-color1h!50, mark options={fill opacity=0.50}},
+			8={mark=halfsquare right*, pr-color1i, fill=pr-color1i!50, mark options={fill opacity=0.50}},   
+			9={mark=halfsquare left*, pr-color1j, fill=pr-color1j!50, mark options={fill opacity=0.50}},     
+			10={mark=asterisk, pr-color1k, fill=pr-color1k!50, mark options={fill opacity=0.50}},  
+			11={mark=diamond*, pr-color1a, fill=pr-color1a!50, mark options={fill opacity=0.50}},   
+			12={mark=triangle*, pr-color1b, fill=pr-color1b!50, mark options={fill opacity=0.50}},   
+			13={mark=*, pr-color1c, fill=pr-color1c!50, ,mark options={fill opacity=0.50}}
+			}},
+		pr-scatter-marks/.style={	 
+		only marks,
+		scatter src	=explicit symbolic,
+		scatter/classes	= {
+		0={mark=*,pr-color1a},   
+		1={mark=*, pr-color1b},
+		2={mark=*, pr-color1c},
+		3={mark=*, pr-color1d},
+		4={mark=*, pr-color1e},
+		5={mark=*, pr-color1f},
+		6={mark=*, pr-color1g},
+		7={mark=*, pr-color1f},
+		8={mark=*, pr-color1e},   
+		9={mark=*, pr-color1d},   
+		10={mark=*, pr-color1c},   
+		11={mark=*, pr-color1b},   
+		12={mark=*, pr-color1a},   
+		13={mark=*, pr-color1b},  
+		14={mark=*, pr-color1c},  
+		15={mark=*, pr-color1d},  
+		16={mark=*, pr-color1e},  
+		17={mark=*, pr-color1f},  
+		18={mark=*, pr-color1g},   
+		19={mark=*, pr-color1f} 
+	}}, 	
+}
+
+ 
+ % TODO styles and paths
+% -----------------------------------------------------------------------------
+% Styles
+% -----------------------------------------------------------------------------
+
+%% ellipses
+ \tikzset{prellipse/.style={
+ 		fill=pr-color3a,
+ 		line width=1.2pt, fill opacity=.5, ellipse, 
+ 		inner xsep=0.5cm,inner ysep=0.75cm  
+ }, 
+prellipse white/.style={
+	fill=pr-color2a,
+	draw=white, line width=1.2pt, fill opacity=.5, ellipse, 
+	inner xsep=0.5cm,inner ysep=0.75cm  
+	}
+}
+ 
+%% star
+\pgfdeclareplotmark{prstar}{
+ 	\node[star,star point ratio=2.25,minimum size=6pt,draw=black,
+ 	inner sep=0pt,solid] {};
+ } 
+ 
+%% addplot options
+%usg \addplot+ [option]	
+\pgfplotsset{pr-confline/.style={forget plot, fill=none, draw=none, smooth}}   
+
+\pgfplotsset{pr-scatter-meta/.style={
+		scatter, mark size=1.1pt, point meta=explicit,
+		scatter/use mapped color={draw=mapped color!80, fill=mapped color!80}, }}
+%usg with pretty heatmatrix
+\pgfplotsset{pr-matrix/.style={matrix plot,  point meta=explicit}}
+
+%usg \addplot3+ [option] 
+\pgfplotsset{pr-surf/.style={surf, colormap={prmap1}{rgb255=(251,191,36) rgb255=(22,161,74) rgb255=(3,105,161) rgb255=(131,24,76)}, opacity=0.3, shader = flat}}
+\pgfplotsset{pr-surf red/.style={surf, colormap/RdBu-11, shader = flat}} 
+\pgfplotsset{pr-contour/.style={mesh, patch type=line, thick, colormap/Reds}}
+
+% remove
+%\tikzstyle{example label}  %from Slope
+%= [sloped, above, font = \small, inner sep = 2pt, text = black, pos = 0.8]
+%\tikzstyle{example thresh}  %from Cute
+%= [gray,thin,sharp plot,dashed]  
+
+
+\pgfplotsset{addpretty surf draw/.style={thin,scatter, no marks, draw=charcoal, colormap/hot2, shader=faceted}}  
+
+
+% TODO colors
+% -----------------------------------------------------------------------------
+% Colors
+% -----------------------------------------------------------------------------
+%% Selected EDA colors 
+\definecolor{b1}{RGB}{19,75,135}
+\definecolor{b2}{RGB}{50,125,184}
+\definecolor{b3}{RGB}{107,172,209}
+\definecolor{b4}{RGB}{228,238,244}
+\definecolor{b5}{RGB}{196,80,60}
+\definecolor{b6}{RGB}{140,12,37}  
+\definecolor{c1}{RGB}{63,87,101}
+\definecolor{c2}{RGB}{119,196,211}
+\definecolor{c3}{RGB}{255,83,13}  
+\definecolor{lilacgray}{RGB}{152,150,164}   
+\definecolor{iceblue}{RGB}{128, 182, 207} 
+\definecolor{niceblue}{RGB}{3, 79, 132}
+\definecolor{goldenpoppy}{rgb}{0.99, 0.76, 0.0}
+\definecolor{indigo(web)}{rgb}{0.29, 0.0, 0.51}
+\definecolor{internationalorange}{rgb}{1.0, 0.31, 0.0}
+\definecolor{green(ryb)}{rgb}{0.4, 0.69, 0.2}
+\definecolor{richelectricblue}{rgb}{0.03, 0.57, 0.82}
+\definecolor{crimson}{rgb}{0.86, 0.08, 0.24}
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+\definecolor{green(html/cssgreen)}{rgb}{0.0, 0.5, 0.0}
+\definecolor{dollarbill}{rgb}{0.52, 0.73, 0.4}
+\definecolor{goldenrod}{rgb}{0.85, 0.65, 0.13}
+\definecolor{fawn}{rgb}{0.9, 0.67, 0.44}
+\definecolor{frenchblue}{rgb}{0.0, 0.45, 0.73}
+\definecolor{gainsboro}{rgb}{0.86, 0.86, 0.86}
+\definecolor{darkmagenta}{rgb}{0.55, 0.0, 0.55}
+\definecolor{lightcornflowerblue}{rgb}{0.6, 0.81, 0.93}
+\definecolor{lighttaupe}{rgb}{0.7, 0.55, 0.43}
+\definecolor{tyrianpurple}{rgb}{0.4, 0.01, 0.24}
+\definecolor{yellow-green}{rgb}{0.6, 0.8, 0.2}
+\definecolor{yaleblue}{rgb}{0.06, 0.3, 0.57}
+\definecolor{urobilin}{rgb}{0.88, 0.68, 0.13}
+\definecolor{goldenbrown}{rgb}{0.6, 0.4, 0.08}
+\colorlet{mambacolor1}{indigo(web)}
+\colorlet{mambacolor2}{internationalorange}
+\colorlet{mambacolor3}{green(ryb)}
+\colorlet{mambacolor4}{richelectricblue}
+\colorlet{mambacolor5}{goldenpoppy}
+\colorlet{mambacolor6}{crimson}
+\colorlet{mambacolor7}{airforceblue}
+\colorlet{mambacolor8}{goldenbrown}
+
+% tailwindcss
+\definecolor{tcss-slate05}{HTML}{f8fafc} 
+\definecolor{tcss-slate1}{HTML}{f1f5f9} 
+\definecolor{tcss-slate2}{HTML}{e2e8f0}
+\definecolor{tcss-slate3}{HTML}{cbd5e1} 
+\definecolor{tcss-slate4}{HTML}{94a3b8} 
+\definecolor{tcss-slate5}{HTML}{64748b}
+\definecolor{tcss-slate6}{HTML}{475569} 
+\definecolor{tcss-slate7}{HTML}{334155}
+\definecolor{tcss-slate8}{HTML}{1e293b} 
+\definecolor{tcss-slate9}{HTML}{0f172a}  
+
+\definecolor{tcss-gray5}{HTML}{6b7280}   
+\definecolor{tcss-gray4}{HTML}{99a1af}   
+\definecolor{tcss-gray3}{HTML}{cbd5e1}   
+\definecolor{tcss-gray2}{HTML}{e2e8f0}     
+\definecolor{tcss-gray1}{HTML}{f3f4f6}   
+\definecolor{tcss-gray6}{HTML}{4b5563}   
+\definecolor{tcss-gray7}{HTML}{374151}   
+\definecolor{tcss-gray8}{HTML}{1f2937}   
+\definecolor{tcss-gray9}{HTML}{111827}    
+ 
+
+% the main colors
+\definecolor{pr-color-redorange}{HTML}{e15c4e}
+\definecolor{pr-color-red}{HTML}{D26F5F}%{HTML}{de425b}
+\definecolor{pr-color-red}{HTML}{e44a52} 
+\definecolor{pr-color-orange}{HTML}{eb794e}
+\definecolor{pr-color-sun}{HTML}{ffa600}
+\definecolor{pr-color-gold}{HTML}{D69A35}
+\colorlet{pr-color-golden}{goldenrod}
+\definecolor{pr-color-orangeyellow}{HTML}{f9cb6e}
+\definecolor{pr-color-yellow}{HTML}{ffbc15} %ffd846
+\colorlet{pr-color-yellowgreen}{yellow-green} 
+\definecolor{pr-color-green}{HTML}{84af2c}
+\definecolor{pr-color-lgreen}{HTML}{86ba71}
+\definecolor{pr-color-lightgreen}{HTML}{87ba70}
+\definecolor{pr-color-greenblue}{HTML}{007a86} 
+\definecolor{pr-color-lblue}{HTML}{8ecae6} %{b3d3ed} 
+\definecolor{pr-color-blue}{HTML}{219ebc} %{1d89ab} 
+\definecolor{pr-color-brown}{HTML}{786447} 
+\colorlet{pr-color-dblue}{yaleblue} %{00a8ae} 
+\definecolor{pr-color-purp}{HTML}{8e4988}
+\definecolor{pr-color-pur}{HTML}{ab2a69}
+\definecolor{pr-color-vio}{RGB}{101,66,134}%{86266c}
+\definecolor{pr-color-violet}{HTML}{7C4893}
+
+\definecolor{pr-color-teal}{HTML}{005d80} 
+\definecolor{pr-color-purple}{HTML}{680c56} 
+
+\colorlet{pr-color-gray1}{tcss-gray1} 
+\colorlet{pr-color-gray2}{tcss-gray2} 
+\colorlet{pr-color-gray3}{tcss-gray3} 
+\colorlet{pr-color-gray4}{tcss-gray4} 
+\colorlet{pr-color-gray5}{tcss-gray5} 
+\colorlet{pr-color-bg}{tcss-gray3}  
+
+% some fitting colors
+% lime-turquoise-gray
+\definecolor{pr-color-turqoise}{HTML}{61AAC0} 
+\definecolor{pr-color-lime}{HTML}{D8DE3F} 
+\definecolor{pr-color-gray}{HTML}{616161} 
+
+% complementary
+\colorlet{pr-color1a}{pr-color-green}
+\colorlet{pr-color1b}{pr-color-blue}
+\colorlet{pr-color1c}{pr-color-violet}
+\colorlet{pr-color1d}{pr-color-gold}
+\colorlet{pr-color1e}{pr-color-lblue}  
+\colorlet{pr-color1f}{pr-color-red} 
+\colorlet{pr-color1g}{pr-color-lgreen}   
+\colorlet{pr-color1h}{pr-color-sun}
+\colorlet{pr-color1i}{pr-color-teal} 
+\colorlet{pr-color1j}{pr-color-brown} 
+\colorlet{pr-color1k}{pr-color-lime}
+\colorlet{pr-color1l}{pr-color-orange} 
+\colorlet{pr-color1m}{yellow-green}   
+\colorlet{pr-color1n}{pr-color-purp} 
+\colorlet{pr-color1o}{pr-color-turqoise} 
+\colorlet{pr-color1p}{pr-color-orangeyellow}%{pr-color-greenblue} 
+
+% Blue to light blue
+\definecolor{pr-color0a}{HTML}{004c6d} 
+\definecolor{pr-color0b}{HTML}{326585} 
+\definecolor{pr-color0c}{HTML}{537f9e} 
+\definecolor{pr-color0d}{HTML}{739ab8} 
+\definecolor{pr-color0e}{HTML}{93b6d2}
+\definecolor{pr-color0f}{HTML}{b3d3ed}
+\definecolor{pr-color0g}{HTML}{b3d3ed} %todo
+\definecolor{pr-color0h}{HTML}{b3d3ed} %todo
+
+% blue analogous
+\definecolor{pr-color2a}{HTML}{0e4d68}
+\definecolor{pr-color2b}{HTML}{006579}
+\definecolor{pr-color2c}{HTML}{007d76}
+\definecolor{pr-color2d}{HTML}{00925e}
+\definecolor{pr-color2e}{HTML}{5ba238}
+\definecolor{pr-color2f}{HTML}{abaa00}
+\definecolor{pr-color2g}{HTML}{ffa600} 
+\definecolor{pr-color2h}{HTML}{ffa600} %todo
+
+% red analogous
+\definecolor{pr-color3a}{HTML}{003f5c}
+\definecolor{pr-color3b}{HTML}{374c80}
+\definecolor{pr-color3c}{HTML}{7a5195}
+\definecolor{pr-color3d}{HTML}{bc5090}
+\definecolor{pr-color3e}{HTML}{ef5675}
+\definecolor{pr-color3f}{HTML}{ff764a}
+\definecolor{pr-color3g}{HTML}{ffa600} 
+\definecolor{pr-color3h}{HTML}{ffa600} %todo
+  
+% -----------------------------------------------------------------------------
+% Legend
+% -----------------------------------------------------------------------------
+
+% for line plots with confidence regions
+\pgfplotsset{
+	/pgfplots/pretty fill legend/.style={%
+		area legend,
+		/pgfplots/legend image code/.code={%
+			\fill[##1,fill opacity=.25, draw=none] (0cm,-0.1cm) rectangle (0.3cm,0.1cm);
+			\draw[mark repeat=2,mark phase=2,##1] plot coordinates {
+				(0cm,0cm)
+				(0.1cm,0cm)
+				(0.3cm,0cm)
+			};
+		}%
+	},
+	/pgfplots/pretty marks legend/.style={% 
+		legend image code/.code={%
+			\draw[mark repeat=2,mark phase=2,#1] 
+			plot coordinates { (0cm,0cm) (0.15cm,0cm) (0.5cm,0cm) };%
+		}
+},
+}
+
+
+
+% for box plots 
+\pgfplotsset{
+	/pgfplots/pretty box legend/.style={%
+		area legend,
+		/pgfplots/legend image code/.code={%
+			\fill[##1, fill opacity=0.8] %draw=none
+			(0cm,-0.1cm) rectangle (0.3cm,0.1cm); 
+		}%
+	},
+}
+
+% to add extra entries
+\pgfplotsset{
+	legend image with text/.style={
+		legend image code/.code={%
+			\node[anchor=center] at (0cm,0cm) {#1};
+		}
+	},
+}
+% TODO  markers here
+% -----------------------------------------------------------------------------
+% Markers
+% -----------------------------------------------------------------------------
+\pgfdeclareplotmark{white*}{
+	\begin{pgfscope}
+	\color{white}
+	\pgfpathcircle{\pgfpointorigin}{4pt}\pgfusepath{fill}
+	\end{pgfscope}
+	\begin{pgfscope}
+		\pgfpathcircle{\pgfpointorigin}{2pt}\pgfusepath{fill}
+	\end{pgfscope}
+} % usage in addplot options: [mark=white*]
+\pgfplotsset{
+	white-*/.style={%
+	 mark=*, mark size=3pt, very thick, mark options={draw=white}
+	},% 
+	white-triangle*/.style={%
+	mark=triangle*, mark size=4pt, very thick, mark options={draw=white}
+	},% 
+	white-diamond*/.style={%
+	mark=diamond*, mark size=4pt, very thick, mark options={draw=white}
+	},%
+	white-square*/.style={%
+	mark=square*, mark size=4pt, very thick, mark options={draw=white}
+	},%
+	white-pentagon*/.style={%
+	mark=pentagon*, mark size=4pt, very thick, mark options={draw=white}
+	},% 
+	white-halfcircle*/.style={%
+		mark=halfcircle*, mark size=4pt, very thick, mark options={draw=white}
+	},%
+	white-halfsquare*/.style={%
+	mark=halfsquare*, mark size=4pt, very thick, mark options={draw=white}
+	},% 
+	white-halfdiamond*/.style={%
+	mark=halfdiamond*, mark size=4pt, very thick, mark options={draw=white}
+	},%
+	white-halfpentagon*/.style={%
+	mark=halfpentagon*, mark size=4pt, very thick, mark options={draw=white}
+	},%
+}
+ 
+
+% TODO cycle lists here
+% -----------------------------------------------------------------------------
+% Color palettes
+% -----------------------------------------------------------------------------
+
+%% Settings 
+\pgfplotsset{pr-conf-opac/.style={ % opacity for all confline plots
+		opacity=0.2
+	},  
+}
+\pgfplotsset{pr-marks-base/.style={ 
+		mark size=2pt,
+		mark options={fill opacity=1,line width=.8}
+	},  
+}
+\pgfplotsset{pr-white-marks-base/.style={ % common attrs for line w marks - maybe move to axis environment (but for all axes?)
+	mark size=1pt,
+	mark options={fill opacity=1,line width=.8},
+	pretty marks legend % in legend, white surroundings of mark look weird
+},  
+}
+
+
+%% Line
+\pgfplotscreateplotcyclelist{pr-colors}{
+	{pr-color1a}, {pr-color1b}, {pr-color1c}, {pr-color1d}, {pr-color1e},
+	{pr-color1f}, {pr-color1g},  {pr-color1h}, {pr-color1i}, {pr-color1j}, 
+	{pr-color1k}, {pr-color1l}, {pr-color1m}, {pr-color1n}, {pr-color1o}, {pr-color1p},
+}
+\pgfplotscreateplotcyclelist{pr-colors0}{
+	{pr-color1p}, {pr-color1o}, {pr-color1n}, {pr-color1m}, {pr-color1l}, {pr-color1k}, {pr-color1j},
+	{pr-color1i}, {pr-color1h},  {pr-color1g}, {pr-color1f}, {pr-color1e}, 
+	{pr-color1d}, {pr-color1c}, {pr-color1b}, {pr-color1a},
+} 
+\pgfplotscreateplotcyclelist{pr-colors1}{
+	{pr-color0a}, {pr-color0b}, {pr-color0c}, {pr-color0d}, 
+	{pr-color0e}, {pr-color0f}, {pr-color0g}, {pr-color0h}, 
+}
+
+\pgfplotscreateplotcyclelist{pr-colors2}{
+	{pr-color2a}, {pr-color2b}, {pr-color2c}, {pr-color2d}, 
+	{pr-color2e}, {pr-color2f}, {pr-color2g}, {pr-color2h}, 
+}
+\pgfplotscreateplotcyclelist{pr-colors3}{
+	{pr-color3a}, {pr-color3b}, {pr-color3c}, {pr-color3d}, 
+	{pr-color3e}, {pr-color3f}, {pr-color3g}, {pr-color3h}, 
+}
+
+\pgfplotscreateplotcyclelist{pr-linestyle}{
+	{pr-color0a, solid}, {pr-color0b, densely dashdotted}, {pr-color0c, densely dotted},
+	{pr-color0d, densely dashed}, {pr-color0e, dashdotted}, {pr-color0f, dashed},{pr-color0g, dotted}, {pr-color0g!80, loosely dashdotted}, {pr-color0g!60, loosely dashed},  {pr-color0g!40, loosely dotted}, 
+}
+\pgfplotscreateplotcyclelist{mamba}{%
+	{mambacolor1}, {mambacolor2}, {mambacolor3}, {mambacolor4}, {mambacolor5}, {mambacolor6}, {mambacolor7}, {mambacolor8}
+}
+\pgfplotscreateplotcyclelist{slate}{%
+ 	{tcss-slate05}, {tcss-slate1}, {tcss-slate2}, {tcss-slate3}, {tcss-slate4}, 
+ 	{tcss-slate5}, {tcss-slate6}, {tcss-slate7}, {tcss-slate8}, {tcss-slate9}, 
+ }
+
+%% Confline
+\pgfplotscreateplotcyclelist{pr-colors-conf}{
+	{pr-color1a},{pr-color1a, pr-conf-opac}, {pr-color1b},{pr-color1b, pr-conf-opac}, {pr-color1c},{pr-color1c, pr-conf-opac},
+	{pr-color1d},{pr-color1d, pr-conf-opac}, {pr-color1e},{pr-color1e, pr-conf-opac}, {pr-color1f},{pr-color1f, pr-conf-opac},
+	{pr-color1g},{pr-color1g, pr-conf-opac}, {pr-color1h},{pr-color1h, pr-conf-opac}, {pr-color1i},{pr-color1i, pr-conf-opac},
+	{pr-color1j},{pr-color1j, pr-conf-opac}, {pr-color1k},{pr-color1k, pr-conf-opac}, {pr-color1l},{pr-color1l, pr-conf-opac},
+	{pr-color1m},{pr-color1m, pr-conf-opac}, {pr-color1n},{pr-color1n, pr-conf-opac},
+}
+ 
+\pgfplotscreateplotcyclelist{pr-colors-conf1}{
+	{pr-color0a},{pr-color0a, pr-conf-opac}, {pr-color0b},{pr-color0b, pr-conf-opac}, {pr-color0c},{pr-color0c, pr-conf-opac},
+	{pr-color0d},{pr-color0d, pr-conf-opac}, {pr-color0e},{pr-color0e, pr-conf-opac}, {pr-color0f},{pr-color0f, pr-conf-opac},
+	{pr-color0g},{pr-color0g, pr-conf-opac}, {pr-color0h},{pr-color0h, pr-conf-opac}, {pr-color0i},{pr-color0i, pr-conf-opac},
+	{pr-color0j},{pr-color0j, pr-conf-opac}, {pr-color0k},{pr-color0k, pr-conf-opac}, {pr-color0l},{pr-color0l, pr-conf-opac},
+	{pr-color0m},{pr-color0m, pr-conf-opac}, {pr-color0n},{pr-color0n, pr-conf-opac},
+}
+\pgfplotscreateplotcyclelist{pr-colors-conf0}{
+	{pr-color1a},{pr-color1a, pr-conf-opac}, {pr-color1b},{pr-color1b, pr-conf-opac}, {pr-color1c},{pr-color1c, pr-conf-opac},
+	{pr-color1d},{pr-color1d, pr-conf-opac}, {pr-color1e},{pr-color1e, pr-conf-opac}, {pr-color1f},{pr-color1f, pr-conf-opac},
+	{pr-color1g},{pr-color1g, pr-conf-opac}, {pr-color1h},{pr-color1h, pr-conf-opac}, {pr-color1i},{pr-color1i, pr-conf-opac},
+	{pr-color1j},{pr-color1j, pr-conf-opac}, {pr-color1k},{pr-color1k, pr-conf-opac}, {pr-color1l},{pr-color1l, pr-conf-opac},
+	{pr-color1m},{pr-color1m, pr-conf-opac}, {pr-color1n},{pr-color1n, pr-conf-opac},
+}
+\pgfplotscreateplotcyclelist{pr-colors-conf2}{
+	{pr-color2a},{pr-color2a, pr-conf-opac}, {pr-color2b},{pr-color2b, pr-conf-opac}, {pr-color2c},{pr-color2c, pr-conf-opac},
+	{pr-color2d},{pr-color2d, pr-conf-opac}, {pr-color2e},{pr-color2e, pr-conf-opac}, {pr-color2f},{pr-color2f, pr-conf-opac},
+	{pr-color2g},{pr-color2g, pr-conf-opac}, {pr-color2h},{pr-color2h, pr-conf-opac}, {pr-color2i},{pr-color2i, pr-conf-opac},
+	{pr-color2j},{pr-color2j, pr-conf-opac}, {pr-color2k},{pr-color2k, pr-conf-opac}, {pr-color2l},{pr-color2l, pr-conf-opac},
+	{pr-color2m},{pr-color2m, pr-conf-opac}, {pr-color2n},{pr-color2n, pr-conf-opac},
+}
+
+\pgfplotscreateplotcyclelist{pr-colors-conf3}{
+	{pr-color3a},{pr-color3a, pr-conf-opac}, {pr-color3b},{pr-color3b, pr-conf-opac}, {pr-color3c},{pr-color3c, pr-conf-opac},
+	{pr-color3d},{pr-color3d, pr-conf-opac}, {pr-color3e},{pr-color3e, pr-conf-opac}, {pr-color3f},{pr-color3f, pr-conf-opac},
+	{pr-color3g},{pr-color3g, pr-conf-opac}, {pr-color3h},{pr-color3h, pr-conf-opac}, {pr-color3i},{pr-color3i, pr-conf-opac},
+	{pr-color3j},{pr-color3j, pr-conf-opac}, {pr-color3k},{pr-color3k, pr-conf-opac}, {pr-color3l},{pr-color3l, pr-conf-opac},
+	{pr-color3m},{pr-color3m, pr-conf-opac}, {pr-color3n},{pr-color3n, pr-conf-opac},
+}
+%% Line w marks 
+\pgfplotscreateplotcyclelist{pr-marks}{
+	{pr-marks-base, pr-color1a, mark=*},  
+	{pr-marks-base, pr-color1b, mark=triangle*},    
+	{pr-marks-base, pr-color1c, mark=diamond*},    
+	{pr-marks-base, pr-color1d, mark=square*},    
+	{pr-marks-base, pr-color1e, mark=pentagon*},     
+	{pr-marks-base, pr-color1f, mark=|},     
+	{pr-marks-base, pr-color1g, mark=x},        
+	{pr-marks-base, pr-color1h, mark=star},        
+	{pr-marks-base, pr-color1i, mark=asterisk},        
+	{pr-marks-base, pr-color1j, mark=Mercedes star},     
+	{pr-marks-base, pr-color1k, mark=Mercedes star flipped},  
+	{pr-marks-base, pr-color1l, mark=10-pointed star},      
+	}
+\pgfplotscreateplotcyclelist{pr-white-marks}{
+	{pr-white-marks-base, pr-color1a, white-*},  
+	{pr-white-marks-base, pr-color1b, white-triangle*},  
+	{pr-white-marks-base, pr-color1c, white-diamond*},  
+	{pr-white-marks-base, pr-color1d, white-square*},  
+	{pr-white-marks-base, pr-color1e, white-halfcircle*},      
+	{pr-white-marks-base, pr-color1f, white-halfsquare*},  
+	{pr-white-marks-base, pr-color1g, white-halfdiamond*},  
+	{pr-white-marks-base, pr-color1h, white-halfpentagon*},   
+}
+\pgfplotscreateplotcyclelist{pr-marks2}{ % testing: line opacity to make it look in the background
+	{pr-marks-base, pr-color1a!30,mark=*,mark options={pr-color1a,fill=pr-color1a}},  
+	{pr-marks-base, pr-color1b!30,mark=triangle*,mark options={pr-color1b,fill=pr-color1b}},    
+	{pr-marks-base, pr-color1c!30,mark=diamond*,mark options={pr-color1c,fill=pr-color1c}},    
+	{pr-marks-base, pr-color1d!30,mark=square*,mark options={pr-color1d,fill=pr-color1d}},    
+	{pr-marks-base, pr-color1e!30,mark=pentagon*,mark options={pr-color1e,fill=pr-color1e}},     
+	{pr-marks-base, pr-color1f!30,mark=|,mark options={pr-color1f,fill=pr-color1f}},     
+	{pr-marks-base, pr-color1g!30,mark=x,mark options={pr-color1g,fill=pr-color1g}},        
+	{pr-marks-base, pr-color1h!30,mark=star,mark options={pr-color1h,fill=pr-color1h}},        
+	{pr-marks-base, pr-color1i!30,mark=asterisk,mark options={pr-color1i,fill=pr-color1i}},        
+	{pr-marks-base, pr-color1j!30,mark=Mercedes star,mark options={pr-color1j,fill=pr-color1j}},     
+	{pr-marks-base, pr-color1k!30,mark=Mercedes star flipped,mark options={pr-color1k,fill=pr-color1k}},  
+	{pr-marks-base, pr-color1l!30,mark=10-pointed star,mark options={pr-color1l,fill=pr-color1l}},      
+} 
+%% Confline w marks
+\pgfplotscreateplotcyclelist{pr-marks-conf}{
+	{pr-marks-base, pr-color1a,mark=*}, {pr-color1a, pr-conf-opac},
+	{pr-marks-base, pr-color1b,mark=triangle*}, {pr-color1b, pr-conf-opac},
+	{pr-marks-base, pr-color1c,mark=diamond*}, {pr-color1c, pr-conf-opac},
+	{pr-marks-base, pr-color1d,mark=square*}, {pr-color1d, pr-conf-opac},
+	{pr-marks-base, pr-color1e,mark=pentagon*}, {pr-color1e, pr-conf-opac},
+	{pr-marks-base, pr-color1f,mark=|}, {pr-color1f, pr-conf-opac},
+	{pr-marks-base, pr-color1g,mark=x}, {pr-color1g, pr-conf-opac},
+	{pr-marks-base, pr-color1h,mark=star}, {pr-color1h, pr-conf-opac},
+	{pr-marks-base, pr-color1i,mark=asterisk}, {pr-color1i, pr-conf-opac},
+	{pr-marks-base, pr-color1j,mark=Mercedes star}, {pr-color1j, pr-conf-opac},
+	{pr-marks-base, pr-color1k,mark=Mercedes star flipped}, {pr-color1k, pr-conf-opac},
+	{pr-marks-base, pr-color1,mark=10-pointed star}, {pr-color1k,pr-conf-opac},
+	{pr-marks-base, pr-color1i,mark=asterisk}, {pr-color1i, pr-conf-opac},
+	{pr-marks-base, pr-color1j,mark=Mercedes star}, {pr-color1j, pr-conf-opac},
+	{pr-marks-base, pr-color1k,mark=Mercedes star flipped}, {pr-color1j,pr-conf-opac},
+	{pr-marks-base, pr-color1l,mark=10-pointed star}, {pr-color1j, pr-conf-opac},
+} 
+
+%% Line with fill below
+\pgfplotscreateplotcyclelist{pr-fill}{
+	{pr-color1a},{fill=pr-color1a!30},
+	{pr-color1b},{fill=pr-color1b!30},
+	{pr-color1c},{fill=pr-color1c!30},
+	{pr-color1d},{fill=pr-color1d!30}, 
+	{pr-color1e},{fill=pr-color1e!30},  
+}
+\pgfdeclareverticalshading{pr-shade1a}{100bp}{
+	color(0bp)=(white); 
+	color(75bp)=(pr-color1a!10); 
+	color(100bp)=(pr-color1a!80)
+}
+\pgfdeclareverticalshading{pr-shade1b}{100bp}{
+	color(0bp)=(white); 
+	color(75bp)=(pr-color1b!10); 
+	color(100bp)=(pr-color1b!80)
+}
+\pgfdeclareverticalshading{pr-shade1c}{100bp}{
+	color(0bp)=(white); 
+	color(75bp)=(pr-color1c!10); 
+	color(100bp)=(pr-color1c!80)
+}
+\pgfdeclareverticalshading{pr-shade1d}{100bp}{
+	color(0bp)=(white); 
+	color(80bp)=(pr-color1d!10); 
+	color(100bp)=(pr-color1d!80)
+}
+\pgfdeclareverticalshading{pr-shade1e}{100bp}{
+	color(0bp)=(white); 
+	color(80bp)=(pr-color1e!10); 
+	color(100bp)=(pr-color1e!80)
+}
+\pgfdeclareverticalshading{pr-shade1f}{100bp}{
+	color(0bp)=(white); 
+	color(80bp)=(pr-color1f!10); 
+	color(100bp)=(pr-color1f!80)
+}
+\pgfplotscreateplotcyclelist{pr-shade}{
+	{pr-color1a},{shading=pr-shade1a, draw=none},
+	{pr-color1b},{shading=pr-shade1b, draw=none},
+	{pr-color1c},{shading=pr-shade1c, draw=none}, 
+	{pr-color1d},{shading=pr-shade1d, draw=none}, 
+	{pr-color1e},{shading=pr-shade1e, draw=none}, 
+	{pr-color1f},{shading=pr-shade1f, draw=none}, 
+}
+
+\pgfplotscreateplotcyclelist{pr-box}{%
+	{pr-color1a, fill=pr-color1a!40},
+	{pr-color1b, fill=pr-color1b!40},
+	{pr-color1c, fill=pr-color1c!40},
+	{pr-color1d, fill=pr-color1d!40},
+	{pr-color1e, fill=pr-color1e!40},
+	{pr-color1f, fill=pr-color1f!40},
+	{pr-color1g, fill=pr-color1g!40}, 
+	{pr-color1h, fill=pr-color1h!40},
+	{pr-color1i, fill=pr-color1i!40}, 
+	{pr-color1j, fill=pr-color1j!40}, 
+	{pr-color1k, fill=pr-color1k!40},
+	{pr-color1l, fill=pr-color1l!40}
+} 
+ 
+\pgfplotscreateplotcyclelist{pr-bar}{%
+	{pr-color1a, fill=pr-color1a!60},
+	{pr-color1b, fill=pr-color1b!60},
+	{pr-color1c, fill=pr-color1c!60},
+	{pr-color1d, fill=pr-color1d!60},
+	{pr-color1e, fill=pr-color1e!60},
+	{pr-color1f, fill=pr-color1f!60},
+	{pr-color1g, fill=pr-color1g!60}, 
+	{pr-color1h, fill=pr-color1h!60},
+	{pr-color1i, fill=pr-color1i!60}, 
+	{pr-color1j, fill=pr-color1j!60}, 
+	{pr-color1k, fill=pr-color1k!60},
+	{pr-color1l, fill=pr-color1l!60}, 
+} 
+\pgfplotscreateplotcyclelist{pr-bar-fill}{%
+	{pr-color1a!80, fill=pr-color1a!80},
+	{pr-color1b, fill=pr-color1b},
+	{pr-color1c, fill=pr-color1c},
+	{pr-color1d, fill=pr-color1d},
+	{pr-color1e, fill=pr-color1e},
+	{pr-color1f, fill=pr-color1f},
+	{pr-color1g, fill=pr-color1g},
+	{pr-color1h, fill=pr-color1h},
+	{pr-color1i, fill=pr-color1i},
+	{pr-color1j, fill=pr-color1j},
+	{pr-color1k, fill=pr-color1k},
+	{pr-color1l, fill=pr-color1l},
+}  
+% pr bar conf
+\pgfplotscreateplotcyclelist{pr-bar2}{%
+	{pr-color-turqoise, fill=pr-color-turqoise!60}, 
+	{pr-color-lime, fill=pr-color-lime!60, },  
+	{pr-color-gray, fill=pr-color-gray!60},
+	{pr-color-vio, fill=pr-color-vio!60}, 
+}
+
+\pgfplotscreateplotcyclelist{pr-box2}{
+	{pr-color0a, fill=pr-color0a}, 
+	{pr-color0b, fill=pr-color0b}, 
+	{pr-color0c, fill=pr-color0c}, 
+	{pr-color0d, fill=pr-color0d}, 
+	{pr-color0e, fill=pr-color0e}, 
+	{pr-color0f, fill=pr-color0f},  
+}
+
+% Ridgeline plots
+
+\pgfplotsset{pretty ridge option/.style={draw=white, line width=2pt}}
+\pgfplotscreateplotcyclelist{pr-ridgeline}{
+	{draw=white, line width=2pt,fill=pr-color2a!40},
+	{draw=white, line width=2pt, fill=pr-color2b!40}, 
+	{draw=white, line width=2pt, fill=pr-color2c!40},
+	{draw=white, line width=2pt, fill=pr-color2d!40},  
+	{draw=white, line width=2pt, fill=pr-color2e!40},
+	draw=white, line width=2pt, fill={pr-color2f!40},
+	{draw=white, line width=2pt, fill=pr-color2g!40},  
+}
+\pgfplotscreateplotcyclelist{pr-ridgeline-complementary}{
+	{draw=white, line width=2pt,fill=pr-color-green!40},
+	{draw=white, line width=2pt, fill=pr-color-sun!40}, 
+	{draw=white, line width=2pt, fill=pr-color-blue!40},
+	{draw=white, line width=2pt, fill=pr-color-yellow!40},  
+	{draw=white, line width=2pt, fill=pr-color-purp!40},
+	draw=white, line width=2pt, fill={pr-color-dblue!40},
+	{draw=white, line width=2pt, fill=pr-color-redorange!40}, 
+	{draw=white, line width=2pt, fill=pr-color-lblue!40},
+	{draw=white, line width=2pt, fill=pr-color-yellowgreen!40}, 
+	{draw=white, line width=2pt, fill=pr-color-redorange!40},  
+	{draw=white, line width=2pt, fill=pr-color-lightgreen!40}, 
+}
+\pgfplotscreateplotcyclelist{pr-ridgeline-transparent}{
+	{draw=pr-color-green, line width=1pt,fill=pr-color-green,fill opacity=.5},
+	{draw=pr-color-blue, line width=1pt, fill=pr-color-blue,fill opacity=.5},
+	{draw=pr-color-yellow, line width=1pt, fill=pr-color-yellow,fill opacity=.5},
+	{draw=pr-color-redorange, line width=1pt, fill=pr-color-redorange,fill opacity=.5},
+	draw=pr-color-dblue, line width=1pt, fill={pr-color-dblue,fill opacity=.5},
+	{draw=pr-color-purp, line width=1pt, fill=pr-color-purp,fill opacity=.5},
+	{draw=pr-color-sun, line width=1pt, fill=pr-color-sun,fill opacity=.5},
+	{draw=pr-color-lblue, line width=1pt, fill=pr-color-lblue,fill opacity=.5},
+	{draw=pr-color-yellowgreen, line width=1pt, fill=pr-color-yellowgreen,fill opacity=.5},
+	{draw=pr-color-redorange, line width=1pt, fill=pr-color-redorange,fill opacity=.5},
+	{draw=pr-color-lightgreen, line width=1pt, fill=pr-color-lightgreen,fill opacity=.5},
+}
+ 
+\pgfplotscreateplotcyclelist{pr-ternary}{%
+	{goldenrod, fill=goldenrod!40}, 
+	{pr-color-dblue, fill=pr-color-dblue!40},
+	{pr-color1a, fill=pr-color1a!40},  
+	{pr-color-purple, fill=pr-color-purple!40},
+	{pr-color-redorange, fill=pr-color-redorange!40},
+	{pr-color1d, fill=pr-color1d!40}, 
+	{pr-color1b, fill=pr-color1b!40 },  
+	{pr-color1e, fill=pr-color1e!40}, 
+	{pr-color1f, fill=pr-color1f!40}, 
+} 
+ 
+\pgfplotscreateplotcyclelist{pr-box3}{%
+	{b1, fill=b1},
+	{b2, fill=b2},	
+	{b3, fill=b3},
+	{dollarbill, fill=dollarbill},
+	{gray, fill= gray}, 
+	{b5, fill=b5},
+	{fawn, fill=fawn},
+}
+\pgfplotscreateplotcyclelist{pr-box4}{ 
+	{mambacolor4, fill=mambacolor4, fill opacity=.5 }, 
+	{mambacolor3,fill=mambacolor3, fill opacity=.5  }, 
+	{mambacolor5, fill=mambacolor5, fill opacity=.5 }, 
+	{mambacolor2,fill=mambacolor2, fill opacity=.5  },
+	{beaver , fill=beaver, fill opacity=.5 }, 
+}
+
+
+\pgfplotscreateplotcyclelist{pr-ybar}{%
+	{dollarbill, fill=dollarbill},
+	{b2, fill=b2},	
+	{b5, fill=b5},
+	{b3, fill=b3},
+}
+
+
+\pgfplotscreateplotcyclelist{cisc-scatter}{%
+	{c1, mark=*},
+	{c2, mark=*},
+	{c3, mark=*},
+}
+ 
+\pgfplotscreateplotcyclelist{yaf}{%
+	{yafcolor1},
+	{yafcolor2},
+	{yafcolor3},
+	{yafcolor4},
+	{yafcolor5},
+	{yafcolor6},
+	{yafcolor7},
+	{yafcolor8}
+}
+
+\pgfplotscreateplotcyclelist{wrongright}{%
+	{mambacolor3},
+	{mambacolor6}
+}
+
+
+%% Credits
+% line: http://pgfplots.net/tikz/examples/tufte-3d-axes/
+% https://tex.stackexchange.com/questions/165766/tufte-style-range-frames-for-three-dimensional-plots
+% bar: http://latex-community.org/tufte-plots.pdf
+% scatter: https://tug.org/TUGboat/tb34-2/tb107dugge.pdf
+% Eda papers 
+% pgf doc, https://ftp.fau.de/ctan/graphics/pgf/contrib/pgfplots/doc/pgfplots.pdf
+% pgf examples, http://pgfplots.sourceforge.net/gallery.html
+% colors https://tailwindcss.com/docs/colors
